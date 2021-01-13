@@ -10,15 +10,6 @@ namespace Aptacode.AppFramework.Demo.Pages
 
         public DemoSceneController(Scene.Scene scene) : base(scene)
         {
-            UserInteractionController.OnMouseEvent += UserInteractionControllerOnOnMouseEvent;
-        }
-
-        private void UserInteractionControllerOnOnMouseEvent(object? sender, MouseEvent e)
-        {
-            foreach (var componentViewModel in Scene.Components)
-            {
-                componentViewModel.HandleMouseEvent(e);
-            }
         }
     }
 }

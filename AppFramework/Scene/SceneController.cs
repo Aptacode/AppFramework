@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Scene.Events;
 using Aptacode.BlazorCanvas;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 using Aptacode.Geometry.Collision;
@@ -20,6 +21,15 @@ namespace Aptacode.AppFramework.Scene
             Scene = scene;
             CollisionDetector = new HybridCollisionDetector();
             UserInteractionController = new SceneInteractionController();
+            UserInteractionController.OnMouseEvent += UserInteractionControllerOnOnMouseEvent;
+        }
+
+        private void UserInteractionControllerOnOnMouseEvent(object? sender, MouseEvent e)
+        {
+            foreach (var componentViewModel in Scene.Components)
+            {
+                componentViewModel.HandleMouseEvent(e);
+            }
         }
 
         #endregion
