@@ -2,9 +2,9 @@
 using System.Numerics;
 using Aptacode.Geometry;
 
-namespace Aptacode.AppFramework.Components.ViewModels
+namespace Aptacode.AppFramework.Scene
 {
-    public class UserInteractionController
+    public class SceneInteractionController
     {
         #region State
 

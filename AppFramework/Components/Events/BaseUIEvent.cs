@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Aptacode.AppFramework.Components.ViewModels.Components.Events
+namespace Aptacode.AppFramework.Components.Events
 {
     public abstract class BaseUIEvent
     {

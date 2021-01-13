@@ -10,34 +10,32 @@ using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 using Aptacode.Geometry.Vertices;
 
-namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
+namespace Aptacode.AppFramework.Components.Primitives
 {
-    public class PolygonViewModel : ComponentViewModel
+    public class PolylineViewModel : ComponentViewModel
     {
-        #region Canvas
+        #region Ctor
 
-        public PolygonViewModel(Polygon polygon)
+        public PolylineViewModel(PolyLine polyLine)
         {
-            Polygon = polygon;
+            PolyLine = polyLine;
             OldBoundingRectangle = BoundingRectangle =
                 Children.ToBoundingRectangle().Combine(BoundingPrimitive.BoundingRectangle);
         }
 
         #endregion
 
-        #region Ctor
+        #region Canvas
 
         public override async Task CustomDraw(BlazorCanvasInterop ctx)
         {
-            var vertices = new Vector2[Polygon.Vertices.Length];
-            for (var i = 0; i < Polygon.Vertices.Length; i++)
+            var vertices = new Vector2[_polyLine.Vertices.Length];
+            for (var i = 0; i < _polyLine.Vertices.Length; i++)
             {
-                vertices[i] = Polygon.Vertices[i] * SceneScale.Value;
+                vertices[i] = _polyLine.Vertices[i] * SceneScale.Value;
             }
 
-            ctx.Polygon(vertices);
-
-            ctx.Fill();
+            ctx.PolyLine(vertices);
             ctx.Stroke();
         }
 
@@ -45,14 +43,14 @@ namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
 
         #region Props
 
-        private Polygon _polygon;
+        private PolyLine _polyLine;
 
-        public Polygon Polygon
+        public PolyLine PolyLine
         {
-            get => _polygon;
+            get => _polyLine;
             set
             {
-                _polygon = value;
+                _polyLine = value;
                 UpdateMargin();
                 Invalidated = true;
             }
@@ -60,18 +58,18 @@ namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
 
         public override void UpdateMargin()
         {
-            if (_polygon == null)
+            if (_polyLine == null)
             {
                 return;
             }
 
             if (Margin > Constants.Tolerance)
             {
-                BoundingPrimitive = new Polygon(_polygon.Vertices.ToConvexHull(Margin));
+                BoundingPrimitive = new Polygon(_polyLine.Vertices.ToConvexHull(Margin));
             }
             else
             {
-                BoundingPrimitive = Polygon.Create(_polygon.Vertices.Vertices.ToArray());
+                BoundingPrimitive = PolyLine.Create(_polyLine.Vertices.Vertices.ToArray());
             }
         }
 
@@ -81,14 +79,15 @@ namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
 
         public override void Translate(Vector2 delta)
         {
-            Polygon.Translate(delta);
+            PolyLine.Translate(delta);
             BoundingPrimitive.Translate(delta);
+
             base.Translate(delta);
         }
 
         public override void Scale(Vector2 delta)
         {
-            Polygon.Scale(delta);
+            PolyLine.Scale(delta);
             UpdateMargin();
 
             base.Scale(delta);
@@ -96,7 +95,7 @@ namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
 
         public override void Rotate(float theta)
         {
-            Polygon.Rotate(theta);
+            PolyLine.Rotate(theta);
             UpdateMargin();
 
             base.Rotate(theta);
@@ -104,7 +103,7 @@ namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
 
         public override void Rotate(Vector2 rotationCenter, float theta)
         {
-            Polygon.Rotate(rotationCenter, theta);
+            PolyLine.Rotate(rotationCenter, theta);
             UpdateMargin();
 
             base.Rotate(rotationCenter, theta);
@@ -112,8 +111,9 @@ namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
 
         public override void Skew(Vector2 delta)
         {
-            Polygon.Skew(delta);
+            PolyLine.Skew(delta);
             UpdateMargin();
+
             base.Skew(delta);
         }
 
@@ -129,17 +129,17 @@ namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
 
         public override bool CollidesWith(ComponentViewModel component)
         {
-            return base.CollidesWith(component) || component.CollidesWith(Polygon);
+            return base.CollidesWith(component) || component.CollidesWith(PolyLine);
         }
 
         public override bool CollidesWith(Primitive component)
         {
-            return base.CollidesWith(component) || Polygon.CollidesWith(component);
+            return base.CollidesWith(component) || PolyLine.CollidesWith(component);
         }
 
         public override bool CollidesWith(Vector2 point)
         {
-            return base.CollidesWith(point) || Polygon.Contains(point);
+            return base.CollidesWith(point) || PolyLine.Contains(point);
         }
 
         #endregion

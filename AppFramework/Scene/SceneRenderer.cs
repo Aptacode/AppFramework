@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using Aptacode.AppFramework.Components.ViewModels.Components;
+using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Collision.Rectangles;
 
-namespace Aptacode.AppFramework.Components.ViewModels
+namespace Aptacode.AppFramework.Scene
 {
     public class SceneRenderer
     {

@@ -1,6 +1,6 @@
 ﻿using Aptacode.Geometry.Primitives.Polygons;
 
-namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
+namespace Aptacode.AppFramework.Components.Primitives
 {
     public class RectangleViewModel : PolygonViewModel
     {

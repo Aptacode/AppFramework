@@ -8,7 +8,7 @@ using Aptacode.Geometry.Collision;
 using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 
-namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
+namespace Aptacode.AppFramework.Components.Primitives
 {
     public class PointViewModel : ComponentViewModel
     {

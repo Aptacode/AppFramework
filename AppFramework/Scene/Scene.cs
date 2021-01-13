@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Aptacode.AppFramework.Components.ViewModels.Components;
+using Aptacode.AppFramework.Components;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 
-namespace Aptacode.AppFramework.Components.ViewModels
+namespace Aptacode.AppFramework.Scene
 {
     public class Scene : BindableBase
     {

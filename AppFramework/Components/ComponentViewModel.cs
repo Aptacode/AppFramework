@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
-using Aptacode.AppFramework.Components.ViewModels.Components.Events;
+using Aptacode.AppFramework.Components.Events;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 
-namespace Aptacode.AppFramework.Components.ViewModels.Components
+namespace Aptacode.AppFramework.Components
 {
     public class ComponentViewModel
     {

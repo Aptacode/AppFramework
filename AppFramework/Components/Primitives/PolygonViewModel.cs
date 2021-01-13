@@ -1,36 +1,42 @@
-﻿using System;
+﻿using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
+using Aptacode.Geometry;
 using Aptacode.Geometry.Collision;
 using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
+using Aptacode.Geometry.Vertices;
 
-namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
+namespace Aptacode.AppFramework.Components.Primitives
 {
-    public class EllipseViewModel : ComponentViewModel
+    public class PolygonViewModel : ComponentViewModel
     {
-        #region Ctor
+        #region Canvas
 
-        public EllipseViewModel(Ellipse ellipse)
+        public PolygonViewModel(Polygon polygon)
         {
-            Ellipse = ellipse;
+            Polygon = polygon;
             OldBoundingRectangle = BoundingRectangle =
                 Children.ToBoundingRectangle().Combine(BoundingPrimitive.BoundingRectangle);
         }
 
         #endregion
 
-        #region Canvase
+        #region Ctor
 
         public override async Task CustomDraw(BlazorCanvasInterop ctx)
         {
-            ctx.BeginPath();
+            var vertices = new Vector2[Polygon.Vertices.Length];
+            for (var i = 0; i < Polygon.Vertices.Length; i++)
+            {
+                vertices[i] = Polygon.Vertices[i] * SceneScale.Value;
+            }
 
-            ctx.Ellipse((int) Ellipse.Position.X * SceneScale.Value, (int) Ellipse.Position.Y * SceneScale.Value, (int) Ellipse.Radii.X * SceneScale.Value,
-                (int) Ellipse.Radii.Y * SceneScale.Value, Ellipse.Rotation, 0, 2.0f * (float) Math.PI);
+            ctx.Polygon(vertices);
+
             ctx.Fill();
             ctx.Stroke();
         }
@@ -39,14 +45,14 @@ namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
 
         #region Props
 
-        private Ellipse _ellipse;
+        private Polygon _polygon;
 
-        public Ellipse Ellipse
+        public Polygon Polygon
         {
-            get => _ellipse;
+            get => _polygon;
             set
             {
-                _ellipse = value;
+                _polygon = value;
                 UpdateMargin();
                 Invalidated = true;
             }
@@ -54,52 +60,60 @@ namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
 
         public override void UpdateMargin()
         {
-            if (_ellipse == null)
+            if (_polygon == null)
             {
                 return;
             }
 
-            BoundingPrimitive = new Ellipse(_ellipse.Position, _ellipse.Radii + new Vector2(Margin, Margin),
-                _ellipse.Rotation);
+            if (Margin > Constants.Tolerance)
+            {
+                BoundingPrimitive = new Polygon(_polygon.Vertices.ToConvexHull(Margin));
+            }
+            else
+            {
+                BoundingPrimitive = Polygon.Create(_polygon.Vertices.Vertices.ToArray());
+            }
         }
 
         #endregion
-
 
         #region Transformations
 
         public override void Translate(Vector2 delta)
         {
-            Ellipse.Translate(delta);
+            Polygon.Translate(delta);
             BoundingPrimitive.Translate(delta);
             base.Translate(delta);
         }
 
         public override void Scale(Vector2 delta)
         {
-            Ellipse.Scale(delta);
-            BoundingPrimitive.Scale(delta);
+            Polygon.Scale(delta);
+            UpdateMargin();
+
             base.Scale(delta);
         }
 
         public override void Rotate(float theta)
         {
-            Ellipse.Rotate(theta);
-            BoundingPrimitive.Rotate(theta);
+            Polygon.Rotate(theta);
+            UpdateMargin();
+
             base.Rotate(theta);
         }
 
         public override void Rotate(Vector2 rotationCenter, float theta)
         {
-            Ellipse.Rotate(rotationCenter, theta);
-            BoundingPrimitive.Rotate(rotationCenter, theta);
+            Polygon.Rotate(rotationCenter, theta);
+            UpdateMargin();
+
             base.Rotate(rotationCenter, theta);
         }
 
         public override void Skew(Vector2 delta)
         {
-            Ellipse.Skew(delta);
-            BoundingPrimitive.Skew(delta);
+            Polygon.Skew(delta);
+            UpdateMargin();
             base.Skew(delta);
         }
 
@@ -115,17 +129,17 @@ namespace Aptacode.AppFramework.Components.ViewModels.Components.Primitives
 
         public override bool CollidesWith(ComponentViewModel component)
         {
-            return base.CollidesWith(component) || component.CollidesWith(Ellipse);
+            return base.CollidesWith(component) || component.CollidesWith(Polygon);
         }
 
         public override bool CollidesWith(Primitive component)
         {
-            return base.CollidesWith(component) || Ellipse.CollidesWith(component);
+            return base.CollidesWith(component) || Polygon.CollidesWith(component);
         }
 
         public override bool CollidesWith(Vector2 point)
         {
-            return base.CollidesWith(point) || Ellipse.Contains(point);
+            return base.CollidesWith(point) || Polygon.Contains(point);
         }
 
         #endregion

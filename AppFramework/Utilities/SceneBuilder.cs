@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
-using Aptacode.AppFramework.Components.ViewModels;
-using Aptacode.AppFramework.Components.ViewModels.Components;
+using Aptacode.AppFramework.Components;
 
 namespace Aptacode.AppFramework.Utilities
 {
@@ -29,9 +28,9 @@ namespace Aptacode.AppFramework.Utilities
             return this;
         }
 
-        public Scene Build()
+        public Scene.Scene Build()
         {
-            var scene = new Scene(new Vector2(_width, _height));
+            var scene = new Scene.Scene(new Vector2(_width, _height));
 
             foreach (var componentViewModel in _components)
             {

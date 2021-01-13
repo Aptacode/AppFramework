@@ -4,12 +4,12 @@ using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
-using Aptacode.AppFramework.Components.ViewModels.Components;
+using Aptacode.AppFramework.Components;
 using Aptacode.BlazorCanvas;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 using Aptacode.Geometry.Collision;
 
-namespace Aptacode.AppFramework.Components.ViewModels
+namespace Aptacode.AppFramework.Scene
 {
     public class SceneController : BindableBase
     {
@@ -19,7 +19,7 @@ namespace Aptacode.AppFramework.Components.ViewModels
         {
             Scene = scene;
             CollisionDetector = new HybridCollisionDetector();
-            UserInteractionController = new UserInteractionController();
+            UserInteractionController = new SceneInteractionController();
         }
 
         #endregion
@@ -80,7 +80,7 @@ namespace Aptacode.AppFramework.Components.ViewModels
 
         public SceneRenderer Renderer { get; private set; }
         public Scene Scene { get; }
-        public UserInteractionController UserInteractionController { get; }
+        public SceneInteractionController UserInteractionController { get; }
         public CollisionDetector CollisionDetector { get; }
 
         public string Cursor { get; set; }

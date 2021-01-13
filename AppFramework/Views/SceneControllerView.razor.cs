@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
-using Aptacode.AppFramework.Components.ViewModels;
 using Aptacode.AppFramework.Extensions;
+using Aptacode.AppFramework.Scene;
 using Aptacode.BlazorCanvas;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
-namespace Aptacode.AppFramework.Components.Views
+namespace Aptacode.AppFramework.Views
 {
     public class SceneControllerViewBase : ComponentBase
     {

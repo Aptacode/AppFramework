@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Aptacode.AppFramework.Components.ViewModels;
 using Aptacode.BlazorCanvas;
 using Microsoft.AspNetCore.Components;
 
-namespace Aptacode.AppFramework.Components.Views
+namespace Aptacode.AppFramework.Views
 {
     public class SceneViewBase : ComponentBase
     {
@@ -30,7 +29,7 @@ namespace Aptacode.AppFramework.Components.Views
 
         [Inject] public BlazorCanvasInterop BlazorCanvas { get; set; }
 
-        [Parameter] public Scene ViewModel { get; set; }
+        [Parameter] public Scene.Scene ViewModel { get; set; }
 
         public ElementReference Canvas { get; set; }
 

@@ -1,8 +1,8 @@
-﻿using Aptacode.AppFramework.Components.ViewModels.Components.Events;
-using Aptacode.AppFramework.Components.ViewModels.Components.Primitives;
+﻿using Aptacode.AppFramework.Components.Events;
+using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.Geometry.Primitives.Polygons;
 
-namespace Aptacode.AppFramework.Components.ViewModels.Components.Controls
+namespace Aptacode.AppFramework.Components.Controls
 {
     public class ButtonViewModel : RectangleViewModel
     {

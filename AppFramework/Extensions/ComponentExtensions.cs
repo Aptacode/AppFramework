@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Aptacode.AppFramework.Components.ViewModels.Components;
+using Aptacode.AppFramework.Components;
 using Aptacode.Geometry.Collision.Rectangles;
 
 namespace Aptacode.AppFramework.Extensions
