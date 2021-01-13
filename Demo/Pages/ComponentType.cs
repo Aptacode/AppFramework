@@ -1,4 +1,4 @@
-﻿namespace Demo.Pages
+﻿namespace Aptacode.AppFramework.Demo.Pages
 {
     public enum ComponentType
     {

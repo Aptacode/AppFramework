@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <ApplicationIcon>Logo.ico</ApplicationIcon>
+    <AssemblyName>Aptacode.AppFramework.Demo</AssemblyName>
+    <RootNamespace>Aptacode.AppFramework.Demo</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,7 +2,7 @@
 using Aptacode.AppFramework.Utilities;
 using Microsoft.AspNetCore.Components;
 
-namespace Demo.Pages
+namespace Aptacode.AppFramework.Demo.Pages
 {
     public class IndexBase : ComponentBase
     {

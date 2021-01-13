@@ -5,7 +5,7 @@ using Aptacode.BlazorCanvas;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Demo
+namespace Aptacode.AppFramework.Demo
 {
     public class Program
     {

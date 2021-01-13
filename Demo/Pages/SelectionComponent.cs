@@ -7,7 +7,7 @@ using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Rectangle = Aptacode.Geometry.Primitives.Polygons.Rectangle;
 
-namespace Demo.Pages
+namespace Aptacode.AppFramework.Demo.Pages
 {
     public class SelectionComponent : RectangleViewModel
     {

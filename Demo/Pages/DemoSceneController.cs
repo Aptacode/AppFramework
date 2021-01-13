@@ -14,7 +14,7 @@ using Aptacode.Geometry.Primitives;
 using Aptacode.Geometry.Primitives.Extensions;
 using Rectangle = Aptacode.Geometry.Primitives.Polygons.Rectangle;
 
-namespace Demo.Pages
+namespace Aptacode.AppFramework.Demo.Pages
 {
     public class DemoSceneController : SceneController
     {
@@ -22,7 +22,7 @@ namespace Demo.Pages
 
         public readonly List<ComponentViewModel> SelectedComponents = new();
 
-        public DemoSceneController(Scene scene) : base(scene)
+        public DemoSceneController(Scene.Scene scene) : base(scene)
         {
             UserInteractionController.OnKeyDown += UserInteractionControllerOnOnKeyDown;
             UserInteractionController.OnKeyUp += UserInteractionControllerOnOnKeyUp;
