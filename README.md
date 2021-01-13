@@ -1,4 +1,8 @@
-# AppFramework
+<p align="center">
+   <div style="width:640;height:320">
+       <img style="width: inherit" src="https://raw.githubusercontent.com/Aptacode/AppFramework/Production/Resources/Images/Banner.png">
+</div>
+</p>
 
 [Live Demo](https://aptacode.github.io/AppFramework/)
 
