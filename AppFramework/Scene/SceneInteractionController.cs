@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using Aptacode.AppFramework.Scene.Events;
 using Aptacode.Geometry;
 
 namespace Aptacode.AppFramework.Scene
@@ -36,11 +37,11 @@ namespace Aptacode.AppFramework.Scene
         {
             if (DateTime.Now - SecondMouseDownTime < TimeSpan.FromMilliseconds(150))
             {
-                OnMouseDoubleClicked?.Invoke(this, position);
+                OnMouseEvent?.Invoke(this, new MouseDoubleClickEvent(position));
             }
             else if (DateTime.Now - FirstMouseDownTime < TimeSpan.FromMilliseconds(150))
             {
-                OnMouseClicked?.Invoke(this, position);
+                OnMouseEvent?.Invoke(this, new MouseClickEvent(position));
             }
         }
 
@@ -55,15 +56,14 @@ namespace Aptacode.AppFramework.Scene
 
             MouseDownPosition = position;
             MouseClickDown();
-            OnMouseDown?.Invoke(this, position);
+            OnMouseEvent?.Invoke(this, new MouseDownEvent(position));
             LastMousePosition = position;
         }
 
         public void MouseUp(Vector2 position)
         {
             IsMouseDown = false;
-
-            OnMouseUp?.Invoke(this, position);
+            OnMouseEvent?.Invoke(this, new MouseUpEvent(position));
             LastMousePosition = position;
 
             MouseClickRelease(position);
@@ -77,7 +77,7 @@ namespace Aptacode.AppFramework.Scene
                 return;
             }
 
-            OnMouseMoved?.Invoke(this, position);
+            OnMouseEvent?.Invoke(this, new MouseMoveEvent(position));
             LastMousePosition = position;
         }
 
@@ -98,7 +98,7 @@ namespace Aptacode.AppFramework.Scene
         public void KeyDown(string key)
         {
             CurrentKey = key;
-            OnKeyDown?.Invoke(this, CurrentKey);
+            OnKeyboardEvent?.Invoke(this, new KeyDownEvent(key));
         }
 
         public void KeyUp(string key)
@@ -109,7 +109,7 @@ namespace Aptacode.AppFramework.Scene
             }
 
             CurrentKey = null;
-            OnKeyUp?.Invoke(this, CurrentKey);
+            OnKeyboardEvent?.Invoke(this, new KeyUpEvent(key));
         }
 
         #endregion
@@ -118,13 +118,8 @@ namespace Aptacode.AppFramework.Scene
 
         #region Events
 
-        public event EventHandler<Vector2> OnMouseDown;
-        public event EventHandler<Vector2> OnMouseMoved;
-        public event EventHandler<Vector2> OnMouseUp;
-        public event EventHandler<Vector2> OnMouseClicked;
-        public event EventHandler<Vector2> OnMouseDoubleClicked;
-        public event EventHandler<string> OnKeyDown;
-        public event EventHandler<string> OnKeyUp;
+        public event EventHandler<MouseEvent> OnMouseEvent;
+        public event EventHandler<KeyboardEvent> OnKeyboardEvent;
 
         #endregion
     }

@@ -1,6 +1,7 @@
-﻿using Aptacode.AppFramework.Components.Events;
+﻿using System.Drawing;
 using Aptacode.AppFramework.Components.Primitives;
-using Aptacode.Geometry.Primitives.Polygons;
+using Aptacode.AppFramework.Scene.Events;
+using Rectangle = Aptacode.Geometry.Primitives.Polygons.Rectangle;
 
 namespace Aptacode.AppFramework.Components.Controls
 {
@@ -10,15 +11,22 @@ namespace Aptacode.AppFramework.Components.Controls
 
         public ButtonViewModel(Rectangle rectangle) : base(rectangle)
         {
+            OnMouseDown += Handle_OnMouseDown;
+            OnMouseUp += Handle_OnMouseUp;
         }
 
         #endregion
 
         #region Events
 
-        public override bool HandleMouseEvent(BaseMouseEvent mouseEvent)
+        private void Handle_OnMouseDown(object? sender, MouseDownEvent e)
         {
-            return base.HandleMouseEvent(mouseEvent);
+            BorderColor = Color.Green;
+        }
+
+        private void Handle_OnMouseUp(object? sender, MouseUpEvent e)
+        {
+            BorderColor = Color.Black;
         }
 
         #endregion

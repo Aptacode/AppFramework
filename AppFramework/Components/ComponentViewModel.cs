@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
-using Aptacode.AppFramework.Components.Events;
 using Aptacode.AppFramework.Extensions;
+using Aptacode.AppFramework.Scene.Events;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Collision.Rectangles;
@@ -76,14 +76,6 @@ namespace Aptacode.AppFramework.Components
 
         #endregion
 
-        #region Prop
-
-        private readonly List<ComponentViewModel> _children = new();
-        public bool CollisionDetectionEnabled { get; set; }
-        public bool Invalidated { get; set; }
-
-        #endregion
-
         #region Children
 
         public IEnumerable<ComponentViewModel> Children => _children;
@@ -133,7 +125,9 @@ namespace Aptacode.AppFramework.Components
         #region Properties
 
         public Guid Id { get; init; }
-
+        private readonly List<ComponentViewModel> _children = new();
+        public bool CollisionDetectionEnabled { get; set; }
+        public bool Invalidated { get; set; }
         public BoundingRectangle OldBoundingRectangle { get; protected set; }
         public BoundingRectangle BoundingRectangle { get; protected set; }
         public Primitive BoundingPrimitive { get; set; }
@@ -343,18 +337,18 @@ namespace Aptacode.AppFramework.Components
 
         #region Events
 
-        public bool Handle(BaseUIEvent uiEvent)
+        public bool Handle(UIEvent uiEvent)
         {
             switch (uiEvent)
             {
-                case BaseMouseEvent mouseEvent:
+                case MouseEvent mouseEvent:
                     return HandleMouseEvent(mouseEvent);
                 default:
                     return HandleCustomEvent(uiEvent);
             }
         }
 
-        public virtual bool HandleMouseEvent(BaseMouseEvent mouseEvent)
+        public virtual bool HandleMouseEvent(MouseEvent mouseEvent)
         {
             //Tunnel
             foreach (var child in Children)
@@ -386,7 +380,7 @@ namespace Aptacode.AppFramework.Components
             return false;
         }
 
-        public virtual bool HandleCustomEvent(BaseUIEvent customEvent)
+        public virtual bool HandleCustomEvent(UIEvent customEvent)
         {
             foreach (var child in Children)
             {
