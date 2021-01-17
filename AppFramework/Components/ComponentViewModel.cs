@@ -371,6 +371,9 @@ namespace Aptacode.AppFramework.Components
                         break;
                     case MouseClickEvent mouseClickEvent:
                         OnMouseClick?.Invoke(this, mouseClickEvent);
+                        break;     
+                    case MouseDoubleClickEvent mouseDoubleClickEvent:
+                        OnMouseDoubleClick?.Invoke(this, mouseDoubleClickEvent);
                         break;
                 }
 
@@ -393,10 +396,10 @@ namespace Aptacode.AppFramework.Components
             return false;
         }
 
-
         public event EventHandler<MouseDownEvent> OnMouseDown;
         public event EventHandler<MouseUpEvent> OnMouseUp;
         public event EventHandler<MouseClickEvent> OnMouseClick;
+        public event EventHandler<MouseDoubleClickEvent> OnMouseDoubleClick;
 
         #endregion
     }
