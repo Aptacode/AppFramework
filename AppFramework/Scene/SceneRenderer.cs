@@ -36,13 +36,19 @@ namespace Aptacode.AppFramework.Scene
             _canvas.StrokeStyle(ComponentViewModel.DefaultBorderColor);
             _canvas.LineWidth(ComponentViewModel.DefaultBorderThickness);
 
-            var invalidatedItems = await InvalidateItems();
 
-            for (var i = 0; i < invalidatedItems.Count; i++)
+            for (var i = 0; i < _scene.Components.Count(); i++)
             {
-                var component = invalidatedItems[i];
-                await component.Draw(_canvas);
+                await _scene.Components.ElementAt(i).Draw(_canvas);
             }
+            
+            //var invalidatedItems = await InvalidateItems();
+
+            //for (var i = 0; i < invalidatedItems.Count; i++)
+            //{
+            //    var component = invalidatedItems[i];
+            //    await component.Draw(_canvas);
+            //}
         }
 
         public async Task<List<ComponentViewModel>> InvalidateItems()
