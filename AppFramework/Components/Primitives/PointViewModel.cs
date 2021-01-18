@@ -117,7 +117,7 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public override bool CollidesWith(Primitive component)
         {
-            return base.CollidesWith(component) || Point.CollidesWith(component);
+            return base.CollidesWith(component) || Point.CollidesWithPrimitive(component);
         }
 
         public override bool CollidesWith(Vector2 point)
