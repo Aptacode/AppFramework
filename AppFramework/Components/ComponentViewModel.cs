@@ -9,6 +9,7 @@ using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
+using Point = Aptacode.Geometry.Primitives.Point;
 
 namespace Aptacode.AppFramework.Components
 {
@@ -237,16 +238,70 @@ namespace Aptacode.AppFramework.Components
             return false;
         }
 
-        public virtual bool CollidesWith(Primitive primitive)
+        public virtual bool CollidesWith(Point point)
         {
-            if (!BoundingRectangle.CollidesWith(primitive.BoundingRectangle))
+            if (!BoundingRectangle.CollidesWith(point.BoundingRectangle))
             {
                 return false;
             }
 
             foreach (var child in Children)
             {
-                if (child.CollidesWith(primitive))
+                if (child.CollidesWith(point))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public virtual bool CollidesWith(PolyLine point)
+        {
+            if (!BoundingRectangle.CollidesWith(point.BoundingRectangle))
+            {
+                return false;
+            }
+
+            foreach (var child in Children)
+            {
+                if (child.CollidesWith(point))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public virtual bool CollidesWith(Polygon point)
+        {
+            if (!BoundingRectangle.CollidesWith(point.BoundingRectangle))
+            {
+                return false;
+            }
+
+            foreach (var child in Children)
+            {
+                if (child.CollidesWith(point))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public virtual bool CollidesWith(Ellipse point)
+        {
+            if (!BoundingRectangle.CollidesWith(point.BoundingRectangle))
+            {
+                return false;
+            }
+
+            foreach (var child in Children)
+            {
+                if (child.CollidesWith(point))
                 {
                     return true;
                 }

@@ -19,7 +19,6 @@ namespace Aptacode.AppFramework.Scene
         public SceneController(Scene scene)
         {
             Scene = scene;
-            CollisionDetector = new HybridCollisionDetector();
             UserInteractionController = new SceneInteractionController();
             UserInteractionController.OnMouseEvent += UserInteractionControllerOnOnMouseEvent;
         }
@@ -91,7 +90,6 @@ namespace Aptacode.AppFramework.Scene
         public SceneRenderer Renderer { get; private set; }
         public Scene Scene { get; }
         public SceneInteractionController UserInteractionController { get; }
-        public CollisionDetector CollisionDetector { get; }
 
         public string Cursor { get; set; }
 

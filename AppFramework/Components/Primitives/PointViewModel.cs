@@ -109,20 +109,31 @@ namespace Aptacode.AppFramework.Components.Primitives
             return BoundingRectangle;
         }
 
-
         public override bool CollidesWith(ComponentViewModel component)
         {
-            return base.CollidesWith(component) || component.CollidesWith(Point);
+            return component.CollidesWith(Point) || base.CollidesWith(component);
         }
 
-        public override bool CollidesWith(Primitive component)
+        public override bool CollidesWith(Point point)
         {
-            return base.CollidesWith(component) || Point.CollidesWithPrimitive(component);
+            return Point.CollidesWith(point) || base.CollidesWith(point);
+        }
+        public override bool CollidesWith(PolyLine polyLine)
+        {
+            return Point.CollidesWith(polyLine) || base.CollidesWith(polyLine);
+        }
+        public override bool CollidesWith(Ellipse ellipse)
+        {
+            return Point.CollidesWith(ellipse) || base.CollidesWith(ellipse);
+        }
+        public override bool CollidesWith(Polygon polygon)
+        {
+            return Point.CollidesWith(polygon) || base.CollidesWith(polygon);
         }
 
         public override bool CollidesWith(Vector2 point)
         {
-            return base.CollidesWith(point) || Point.Contains(point);
+            return Point.CollidesWith(point) || base.CollidesWith(point);
         }
 
         #endregion

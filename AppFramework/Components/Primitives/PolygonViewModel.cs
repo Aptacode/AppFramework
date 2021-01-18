@@ -129,17 +129,29 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public override bool CollidesWith(ComponentViewModel component)
         {
-            return base.CollidesWith(component) || component.CollidesWith(Polygon);
+            return component.CollidesWith(Polygon) || base.CollidesWith(component);
         }
 
-        public override bool CollidesWith(Primitive component)
+        public override bool CollidesWith(Point point)
         {
-            return base.CollidesWith(component) || Polygon.CollidesWithPrimitive(component);
+            return Polygon.CollidesWith(point) || base.CollidesWith(point);
+        }
+        public override bool CollidesWith(PolyLine polyLine)
+        {
+            return Polygon.CollidesWith(polyLine) || base.CollidesWith(polyLine);
+        }
+        public override bool CollidesWith(Ellipse ellipse)
+        {
+            return Polygon.CollidesWith(ellipse) || base.CollidesWith(ellipse);
+        }
+        public override bool CollidesWith(Polygon polygon)
+        {
+            return Polygon.CollidesWith(polygon) || base.CollidesWith(polygon);
         }
 
         public override bool CollidesWith(Vector2 point)
         {
-            return base.CollidesWith(point) || Polygon.Contains(point);
+            return Polygon.CollidesWith(point) || base.CollidesWith(point);
         }
 
         #endregion
