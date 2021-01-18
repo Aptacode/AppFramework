@@ -68,6 +68,8 @@ namespace Aptacode.AppFramework.Components.Primitives
         {
             Point.Translate(delta);
             BoundingPrimitive.Translate(delta);
+            UpdateMargin();
+
             base.Translate(delta);
         }
 
@@ -116,24 +118,24 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public override bool CollidesWith(Point point)
         {
-            return Point.CollidesWith(point) || base.CollidesWith(point);
+            return Point.HybridCollidesWith(point) || base.CollidesWith(point);
         }
         public override bool CollidesWith(PolyLine polyLine)
         {
-            return Point.CollidesWith(polyLine) || base.CollidesWith(polyLine);
+            return Point.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine);
         }
         public override bool CollidesWith(Ellipse ellipse)
         {
-            return Point.CollidesWith(ellipse) || base.CollidesWith(ellipse);
+            return Point.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse);
         }
         public override bool CollidesWith(Polygon polygon)
         {
-            return Point.CollidesWith(polygon) || base.CollidesWith(polygon);
+            return Point.HybridCollidesWith(polygon) || base.CollidesWith(polygon);
         }
 
         public override bool CollidesWith(Vector2 point)
         {
-            return Point.CollidesWith(point) || base.CollidesWith(point);
+            return Point.HybridCollidesWith(point) || base.CollidesWith(point);
         }
 
         #endregion

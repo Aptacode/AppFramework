@@ -5,8 +5,6 @@ using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry;
-using Aptacode.Geometry.Collision;
-using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 using Aptacode.Geometry.Vertices;
 
@@ -81,6 +79,7 @@ namespace Aptacode.AppFramework.Components.Primitives
         {
             PolyLine.Translate(delta);
             BoundingPrimitive.Translate(delta);
+            UpdateMargin();
 
             base.Translate(delta);
         }
@@ -128,24 +127,24 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public override bool CollidesWith(Point point)
         {
-            return PolyLine.CollidesWith(point) || base.CollidesWith(point);
+            return PolyLine.HybridCollidesWith(point) || base.CollidesWith(point);
         }
         public override bool CollidesWith(PolyLine polyLine)
         {
-            return PolyLine.CollidesWith(polyLine) || base.CollidesWith(polyLine);
+            return PolyLine.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine);
         }
         public override bool CollidesWith(Ellipse ellipse)
         {
-            return PolyLine.CollidesWith(ellipse) || base.CollidesWith(ellipse);
+            return PolyLine.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse);
         }
         public override bool CollidesWith(Polygon polygon)
         {
-            return PolyLine.CollidesWith(polygon) || base.CollidesWith(polygon);
+            return PolyLine.HybridCollidesWith(polygon) || base.CollidesWith(polygon);
         }
 
         public override bool CollidesWith(Vector2 point)
         {
-            return PolyLine.CollidesWith(point) || base.CollidesWith(point);
+            return PolyLine.HybridCollidesWith(point) || base.CollidesWith(point);
         }
 
         #endregion

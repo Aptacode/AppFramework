@@ -119,24 +119,24 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public override bool CollidesWith(Point point)
         {
-            return Ellipse.CollidesWith(point) || base.CollidesWith(point);
+            return Ellipse.HybridCollidesWith(point) || base.CollidesWith(point);
         }
         public override bool CollidesWith(PolyLine polyLine)
         {
-            return Ellipse.CollidesWith(polyLine) || base.CollidesWith(polyLine);
+            return Ellipse.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine);
         }
         public override bool CollidesWith(Ellipse ellipse)
         {
-            return Ellipse.CollidesWith(ellipse) || base.CollidesWith(ellipse);
+            return Ellipse.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse);
         }
         public override bool CollidesWith(Polygon polygon)
         {
-            return Ellipse.CollidesWith(polygon) || base.CollidesWith(polygon);
+            return Ellipse.HybridCollidesWith(polygon) || base.CollidesWith(polygon);
         }
         
         public override bool CollidesWith(Vector2 point)
         {
-            return Ellipse.CollidesWith(point) || base.CollidesWith(point);
+            return Ellipse.HybridCollidesWith(point) || base.CollidesWith(point);
         }
 
         #endregion
