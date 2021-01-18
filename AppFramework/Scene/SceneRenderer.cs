@@ -36,6 +36,7 @@ namespace Aptacode.AppFramework.Scene
             _canvas.StrokeStyle(ComponentViewModel.DefaultBorderColor);
             _canvas.LineWidth(ComponentViewModel.DefaultBorderThickness);
 
+            _canvas.ClearRect(0, 0, _scene.Size.X* SceneScale.Value, _scene.Size.Y * SceneScale.Value);
 
             for (var i = 0; i < _scene.Components.Count(); i++)
             {
