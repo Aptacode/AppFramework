@@ -16,7 +16,7 @@ namespace Aptacode.AppFramework.Demo.Pages
         {
             //Scene
             var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
-            SceneController = new DemoSceneController(scene);
+            SceneController = new DemoSceneController();
 
             var componentBuilder = new ComponentBuilder();
             var button = componentBuilder
@@ -37,6 +37,9 @@ namespace Aptacode.AppFramework.Demo.Pages
             scene.Add(button2);
             button.OnMouseDown += delegate(object? sender, MouseDownEvent e) { button.BorderColor = Color.AliceBlue; };
             button.OnMouseUp += delegate(object? sender, MouseUpEvent e) { button.BorderColor = Color.Green; };
+
+            SceneController.Add(scene);
+            
             await base.OnInitializedAsync();
         }
 

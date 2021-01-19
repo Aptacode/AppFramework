@@ -13,7 +13,7 @@ namespace Aptacode.AppFramework.Scene
     {
         #region Ctor
 
-        public SceneRenderer(BlazorCanvasInterop canvas, Scene scene)
+        public SceneRenderer(BlazorCanvasInterop canvas, SceneController scene)
         {
             _canvas = canvas;
             _scene = scene;
@@ -24,7 +24,7 @@ namespace Aptacode.AppFramework.Scene
         #region Props
 
         private readonly BlazorCanvasInterop _canvas;
-        private readonly Scene _scene;
+        private readonly SceneController _scene;
 
         #endregion
 
@@ -36,30 +36,33 @@ namespace Aptacode.AppFramework.Scene
             _canvas.StrokeStyle(ComponentViewModel.DefaultBorderColor);
             _canvas.LineWidth(ComponentViewModel.DefaultBorderThickness);
 
-            _canvas.ClearRect(0, 0, _scene.Size.X* SceneScale.Value, _scene.Size.Y * SceneScale.Value);
-
-            for (var i = 0; i < _scene.Components.Count(); i++)
+            foreach (var scene in _scene.Scenes)
             {
-                await _scene.Components.ElementAt(i).Draw(_canvas);
-            }
-            
-            //var invalidatedItems = await InvalidateItems();
+                _canvas.ClearRect(0, 0, scene.Size.X * SceneScale.Value, scene.Size.Y * SceneScale.Value);
 
-            //for (var i = 0; i < invalidatedItems.Count; i++)
-            //{
-            //    var component = invalidatedItems[i];
-            //    await component.Draw(_canvas);
-            //}
+                for (var i = 0; i < scene.Components.Count(); i++)
+                {
+                    await scene.Components.ElementAt(i).Draw(_canvas);
+                }
+
+                //var invalidatedItems = await InvalidateItems();
+
+                //for (var i = 0; i < invalidatedItems.Count; i++)
+                //{
+                //    var component = invalidatedItems[i];
+                //    await component.Draw(_canvas);
+                //}
+            }
         }
 
-        public async Task<List<ComponentViewModel>> InvalidateItems()
+        public async Task<List<ComponentViewModel>> InvalidateItems(Scene scene)
         {
             var validItems = new List<ComponentViewModel>();
             var invalidItems = new List<ComponentViewModel>();
 
-            for (var i = 0; i < _scene.Components.Count(); i++)
+            for (var i = 0; i < scene.Components.Count(); i++)
             {
-                var component = _scene.Components.ElementAt(i);
+                var component = scene.Components.ElementAt(i);
                 if (component.Invalidated)
                 {
                     invalidItems.Add(component);

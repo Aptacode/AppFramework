@@ -5,7 +5,6 @@ using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry;
-using Aptacode.Geometry.Collision;
 using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 using Aptacode.Geometry.Vertices;
@@ -64,8 +63,6 @@ namespace Aptacode.AppFramework.Components.Primitives
             {
                 return;
             }
-            BoundingPrimitive = Polygon.Create(_polygon.Vertices.Vertices.ToArray());
-return;
 
             if (Margin > Constants.Tolerance)
             {
@@ -133,29 +130,29 @@ return;
 
         public override bool CollidesWith(ComponentViewModel component)
         {
-            return component.CollidesWith(Polygon) || base.CollidesWith(component);
+            return CollisionDetectionEnabled && (component.CollidesWith(Polygon) || base.CollidesWith(component));
         }
 
         public override bool CollidesWith(Point point)
         {
-            return Polygon.HybridCollidesWith(point) || base.CollidesWith(point);
+            return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(point) || base.CollidesWith(point));
         }
         public override bool CollidesWith(PolyLine polyLine)
         {
-            return Polygon.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine);
+            return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine));
         }
         public override bool CollidesWith(Ellipse ellipse)
         {
-            return Polygon.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse);
+            return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse));
         }
         public override bool CollidesWith(Polygon polygon)
         {
-            return Polygon.HybridCollidesWith(polygon) || base.CollidesWith(polygon);
+            return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(polygon) || base.CollidesWith(polygon));
         }
 
         public override bool CollidesWith(Vector2 point)
         {
-            return Polygon.HybridCollidesWith(point) || base.CollidesWith(point);
+            return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(point) || base.CollidesWith(point));
         }
 
         #endregion

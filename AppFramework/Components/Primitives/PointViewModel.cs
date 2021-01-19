@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
-using Aptacode.Geometry.Collision;
 using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 
@@ -113,29 +112,29 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public override bool CollidesWith(ComponentViewModel component)
         {
-            return component.CollidesWith(Point) || base.CollidesWith(component);
+            return CollisionDetectionEnabled && (component.CollidesWith(Point) || base.CollidesWith(component));
         }
 
         public override bool CollidesWith(Point point)
         {
-            return Point.HybridCollidesWith(point) || base.CollidesWith(point);
+            return CollisionDetectionEnabled && (Point.HybridCollidesWith(point) || base.CollidesWith(point));
         }
         public override bool CollidesWith(PolyLine polyLine)
         {
-            return Point.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine);
+            return CollisionDetectionEnabled && (Point.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine));
         }
         public override bool CollidesWith(Ellipse ellipse)
         {
-            return Point.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse);
+            return CollisionDetectionEnabled && (Point.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse));
         }
         public override bool CollidesWith(Polygon polygon)
         {
-            return Point.HybridCollidesWith(polygon) || base.CollidesWith(polygon);
+            return CollisionDetectionEnabled && (Point.HybridCollidesWith(polygon) || base.CollidesWith(polygon));
         }
 
         public override bool CollidesWith(Vector2 point)
         {
-            return Point.HybridCollidesWith(point) || base.CollidesWith(point);
+            return CollisionDetectionEnabled && (Point.HybridCollidesWith(point) || base.CollidesWith(point));
         }
 
         #endregion

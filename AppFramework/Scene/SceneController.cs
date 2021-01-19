@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Threading;
 using System.Threading.Tasks;
-using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.BlazorCanvas;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
-using Aptacode.Geometry.Collision;
 
 namespace Aptacode.AppFramework.Scene
 {
@@ -16,48 +11,21 @@ namespace Aptacode.AppFramework.Scene
     {
         #region Ctor
 
-        public SceneController(Scene scene)
+        public SceneController()
         {
-            Scene = scene;
+            Scenes = new List<Scene>();
             UserInteractionController = new SceneInteractionController();
             UserInteractionController.OnMouseEvent += UserInteractionControllerOnOnMouseEvent;
         }
 
         private void UserInteractionControllerOnOnMouseEvent(object? sender, MouseEvent e)
         {
-            foreach (var componentViewModel in Scene.Components)
+            foreach (var scene in Scenes)
             {
-                componentViewModel.HandleMouseEvent(e);
-            }
-        }
-
-        #endregion
-
-        #region Movement
-
-        public void Translate(
-            ComponentViewModel component,
-            Vector2 delta,
-            List<ComponentViewModel> movingComponents,
-            CancellationTokenSource cancellationToken)
-        {
-            var unselectedItems = Scene.Components.Except(movingComponents).Where(c => c.CollisionDetectionEnabled);
-
-            component.Translate(delta);
-
-            var collidingItems = unselectedItems
-                .Where(i => i.CollidesWith(component)).ToList();
-
-            movingComponents.AddRange(collidingItems);
-
-            foreach (var collidingItem in collidingItems)
-            {
-                Translate(collidingItem, delta, movingComponents, cancellationToken);
-            }
-
-            if (cancellationToken.IsCancellationRequested)
-            {
-                component.Translate(-delta);
+                foreach (var componentViewModel in scene.Components)
+                {
+                    componentViewModel.HandleMouseEvent(e);
+                }
             }
         }
 
@@ -65,7 +33,7 @@ namespace Aptacode.AppFramework.Scene
 
         public void Setup(BlazorCanvasInterop canvas)
         {
-            Renderer = new SceneRenderer(canvas, Scene);
+            Renderer = new SceneRenderer(canvas, this);
         }
 
         #region Events
@@ -88,10 +56,24 @@ namespace Aptacode.AppFramework.Scene
         #region Properties
 
         public SceneRenderer Renderer { get; private set; }
-        public Scene Scene { get; }
         public SceneInteractionController UserInteractionController { get; }
+        public List<Scene> Scenes { get; set; }
 
         public string Cursor { get; set; }
+
+        #endregion
+
+        #region Scene
+
+        public void Add(Scene scene)
+        {
+            Scenes.Add(scene);
+        }
+
+        public bool Remove(Scene scene)
+        {
+            return Scenes.Remove(scene);
+        }
 
         #endregion
     }

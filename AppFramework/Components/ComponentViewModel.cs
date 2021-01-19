@@ -342,6 +342,7 @@ namespace Aptacode.AppFramework.Components
             UpdateBoundingRectangle();
 
             Invalidated = true;
+            OnTranslated?.Invoke(this, new TranslateEvent());
         }
 
         public virtual void Rotate(float theta)
@@ -353,6 +354,7 @@ namespace Aptacode.AppFramework.Components
 
             UpdateBoundingRectangle();
             Invalidated = true;
+            OnRotated?.Invoke(this, new RotateEvent());
         }
 
         public virtual void Rotate(Vector2 rotationCenter, float theta)
@@ -364,6 +366,7 @@ namespace Aptacode.AppFramework.Components
 
             UpdateBoundingRectangle();
             Invalidated = true;
+            OnRotated?.Invoke(this, new RotateEvent());
         }
 
         public virtual void Scale(Vector2 delta)
@@ -375,6 +378,7 @@ namespace Aptacode.AppFramework.Components
 
             UpdateBoundingRectangle();
             Invalidated = true;
+            OnScaled?.Invoke(this, new ScaleEvent());
         }
 
         public virtual void Skew(Vector2 delta)
@@ -386,6 +390,7 @@ namespace Aptacode.AppFramework.Components
 
             UpdateBoundingRectangle();
             Invalidated = true;
+            OnSkewed?.Invoke(this, new SkewEvent());
         }
 
         #endregion
@@ -451,11 +456,18 @@ namespace Aptacode.AppFramework.Components
             return false;
         }
 
+        //Mouse
         public event EventHandler<MouseDownEvent> OnMouseDown;
         public event EventHandler<MouseUpEvent> OnMouseUp;
         public event EventHandler<MouseClickEvent> OnMouseClick;
         public event EventHandler<MouseDoubleClickEvent> OnMouseDoubleClick;
 
+        //Transformation
+        public event EventHandler<TranslateEvent> OnTranslated;
+        public event EventHandler<RotateEvent> OnRotated;
+        public event EventHandler<ScaleEvent> OnScaled;
+        public event EventHandler<SkewEvent> OnSkewed;
+        
         #endregion
     }
 }

@@ -122,29 +122,28 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public override bool CollidesWith(ComponentViewModel component)
         {
-            return component.CollidesWith(PolyLine) || base.CollidesWith(component);
+            return CollisionDetectionEnabled && (component.CollidesWith(PolyLine) || base.CollidesWith(component));
         }
 
         public override bool CollidesWith(Point point)
         {
-            return PolyLine.HybridCollidesWith(point) || base.CollidesWith(point);
+            return CollisionDetectionEnabled && (PolyLine.HybridCollidesWith(point) || base.CollidesWith(point));
         }
         public override bool CollidesWith(PolyLine polyLine)
         {
-            return PolyLine.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine);
+            return CollisionDetectionEnabled && (PolyLine.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine));
         }
         public override bool CollidesWith(Ellipse ellipse)
         {
-            return PolyLine.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse);
+            return CollisionDetectionEnabled && (PolyLine.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse));
         }
         public override bool CollidesWith(Polygon polygon)
         {
-            return PolyLine.HybridCollidesWith(polygon) || base.CollidesWith(polygon);
+            return CollisionDetectionEnabled && (PolyLine.HybridCollidesWith(polygon) || base.CollidesWith(polygon));
         }
-
         public override bool CollidesWith(Vector2 point)
         {
-            return PolyLine.HybridCollidesWith(point) || base.CollidesWith(point);
+            return CollisionDetectionEnabled && (PolyLine.HybridCollidesWith(point) || base.CollidesWith(point));
         }
 
         #endregion

@@ -10,6 +10,8 @@
       @onmouseup="MouseUp"
       @onmouseout="MouseOut">
 
-    <SceneView ViewModel="ViewModel.Scene"></SceneView>
-
+    @foreach (var scene in ViewModel.Scenes)
+    {
+        <SceneView ViewModel="scene"></SceneView>
+    }
 </div>
