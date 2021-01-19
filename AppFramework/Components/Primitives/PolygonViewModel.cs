@@ -81,7 +81,7 @@ namespace Aptacode.AppFramework.Components.Primitives
         public override void Translate(Vector2 delta)
         {
             Polygon.Translate(delta);
-            BoundingPrimitive.Translate(delta); 
+            BoundingPrimitive.Translate(delta);
             UpdateMargin();
 
             base.Translate(delta);
@@ -137,14 +137,17 @@ namespace Aptacode.AppFramework.Components.Primitives
         {
             return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(point) || base.CollidesWith(point));
         }
+
         public override bool CollidesWith(PolyLine polyLine)
         {
             return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine));
         }
+
         public override bool CollidesWith(Ellipse ellipse)
         {
             return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse));
         }
+
         public override bool CollidesWith(Polygon polygon)
         {
             return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(polygon) || base.CollidesWith(polygon));

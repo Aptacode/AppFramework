@@ -129,18 +129,22 @@ namespace Aptacode.AppFramework.Components.Primitives
         {
             return CollisionDetectionEnabled && (PolyLine.HybridCollidesWith(point) || base.CollidesWith(point));
         }
+
         public override bool CollidesWith(PolyLine polyLine)
         {
             return CollisionDetectionEnabled && (PolyLine.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine));
         }
+
         public override bool CollidesWith(Ellipse ellipse)
         {
             return CollisionDetectionEnabled && (PolyLine.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse));
         }
+
         public override bool CollidesWith(Polygon polygon)
         {
             return CollisionDetectionEnabled && (PolyLine.HybridCollidesWith(polygon) || base.CollidesWith(polygon));
         }
+
         public override bool CollidesWith(Vector2 point)
         {
             return CollisionDetectionEnabled && (PolyLine.HybridCollidesWith(point) || base.CollidesWith(point));

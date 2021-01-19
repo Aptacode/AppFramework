@@ -9,6 +9,11 @@ namespace Aptacode.AppFramework.Scene
 {
     public class SceneController : BindableBase
     {
+        public void Setup(BlazorCanvasInterop canvas)
+        {
+            Renderer = new SceneRenderer(canvas, this);
+        }
+
         #region Ctor
 
         public SceneController()
@@ -30,11 +35,6 @@ namespace Aptacode.AppFramework.Scene
         }
 
         #endregion
-
-        public void Setup(BlazorCanvasInterop canvas)
-        {
-            Renderer = new SceneRenderer(canvas, this);
-        }
 
         #region Events
 
