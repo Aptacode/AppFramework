@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.BlazorCanvas;
@@ -16,8 +17,9 @@ namespace Aptacode.AppFramework.Scene
 
         #region Ctor
 
-        public SceneController()
+        public SceneController(Vector2 size)
         {
+            Size = size;
             Scenes = new List<Scene>();
             UserInteractionController = new SceneInteractionController();
             UserInteractionController.OnMouseEvent += UserInteractionControllerOnOnMouseEvent;
@@ -60,6 +62,8 @@ namespace Aptacode.AppFramework.Scene
         public List<Scene> Scenes { get; set; }
 
         public string Cursor { get; set; }
+        public bool ShowGrid { get; set; }
+        public Vector2 Size { get; private set; }
 
         #endregion
 

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Numerics;
 using Aptacode.AppFramework.Components.Controls;
 using Aptacode.AppFramework.Scene;
 using Aptacode.AppFramework.Scene.Events;
@@ -10,8 +11,9 @@ namespace Aptacode.AppFramework.Demo.Pages
     {
         private readonly ComponentBuilder _componentBuilder = new();
 
-        public DemoSceneController()
+        public DemoSceneController(Vector2 size):base(size)
         {
+            ShowGrid = true;
             UserInteractionController.OnMouseEvent += UserInteractionControllerOnOnMouseEvent;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components.Controls;
 using Aptacode.AppFramework.Utilities;
@@ -15,7 +16,7 @@ namespace Aptacode.AppFramework.Demo.Pages
         {
             //Scene
             var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
-            SceneController = new DemoSceneController();
+            SceneController = new DemoSceneController(new Vector2(200,200));
 
             var componentBuilder = new ComponentBuilder();
             var button = componentBuilder

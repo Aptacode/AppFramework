@@ -22,8 +22,7 @@ namespace Aptacode.AppFramework.Scene
         private readonly List<ComponentViewModel> _components = new();
 
         public Vector2 Size { get; init; }
-
-        public bool ShowGrid { get; set; } = true;
+        public Guid Id { get; init; } = Guid.NewGuid();
 
         #endregion
 

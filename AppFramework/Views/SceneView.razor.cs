@@ -17,7 +17,7 @@ namespace Aptacode.AppFramework.Views
         {
             if (firstRender)
             {
-                await BlazorCanvas.Register(Canvas);
+                await BlazorCanvas.Register(ViewModel.Id.ToString(), Canvas);
             }
 
             await base.OnAfterRenderAsync(firstRender);

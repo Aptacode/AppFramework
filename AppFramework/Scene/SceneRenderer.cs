@@ -16,7 +16,7 @@ namespace Aptacode.AppFramework.Scene
         public SceneRenderer(BlazorCanvasInterop canvas, SceneController scene)
         {
             _canvas = canvas;
-            _scene = scene;
+            _sceneController = scene;
         }
 
         #endregion
@@ -24,7 +24,7 @@ namespace Aptacode.AppFramework.Scene
         #region Props
 
         private readonly BlazorCanvasInterop _canvas;
-        private readonly SceneController _scene;
+        private readonly SceneController _sceneController;
 
         #endregion
 
@@ -32,12 +32,12 @@ namespace Aptacode.AppFramework.Scene
 
         public async Task Redraw()
         {
-            _canvas.FillStyle(ComponentViewModel.DefaultFillColor);
-            _canvas.StrokeStyle(ComponentViewModel.DefaultBorderColor);
-            _canvas.LineWidth(ComponentViewModel.DefaultBorderThickness);
-
-            foreach (var scene in _scene.Scenes)
+            foreach (var scene in _sceneController.Scenes)
             {
+                _canvas.SelectCanvas(scene.Id.ToString());
+                _canvas.FillStyle(ComponentViewModel.DefaultFillColor);
+                _canvas.StrokeStyle(ComponentViewModel.DefaultBorderColor);
+                _canvas.LineWidth(ComponentViewModel.DefaultBorderThickness);
                 _canvas.ClearRect(0, 0, scene.Size.X * SceneScale.Value, scene.Size.Y * SceneScale.Value);
 
                 for (var i = 0; i < scene.Components.Count(); i++)
