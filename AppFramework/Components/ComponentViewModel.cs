@@ -328,6 +328,11 @@ namespace Aptacode.AppFramework.Components
             return false;
         }
 
+        public virtual bool CollidesWith(BoundingRectangle rectangle)
+        {
+            return BoundingRectangle.CollidesWith(rectangle);
+        }
+
         #endregion
 
         #region Transformation
