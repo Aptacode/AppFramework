@@ -312,7 +312,7 @@ namespace Aptacode.AppFramework.Components
 
         public virtual bool CollidesWith(Vector2 point)
         {
-            if (!BoundingRectangle.Contains(point))
+            if (!BoundingRectangle.CollidesWith(point))
             {
                 return false;
             }

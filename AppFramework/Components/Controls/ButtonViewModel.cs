@@ -1,15 +1,21 @@
 ﻿using System.Drawing;
+using System.Numerics;
 using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Scene.Events;
-using Rectangle = Aptacode.Geometry.Primitives.Polygons.Rectangle;
 
 namespace Aptacode.AppFramework.Components.Controls
 {
-    public class ButtonViewModel : RectangleViewModel
+    public class ButtonViewModel : PolygonViewModel
     {
         #region Ctor
 
-        public ButtonViewModel(Rectangle rectangle) : base(rectangle)
+        public ButtonViewModel(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Geometry.Primitives.Polygon.Rectangle(topLeft, topRight, bottomRight, bottomLeft))
+        {
+            OnMouseDown += Handle_OnMouseDown;
+            OnMouseUp += Handle_OnMouseUp;
+        }
+
+        public ButtonViewModel(Vector2 topLeft, Vector2 bottomRight) : base(Geometry.Primitives.Polygon.Rectangle(topLeft, bottomRight))
         {
             OnMouseDown += Handle_OnMouseDown;
             OnMouseUp += Handle_OnMouseUp;
