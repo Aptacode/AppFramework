@@ -21,7 +21,7 @@ namespace Aptacode.AppFramework.Demo.Pages
         {
             foreach (var component in Scenes.First().Components)
             {
-                if (component is ButtonViewModel btn)
+                if (component is Button btn)
                 {
                     btn.Text = e.Position.ToString();
                 }

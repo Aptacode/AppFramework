@@ -87,14 +87,14 @@ namespace Aptacode.AppFramework.Components
             return BoundingRectangle;
         }
 
-        public void Add(ComponentViewModel child)
+        public virtual void Add(ComponentViewModel child)
         {
             _children.Add(child);
             UpdateBoundingRectangle();
             Invalidated = true;
         }
 
-        public void AddRange(IEnumerable<ComponentViewModel> children)
+        public virtual void AddRange(IEnumerable<ComponentViewModel> children)
         {
             foreach (var child in children)
             {
@@ -105,7 +105,7 @@ namespace Aptacode.AppFramework.Components
             Invalidated = true;
         }
 
-        public void Remove(ComponentViewModel child)
+        public virtual void Remove(ComponentViewModel child)
         {
             _children.Add(child);
             UpdateBoundingRectangle();
@@ -344,6 +344,7 @@ namespace Aptacode.AppFramework.Components
                 child.Translate(delta);
             }
 
+            UpdateMargin();
             UpdateBoundingRectangle();
 
             Invalidated = true;
@@ -357,7 +358,9 @@ namespace Aptacode.AppFramework.Components
                 child.Rotate(theta);
             }
 
+            UpdateMargin();
             UpdateBoundingRectangle();
+            
             Invalidated = true;
             OnRotated?.Invoke(this, new RotateEvent());
         }
@@ -369,7 +372,9 @@ namespace Aptacode.AppFramework.Components
                 child.Rotate(rotationCenter, theta);
             }
 
+            UpdateMargin();
             UpdateBoundingRectangle();
+            
             Invalidated = true;
             OnRotated?.Invoke(this, new RotateEvent());
         }
@@ -381,7 +386,9 @@ namespace Aptacode.AppFramework.Components
                 child.Scale(delta);
             }
 
+            UpdateMargin();
             UpdateBoundingRectangle();
+            
             Invalidated = true;
             OnScaled?.Invoke(this, new ScaleEvent());
         }
@@ -393,7 +400,9 @@ namespace Aptacode.AppFramework.Components
                 child.Skew(delta);
             }
 
+            UpdateMargin();
             UpdateBoundingRectangle();
+            
             Invalidated = true;
             OnSkewed?.Invoke(this, new SkewEvent());
         }
@@ -415,17 +424,17 @@ namespace Aptacode.AppFramework.Components
 
         public virtual bool HandleMouseEvent(MouseEvent mouseEvent)
         {
-            //Tunnel
-            foreach (var child in Children)
-            {
-                if (child.HandleMouseEvent(mouseEvent))
-                {
-                    return true;
-                }
-            }
-
             if (CollidesWith(mouseEvent.Position))
             {
+                //Tunnel
+                foreach (var child in Children)
+                {
+                    if (child.HandleMouseEvent(mouseEvent))
+                    {
+                        return true;
+                    }
+                }
+
                 switch (mouseEvent)
                 {
                     case MouseDownEvent mouseDownEvent:

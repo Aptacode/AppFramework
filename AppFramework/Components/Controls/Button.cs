@@ -5,17 +5,17 @@ using Aptacode.AppFramework.Scene.Events;
 
 namespace Aptacode.AppFramework.Components.Controls
 {
-    public class ButtonViewModel : PolygonViewModel
+    public class Button : PolygonViewModel
     {
         #region Ctor
 
-        public ButtonViewModel(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Geometry.Primitives.Polygon.Rectangle(topLeft, topRight, bottomRight, bottomLeft))
+        public Button(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Geometry.Primitives.Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
         {
             OnMouseDown += Handle_OnMouseDown;
             OnMouseUp += Handle_OnMouseUp;
         }
 
-        public ButtonViewModel(Vector2 topLeft, Vector2 bottomRight) : base(Geometry.Primitives.Polygon.Rectangle(topLeft, bottomRight))
+        public Button(Vector2 topLeft, Vector2 bottomRight) : base(Geometry.Primitives.Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
         {
             OnMouseDown += Handle_OnMouseDown;
             OnMouseUp += Handle_OnMouseUp;

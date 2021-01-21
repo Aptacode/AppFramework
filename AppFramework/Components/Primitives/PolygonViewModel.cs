@@ -63,14 +63,14 @@ namespace Aptacode.AppFramework.Components.Primitives
             {
                 return;
             }
-
+  
             if (Margin > Constants.Tolerance)
             {
                 BoundingPrimitive = new Polygon(_polygon.Vertices.ToConvexHull(Margin));
             }
             else
             {
-                BoundingPrimitive = Polygon.Create(_polygon.Vertices.Vertices.ToArray());
+                BoundingPrimitive = new Polygon(_polygon.Vertices.Vertices.ToArray());
             }
         }
 
@@ -82,24 +82,18 @@ namespace Aptacode.AppFramework.Components.Primitives
         {
             Polygon.Translate(delta);
             BoundingPrimitive.Translate(delta);
-            UpdateMargin();
-
             base.Translate(delta);
         }
 
         public override void Scale(Vector2 delta)
         {
             Polygon.Scale(delta);
-            UpdateMargin();
-
             base.Scale(delta);
         }
 
         public override void Rotate(float theta)
         {
             Polygon.Rotate(theta);
-            UpdateMargin();
-
             base.Rotate(theta);
         }
 
