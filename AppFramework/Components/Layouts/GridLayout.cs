@@ -8,11 +8,85 @@ namespace Aptacode.AppFramework.Components.Layouts
 {
     public class GridLayout : Layout
     {
+
+        #region Ctor
+
+        public GridLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
+        {
+        }
+
+        public GridLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
+        {
+        }
+
+        #endregion
+
+        #region Events
+
+        #endregion
+
+        #region Props
+
+        public Vector2 Size => Primitive.BoundingRectangle.Size;
+        public Vector2 Position => Primitive.BoundingRectangle.TopLeft;
+        public int CellCount => Rows + Columns;
+
+        private VerticalAlignment _verticalAlignment = VerticalAlignment.Stretch;
+
+        public VerticalAlignment VerticalAlignment
+        {
+            get => _verticalAlignment;
+            set
+            {
+                _verticalAlignment = value;
+                Resize();
+            }
+        }
+
+        private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Stretch;
+
+        public HorizontalAlignment HorizontalAlignment
+        {
+            get => _horizontalAlignment;
+            set
+            {
+                _horizontalAlignment = value;
+                Resize();
+            }
+        }
+
+        private int _rows = 3;
+
+        public int Rows
+        {
+            get => _rows;
+            set
+            {
+                _rows = value;
+                Resize();
+            }
+        }
+
+        private int _columns = 3;
+
+        public int Columns
+        {
+            get => _columns;
+            set
+            {
+                _columns = value;
+                Resize();
+            }
+        }
+
+        #endregion
+
+        #region Overrides
+
         public override void Resize()
         {
             var childCount = Children.Count();
             var childIndex = 0;
-            Console.WriteLine("Resize");
 
             var cellSize = new Vector2(Size.X / _columns, Size.Y / _rows);
             var cellPosition = Position;
@@ -111,75 +185,6 @@ namespace Aptacode.AppFramework.Components.Layouts
             child.Translate(new Vector2(xDelta, yDelta));
         }
 
-        #region Ctor
-
-        public GridLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
-        {
-        }
-
-        public GridLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
-        {
-        }
-
-        #endregion
-
-        #region Events
-
-        #endregion
-
-        #region Props
-
-        public Vector2 Size => Primitive.BoundingRectangle.Size;
-        public Vector2 Position => Primitive.BoundingRectangle.TopLeft;
-        public int CellCount => Rows + Columns;
-
-        private VerticalAlignment _verticalAlignment = VerticalAlignment.Stretch;
-
-        public VerticalAlignment VerticalAlignment
-        {
-            get => _verticalAlignment;
-            set
-            {
-                _verticalAlignment = value;
-                Resize();
-            }
-        }
-
-        private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Stretch;
-
-        public HorizontalAlignment HorizontalAlignment
-        {
-            get => _horizontalAlignment;
-            set
-            {
-                _horizontalAlignment = value;
-                Resize();
-            }
-        }
-
-        private int _rows = 3;
-
-        public int Rows
-        {
-            get => _rows;
-            set
-            {
-                _rows = value;
-                Resize();
-            }
-        }
-
-        private int _columns = 3;
-
-        public int Columns
-        {
-            get => _columns;
-            set
-            {
-                _columns = value;
-                Resize();
-            }
-        }
 
         #endregion
     }
