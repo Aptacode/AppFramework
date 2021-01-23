@@ -6,20 +6,6 @@ namespace Aptacode.AppFramework.Components.Layouts
 {
     public class LinearLayout : Layout
     {
-        #region Ctor
-
-        public LinearLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
-        {
-            
-        }
-
-        public LinearLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
-        {
-            
-        }
-
-        #endregion
-        
         public override void Resize()
         {
             var position = Position;
@@ -46,6 +32,18 @@ namespace Aptacode.AppFramework.Components.Layouts
                 }
             }
         }
+
+        #region Ctor
+
+        public LinearLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
+        {
+        }
+
+        public LinearLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
+        {
+        }
+
+        #endregion
 
         #region Events
 

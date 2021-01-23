@@ -60,7 +60,7 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetText("Button 2")
                 .Build();
 
-            var layout = (GridLayout)componentBuilder
+            var layout = (GridLayout) componentBuilder
                 .SetBase(new GridLayout(new Vector2(20, 20), new Vector2(160, 80)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)

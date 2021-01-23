@@ -18,6 +18,7 @@ namespace Aptacode.AppFramework.Components.Layouts
         }
 
         #endregion
+
         public override void UpdateBounds()
         {
             if (Primitive == null)
@@ -78,7 +79,7 @@ namespace Aptacode.AppFramework.Components.Layouts
         #endregion
 
         #region Props
-        
+
         public Vector2 Size => Primitive.BoundingRectangle.Size;
         public Vector2 Position => Primitive.BoundingRectangle.TopLeft;
 
