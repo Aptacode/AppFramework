@@ -1,30 +1,26 @@
-﻿using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
-using Aptacode.AppFramework.Components.Primitives;
+﻿using System.Numerics;
 using Aptacode.AppFramework.Enums;
-using Aptacode.AppFramework.Utilities;
-using Aptacode.BlazorCanvas;
-using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Layouts
 {
-    public class LinearLayout : PolygonViewModel
+    public class LinearLayout : Layout
     {
-        public override void UpdateBounds()
+        #region Ctor
+
+        public LinearLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
         {
-            if (Primitive == null)
-            {
-                BoundingRectangle = BoundingRectangle.Zero;
-            }
-            else
-            {
-                BoundingRectangle = Primitive.BoundingRectangle;
-            }
+            
         }
 
-        public void Resize()
+        public LinearLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
+        {
+            
+        }
+
+        #endregion
+        
+        public override void Resize()
         {
             var position = Position;
             if (Orientation == Orientation.Vertical)
@@ -51,68 +47,23 @@ namespace Aptacode.AppFramework.Components.Layouts
             }
         }
 
-        public override void Add(ComponentViewModel child)
-        {
-            base.Add(child);
-            Resize();
-        }
-
-        public override void Remove(ComponentViewModel child)
-        {
-            base.Remove(child);
-            Resize();
-        }
-
-        public override async Task Draw(BlazorCanvasInterop ctx)
-        {
-            OldBoundingRectangle = BoundingRectangle;
-            Invalidated = false;
-
-            if (!IsShown)
-            {
-                return;
-            }
-
-            ctx.FillStyle(FillColorName);
-
-            ctx.StrokeStyle(BorderColorName);
-
-            ctx.LineWidth(BorderThickness * SceneScale.Value);
-
-            await CustomDraw(ctx);
-
-            var containedChildren = Children.Where(c => c.CollidesWith(this));
-            for (var i = 0; i < containedChildren.Count() - 1; i++)
-            {
-                await containedChildren.ElementAt(i).Draw(ctx);
-            }
-
-            //Todo use globalCompositeOperation to clip last element with Source-In
-            //Needs temp canvas
-            await containedChildren.Last().Draw(ctx);
-        }
-
-        #region Ctor
-
-        public LinearLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
-        {
-        }
-
-        public LinearLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
-        {
-        }
-
-        #endregion
-
         #region Events
 
         #endregion
 
         #region Props
 
-        public Orientation Orientation { get; set; } = Orientation.Vertical;
-        public Vector2 Size => Primitive.BoundingRectangle.Size;
-        public Vector2 Position => Primitive.BoundingRectangle.TopLeft;
+        private Orientation _orientation = Orientation.Vertical;
+
+        public Orientation Orientation
+        {
+            get => _orientation;
+            set
+            {
+                _orientation = value;
+                Resize();
+            }
+        }
 
         #endregion
     }

@@ -212,7 +212,7 @@ namespace Aptacode.AppFramework.Components
                 Invalidated = true;
             }
         }
-
+        
         #endregion
 
         #region CollisionDetection

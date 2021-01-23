@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components.Controls;
 using Aptacode.AppFramework.Components.Layouts;
+using Aptacode.AppFramework.Enums;
 using Aptacode.AppFramework.Utilities;
 using Microsoft.AspNetCore.Components;
 
@@ -59,13 +60,18 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetText("Button 2")
                 .Build();
 
-            var layout = componentBuilder
-                .SetBase(new LinearLayout(new Vector2(20, 20), new Vector2(50, 80)))
+            var layout = (GridLayout)componentBuilder
+                .SetBase(new GridLayout(new Vector2(20, 20), new Vector2(160, 80)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.Aquamarine)
                 .SetText("")
                 .Build();
+
+            layout.Rows = 3;
+            layout.Columns = 3;
+            layout.HorizontalAlignment = HorizontalAlignment.Center;
+            layout.VerticalAlignment = VerticalAlignment.Bottom;
 
             layout.Add(button1);
             layout.Add(button2);
