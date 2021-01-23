@@ -1,44 +1,17 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Enums;
-using Aptacode.AppFramework.Extensions;
-using Aptacode.AppFramework.Scene.Events;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Collision.Rectangles;
+using Aptacode.Geometry.Primitives;
 
-namespace Aptacode.AppFramework.Components.Controls
+namespace Aptacode.AppFramework.Components.Layouts
 {
     public class LinearLayout : PolygonViewModel
     {
-        #region Ctor
-
-        public LinearLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Geometry.Primitives.Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
-        {
-
-        }
-
-        public LinearLayout(Vector2 topLeft, Vector2 bottomRight) : base(Geometry.Primitives.Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
-        {
-
-        }
-
-        #endregion
-
-        #region Events
-
-        #endregion
-
-        #region Props
-
-        public Orientation Orientation { get; set; } = Orientation.Vertical;
-        public Vector2 Size => Primitive.BoundingRectangle.Size;
-        public Vector2 Position => Primitive.BoundingRectangle.TopLeft;
-        #endregion
-
         public override void UpdateBounds()
         {
             if (Primitive == null)
@@ -73,7 +46,7 @@ namespace Aptacode.AppFramework.Components.Controls
                     child.Scale(new Vector2(1, scale));
                     var delta = position - child.BoundingRectangle.TopLeft;
                     child.Translate(delta);
-                    position += new Vector2( child.BoundingRectangle.Size.X, 0);
+                    position += new Vector2(child.BoundingRectangle.Size.X, 0);
                 }
             }
         }
@@ -105,18 +78,42 @@ namespace Aptacode.AppFramework.Components.Controls
             ctx.StrokeStyle(BorderColorName);
 
             ctx.LineWidth(BorderThickness * SceneScale.Value);
-            
+
             await CustomDraw(ctx);
 
             var containedChildren = Children.Where(c => c.CollidesWith(this));
-            for (int i = 0; i < containedChildren.Count() - 1; i++)
+            for (var i = 0; i < containedChildren.Count() - 1; i++)
             {
                 await containedChildren.ElementAt(i).Draw(ctx);
             }
-            
+
             //Todo use globalCompositeOperation to clip last element with Source-In
             //Needs temp canvas
             await containedChildren.Last().Draw(ctx);
         }
+
+        #region Ctor
+
+        public LinearLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
+        {
+        }
+
+        public LinearLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
+        {
+        }
+
+        #endregion
+
+        #region Events
+
+        #endregion
+
+        #region Props
+
+        public Orientation Orientation { get; set; } = Orientation.Vertical;
+        public Vector2 Size => Primitive.BoundingRectangle.Size;
+        public Vector2 Position => Primitive.BoundingRectangle.TopLeft;
+
+        #endregion
     }
 }

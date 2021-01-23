@@ -16,7 +16,15 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public PolylineViewModel(PolyLine polyLine) : base(polyLine)
         {
-            
+        }
+
+        #endregion
+
+        #region Collision
+
+        public override bool CollidesWith(ComponentViewModel component)
+        {
+            return CollisionDetectionEnabled && (component.CollidesWith(Primitive) || base.CollidesWith(component));
         }
 
         #endregion
@@ -41,7 +49,7 @@ namespace Aptacode.AppFramework.Components.Primitives
             {
                 Primitive = PolyLine.Zero;
             }
- 
+
             BoundingRectangle = GetChildrenBoundingRectangle().Combine(Primitive.BoundingRectangle);
 
             if (Margin > Constants.Tolerance)
@@ -52,15 +60,6 @@ namespace Aptacode.AppFramework.Components.Primitives
             {
                 BoundingPrimitive = PolyLine.Create(Primitive.Vertices.Vertices.ToArray());
             }
-        }
-
-        #endregion
-
-        #region Collision
-
-        public override bool CollidesWith(ComponentViewModel component)
-        {
-            return CollisionDetectionEnabled && (component.CollidesWith(Primitive) || base.CollidesWith(component));
         }
 
         #endregion

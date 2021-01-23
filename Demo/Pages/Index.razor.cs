@@ -2,7 +2,7 @@
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components.Controls;
-using Aptacode.AppFramework.Scene.Events;
+using Aptacode.AppFramework.Components.Layouts;
 using Aptacode.AppFramework.Utilities;
 using Microsoft.AspNetCore.Components;
 
@@ -16,11 +16,11 @@ namespace Aptacode.AppFramework.Demo.Pages
         {
             //Scene
             var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
-            SceneController = new DemoSceneController(new Vector2(200,200));
+            SceneController = new DemoSceneController(new Vector2(200, 200));
 
             var componentBuilder = new ComponentBuilder();
             var button1 = componentBuilder
-                .SetBase(new Button(new Vector2(10,10), new Vector2(20,20)))
+                .SetBase(Button.FromPositionAndSize(new Vector2(10, 10), new Vector2(10, 10)))
                 .SetBorderThickness(.2f)
                 .SetMargin(1.0f)
                 .SetFillColor(Color.Gray)
@@ -28,38 +28,38 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .Build();
 
             var button2 = componentBuilder
-                .SetBase(new Button(new Vector2(10, 10), new Vector2(60,40)))
+                .SetBase(Button.FromPositionAndSize(new Vector2(10, 10), new Vector2(10, 10)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(1.0f)
                 .SetFillColor(Color.Yellow)
                 .SetText("Button 2")
                 .Build();
-            
+
             var button3 = componentBuilder
-                .SetBase(new Button(new Vector2(40, 40), new Vector2(10,50)))
+                .SetBase(Button.FromPositionAndSize(new Vector2(10, 10), new Vector2(10, 10)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(1.0f)
                 .SetFillColor(Color.Green)
                 .SetText("Button 2")
-                .Build();     
-            
+                .Build();
+
             var button4 = componentBuilder
-                .SetBase(new Button(new Vector2(40, 40), new Vector2(10,50)))
+                .SetBase(Button.FromPositionAndSize(new Vector2(10, 10), new Vector2(10, 10)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(1.0f)
                 .SetFillColor(Color.BlanchedAlmond)
                 .SetText("Button 2")
-                .Build();    
-            
+                .Build();
+
             var button5 = componentBuilder
-                .SetBase(new Button(new Vector2(40, 40), new Vector2(10,50)))
+                .SetBase(Button.FromPositionAndSize(new Vector2(10, 10), new Vector2(10, 10)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(1.0f)
                 .SetFillColor(Color.Brown)
                 .SetText("Button 2")
                 .Build();
 
-            var layout  = componentBuilder
+            var layout = componentBuilder
                 .SetBase(new LinearLayout(new Vector2(20, 20), new Vector2(50, 80)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)

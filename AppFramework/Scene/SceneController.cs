@@ -63,7 +63,7 @@ namespace Aptacode.AppFramework.Scene
 
         public string Cursor { get; set; }
         public bool ShowGrid { get; set; }
-        public Vector2 Size { get; private set; }
+        public Vector2 Size { get; }
 
         #endregion
 

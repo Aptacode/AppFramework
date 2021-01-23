@@ -2,6 +2,7 @@
 using System.Numerics;
 using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Scene.Events;
+using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Controls
 {
@@ -9,16 +10,20 @@ namespace Aptacode.AppFramework.Components.Controls
     {
         #region Ctor
 
-        public Button(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Geometry.Primitives.Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
+        public Button(Polygon polygon) : base(polygon)
         {
             OnMouseDown += Handle_OnMouseDown;
             OnMouseUp += Handle_OnMouseUp;
         }
 
-        public Button(Vector2 topLeft, Vector2 bottomRight) : base(Geometry.Primitives.Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
+        public static Button FromPositionAndSize(Vector2 position, Vector2 size)
         {
-            OnMouseDown += Handle_OnMouseDown;
-            OnMouseUp += Handle_OnMouseUp;
+            return new(Polygon.Rectangle.FromPositionAndSize(position, size));
+        }
+
+        public static Button FromTwoPoints(Vector2 topLeft, Vector2 bottomRight)
+        {
+            return new(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
         }
 
         #endregion
@@ -34,10 +39,6 @@ namespace Aptacode.AppFramework.Components.Controls
         {
             BorderColor = Color.Black;
         }
-
-        #endregion
-
-        #region Props
 
         #endregion
     }

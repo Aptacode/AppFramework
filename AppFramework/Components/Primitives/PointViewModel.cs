@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry;
-using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 using Aptacode.Geometry.Vertices;
 
@@ -18,7 +16,6 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public PointViewModel(Point point) : base(point)
         {
-            
         }
 
         #endregion
@@ -28,7 +25,7 @@ namespace Aptacode.AppFramework.Components.Primitives
         public override async Task CustomDraw(BlazorCanvasInterop ctx)
         {
             ctx.BeginPath();
-            ctx.Ellipse((int) Primitive.Position.X * SceneScale.Value, (int)Primitive.Position.Y * SceneScale.Value, 1 * SceneScale.Value, 1 * SceneScale.Value, 0, 0, 2 * (float) Math.PI);
+            ctx.Ellipse((int) Primitive.Position.X * SceneScale.Value, (int) Primitive.Position.Y * SceneScale.Value, 1 * SceneScale.Value, 1 * SceneScale.Value, 0, 0, 2 * (float) Math.PI);
             ctx.Fill();
             ctx.Stroke();
         }

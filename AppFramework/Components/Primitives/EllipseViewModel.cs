@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry;
-using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 using Aptacode.Geometry.Vertices;
 
@@ -18,7 +16,6 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public EllipseViewModel(Ellipse ellipse) : base(ellipse)
         {
-            
         }
 
         #endregion
@@ -29,8 +26,8 @@ namespace Aptacode.AppFramework.Components.Primitives
         {
             ctx.BeginPath();
 
-            ctx.Ellipse((int) Primitive.Position.X * SceneScale.Value, (int)Primitive.Position.Y * SceneScale.Value, (int)Primitive.Radii.X * SceneScale.Value,
-                (int)Primitive.Radii.Y * SceneScale.Value, Primitive.Rotation, 0, 2.0f * (float) Math.PI);
+            ctx.Ellipse((int) Primitive.Position.X * SceneScale.Value, (int) Primitive.Position.Y * SceneScale.Value, (int) Primitive.Radii.X * SceneScale.Value,
+                (int) Primitive.Radii.Y * SceneScale.Value, Primitive.Rotation, 0, 2.0f * (float) Math.PI);
             ctx.Fill();
             ctx.Stroke();
         }

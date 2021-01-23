@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
@@ -7,7 +6,6 @@ using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry;
 using Aptacode.Geometry.Primitives;
-using Aptacode.Geometry.Vertices;
 
 namespace Aptacode.AppFramework.Components.Primitives
 {
@@ -17,7 +15,6 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public PolygonViewModel(Polygon polygon) : base(polygon)
         {
-
         }
 
         #endregion
@@ -46,7 +43,7 @@ namespace Aptacode.AppFramework.Components.Primitives
         {
             if (Primitive == null)
             {
-                Primitive = Polygon.Create(0,0,0,0,0,0);
+                Primitive = Polygon.Create(0, 0, 0, 0, 0, 0);
             }
 
             if (Margin > Constants.Tolerance)

@@ -3,6 +3,6 @@
     public enum Orientation
     {
         Vertical,
-        Horizontal,
+        Horizontal
     }
 }

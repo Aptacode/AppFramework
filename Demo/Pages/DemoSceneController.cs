@@ -11,7 +11,7 @@ namespace Aptacode.AppFramework.Demo.Pages
     {
         private readonly ComponentBuilder _componentBuilder = new();
 
-        public DemoSceneController(Vector2 size):base(size)
+        public DemoSceneController(Vector2 size) : base(size)
         {
             ShowGrid = true;
             UserInteractionController.OnMouseEvent += UserInteractionControllerOnOnMouseEvent;

@@ -340,7 +340,7 @@ namespace Aptacode.AppFramework.Components
             {
                 child.Translate(delta);
             }
-            
+
             UpdateBounds();
 
             Invalidated = true;
@@ -355,7 +355,7 @@ namespace Aptacode.AppFramework.Components
             }
 
             UpdateBounds();
-            
+
             Invalidated = true;
             OnRotated?.Invoke(this, new RotateEvent());
         }
@@ -368,7 +368,7 @@ namespace Aptacode.AppFramework.Components
             }
 
             UpdateBounds();
-            
+
             Invalidated = true;
             OnRotated?.Invoke(this, new RotateEvent());
         }
@@ -381,7 +381,7 @@ namespace Aptacode.AppFramework.Components
             }
 
             UpdateBounds();
-            
+
             Invalidated = true;
             OnScaled?.Invoke(this, new ScaleEvent());
         }
@@ -394,7 +394,7 @@ namespace Aptacode.AppFramework.Components
             }
 
             UpdateBounds();
-            
+
             Invalidated = true;
             OnSkewed?.Invoke(this, new SkewEvent());
         }

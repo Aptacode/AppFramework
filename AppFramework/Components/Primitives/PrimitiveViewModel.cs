@@ -11,7 +11,7 @@ namespace Aptacode.AppFramework.Components.Primitives
         {
             Primitive = primitive;
         }
-        
+
         #endregion
 
         #region Props
@@ -41,7 +41,7 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public override void Scale(Vector2 delta)
         {
-            Primitive.ScaleAboutTopLeft(delta);
+            Primitive.ScaleAboutCenter(delta);
             base.Scale(delta);
         }
 
@@ -66,7 +66,7 @@ namespace Aptacode.AppFramework.Components.Primitives
         #endregion
 
         #region Collision
-        
+
         public override bool CollidesWith(Point point)
         {
             return CollisionDetectionEnabled && (Primitive.HybridCollidesWith(point) || base.CollidesWith(point));

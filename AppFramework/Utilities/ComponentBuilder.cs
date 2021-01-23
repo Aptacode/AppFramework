@@ -58,7 +58,7 @@ namespace Aptacode.AppFramework.Utilities
             component.Margin = _margin;
 
             component.AddRange(_children);
-            
+
             Reset();
             return component;
         }
@@ -86,7 +86,7 @@ namespace Aptacode.AppFramework.Utilities
         private float _margin = ComponentViewModel.DefaultMargin;
         private string _text = "";
         private readonly List<ComponentViewModel> _children = new();
-        private ComponentViewModel _baseComponent = null;
+        private ComponentViewModel _baseComponent;
 
         #endregion
     }
