@@ -48,7 +48,7 @@ namespace Aptacode.AppFramework.Scene
             var delta = currentTime - _lastTick;
             var frameRate = 1.0f / delta.TotalSeconds;
             _lastTick = currentTime;
-            Console.WriteLine($"{frameRate}fps");
+            //Console.WriteLine($"{frameRate}fps");
 
             await Renderer.Redraw();
         }

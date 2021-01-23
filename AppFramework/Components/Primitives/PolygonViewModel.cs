@@ -1,25 +1,23 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry;
-using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 using Aptacode.Geometry.Vertices;
 
 namespace Aptacode.AppFramework.Components.Primitives
 {
-    public class PolygonViewModel : ComponentViewModel
+    public class PolygonViewModel : PrimitiveViewModel<Polygon>
     {
         #region Canvas
 
-        public PolygonViewModel(Polygon polygon)
+        public PolygonViewModel(Polygon polygon) : base(polygon)
         {
-            Polygon = polygon;
-            OldBoundingRectangle = BoundingRectangle =
-                Children.ToBoundingRectangle().Combine(BoundingPrimitive.BoundingRectangle);
+
         }
 
         #endregion
@@ -28,10 +26,10 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         public override async Task CustomDraw(BlazorCanvasInterop ctx)
         {
-            var vertices = new Vector2[Polygon.Vertices.Length];
-            for (var i = 0; i < Polygon.Vertices.Length; i++)
+            var vertices = new Vector2[Primitive.Vertices.Length];
+            for (var i = 0; i < Primitive.Vertices.Length; i++)
             {
-                vertices[i] = Polygon.Vertices[i] * SceneScale.Value;
+                vertices[i] = Primitive.Vertices[i] * SceneScale.Value;
             }
 
             ctx.Polygon(vertices);
@@ -42,114 +40,30 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         #endregion
 
-        #region Props
+        #region Collision
 
-        private Polygon _polygon;
-
-        public Polygon Polygon
+        public override void UpdateBounds()
         {
-            get => _polygon;
-            set
+            if (Primitive == null)
             {
-                _polygon = value;
-                UpdateMargin();
-                Invalidated = true;
+                Primitive = Polygon.Create(0,0,0,0,0,0);
             }
-        }
 
-        public override void UpdateMargin()
-        {
-            if (_polygon == null)
-            {
-                return;
-            }
-  
             if (Margin > Constants.Tolerance)
             {
-                BoundingPrimitive = new Polygon(_polygon.Vertices.ToConvexHull(Margin));
+                BoundingPrimitive = Primitive.GetBoundingPrimitive(Margin);
             }
             else
             {
-                BoundingPrimitive = new Polygon(_polygon.Vertices.Vertices.ToArray());
+                BoundingPrimitive = PolyLine.Create(Primitive.Vertices.Vertices.ToArray());
             }
-        }
 
-        #endregion
-
-        #region Transformations
-
-        public override void Translate(Vector2 delta)
-        {
-            Polygon.Translate(delta);
-            BoundingPrimitive.Translate(delta);
-            base.Translate(delta);
-        }
-
-        public override void Scale(Vector2 delta)
-        {
-            Polygon.Scale(delta);
-            base.Scale(delta);
-        }
-
-        public override void Rotate(float theta)
-        {
-            Polygon.Rotate(theta);
-            base.Rotate(theta);
-        }
-
-        public override void Rotate(Vector2 rotationCenter, float theta)
-        {
-            Polygon.Rotate(rotationCenter, theta);
-            UpdateMargin();
-
-            base.Rotate(rotationCenter, theta);
-        }
-
-        public override void Skew(Vector2 delta)
-        {
-            Polygon.Skew(delta);
-            UpdateMargin();
-            base.Skew(delta);
-        }
-
-        #endregion
-
-        #region Collision
-
-        public override BoundingRectangle UpdateBoundingRectangle()
-        {
-            BoundingRectangle = base.UpdateBoundingRectangle().Combine(BoundingPrimitive.BoundingRectangle);
-            return BoundingRectangle;
+            BoundingRectangle = GetChildrenBoundingRectangle().Combine(BoundingPrimitive.BoundingRectangle);
         }
 
         public override bool CollidesWith(ComponentViewModel component)
         {
-            return CollisionDetectionEnabled && (component.CollidesWith(Polygon) || base.CollidesWith(component));
-        }
-
-        public override bool CollidesWith(Point point)
-        {
-            return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(point) || base.CollidesWith(point));
-        }
-
-        public override bool CollidesWith(PolyLine polyLine)
-        {
-            return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine));
-        }
-
-        public override bool CollidesWith(Ellipse ellipse)
-        {
-            return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse));
-        }
-
-        public override bool CollidesWith(Polygon polygon)
-        {
-            return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(polygon) || base.CollidesWith(polygon));
-        }
-
-        public override bool CollidesWith(Vector2 point)
-        {
-            return CollisionDetectionEnabled && (Polygon.HybridCollidesWith(point) || base.CollidesWith(point));
+            return CollisionDetectionEnabled && (component.CollidesWith(Primitive) || base.CollidesWith(component));
         }
 
         #endregion

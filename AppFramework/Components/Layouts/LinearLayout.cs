@@ -35,16 +35,22 @@ namespace Aptacode.AppFramework.Components.Controls
         #region Props
 
         public Orientation Orientation { get; set; } = Orientation.Vertical;
-        public Vector2 Size => Polygon.BoundingRectangle.Size;
-        public Vector2 Position => Polygon.BoundingRectangle.TopLeft;
+        public Vector2 Size => Primitive.BoundingRectangle.Size;
+        public Vector2 Position => Primitive.BoundingRectangle.TopLeft;
         #endregion
 
-        public override BoundingRectangle UpdateBoundingRectangle()
+        public override void UpdateBounds()
         {
-            BoundingRectangle = Polygon.BoundingRectangle;
-            return BoundingRectangle;
+            if (Primitive == null)
+            {
+                BoundingRectangle = BoundingRectangle.Zero;
+            }
+            else
+            {
+                BoundingRectangle = Primitive.BoundingRectangle;
+            }
         }
-        
+
         public void Resize()
         {
             var position = Position;

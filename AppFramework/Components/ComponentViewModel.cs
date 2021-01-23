@@ -13,7 +13,7 @@ using Point = Aptacode.Geometry.Primitives.Point;
 
 namespace Aptacode.AppFramework.Components
 {
-    public class ComponentViewModel
+    public abstract class ComponentViewModel
     {
         #region Ctor
 
@@ -26,8 +26,8 @@ namespace Aptacode.AppFramework.Components
             BorderThickness = DefaultBorderThickness;
             BorderColor = Color.Black;
             FillColor = Color.White;
-            OldBoundingRectangle = BoundingRectangle = _children.ToBoundingRectangle();
             Invalidated = true;
+            OldBoundingRectangle = BoundingRectangle = BoundingRectangle.Zero;
         }
 
         #endregion
@@ -81,16 +81,17 @@ namespace Aptacode.AppFramework.Components
 
         public IEnumerable<ComponentViewModel> Children => _children;
 
-        public virtual BoundingRectangle UpdateBoundingRectangle()
+        public abstract void UpdateBounds();
+
+        public BoundingRectangle GetChildrenBoundingRectangle()
         {
-            BoundingRectangle = _children.ToBoundingRectangle();
-            return BoundingRectangle;
+            return _children.ToBoundingRectangle();
         }
 
         public virtual void Add(ComponentViewModel child)
         {
             _children.Add(child);
-            UpdateBoundingRectangle();
+            UpdateBounds();
             Invalidated = true;
         }
 
@@ -101,14 +102,14 @@ namespace Aptacode.AppFramework.Components
                 _children.Add(child);
             }
 
-            UpdateBoundingRectangle();
+            UpdateBounds();
             Invalidated = true;
         }
 
         public virtual void Remove(ComponentViewModel child)
         {
             _children.Add(child);
-            UpdateBoundingRectangle();
+            UpdateBounds();
             Invalidated = true;
         }
 
@@ -141,7 +142,7 @@ namespace Aptacode.AppFramework.Components
             set
             {
                 _margin = value;
-                UpdateMargin();
+                UpdateBounds();
                 Invalidated = true;
             }
         }
@@ -215,10 +216,6 @@ namespace Aptacode.AppFramework.Components
         #endregion
 
         #region CollisionDetection
-
-        public virtual void UpdateMargin()
-        {
-        }
 
         public virtual bool CollidesWith(ComponentViewModel component)
         {
@@ -343,9 +340,8 @@ namespace Aptacode.AppFramework.Components
             {
                 child.Translate(delta);
             }
-
-            UpdateMargin();
-            UpdateBoundingRectangle();
+            
+            UpdateBounds();
 
             Invalidated = true;
             OnTranslated?.Invoke(this, new TranslateEvent());
@@ -358,8 +354,7 @@ namespace Aptacode.AppFramework.Components
                 child.Rotate(theta);
             }
 
-            UpdateMargin();
-            UpdateBoundingRectangle();
+            UpdateBounds();
             
             Invalidated = true;
             OnRotated?.Invoke(this, new RotateEvent());
@@ -372,8 +367,7 @@ namespace Aptacode.AppFramework.Components
                 child.Rotate(rotationCenter, theta);
             }
 
-            UpdateMargin();
-            UpdateBoundingRectangle();
+            UpdateBounds();
             
             Invalidated = true;
             OnRotated?.Invoke(this, new RotateEvent());
@@ -386,8 +380,7 @@ namespace Aptacode.AppFramework.Components
                 child.Scale(delta);
             }
 
-            UpdateMargin();
-            UpdateBoundingRectangle();
+            UpdateBounds();
             
             Invalidated = true;
             OnScaled?.Invoke(this, new ScaleEvent());
@@ -400,8 +393,7 @@ namespace Aptacode.AppFramework.Components
                 child.Skew(delta);
             }
 
-            UpdateMargin();
-            UpdateBoundingRectangle();
+            UpdateBounds();
             
             Invalidated = true;
             OnSkewed?.Invoke(this, new SkewEvent());

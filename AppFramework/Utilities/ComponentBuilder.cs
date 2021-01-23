@@ -58,15 +58,14 @@ namespace Aptacode.AppFramework.Utilities
             component.Margin = _margin;
 
             component.AddRange(_children);
-            component.UpdateBoundingRectangle();
-
+            
             Reset();
             return component;
         }
 
         public void Reset()
         {
-            _baseComponent = new ComponentViewModel();
+            _baseComponent = null;
             _children.Clear();
             _borderColor = Color.Black;
             _fillColor = Color.White;
@@ -87,7 +86,7 @@ namespace Aptacode.AppFramework.Utilities
         private float _margin = ComponentViewModel.DefaultMargin;
         private string _text = "";
         private readonly List<ComponentViewModel> _children = new();
-        private ComponentViewModel _baseComponent = new();
+        private ComponentViewModel _baseComponent = null;
 
         #endregion
     }

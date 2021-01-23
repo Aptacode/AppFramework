@@ -39,7 +39,7 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetBase(new Button(new Vector2(40, 40), new Vector2(10,50)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(1.0f)
-                .SetFillColor(Color.Yellow)
+                .SetFillColor(Color.Green)
                 .SetText("Button 2")
                 .Build();     
             
@@ -47,7 +47,7 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetBase(new Button(new Vector2(40, 40), new Vector2(10,50)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(1.0f)
-                .SetFillColor(Color.Yellow)
+                .SetFillColor(Color.BlanchedAlmond)
                 .SetText("Button 2")
                 .Build();    
             
@@ -55,7 +55,7 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetBase(new Button(new Vector2(40, 40), new Vector2(10,50)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(1.0f)
-                .SetFillColor(Color.Yellow)
+                .SetFillColor(Color.Brown)
                 .SetText("Button 2")
                 .Build();
 
@@ -63,7 +63,7 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetBase(new LinearLayout(new Vector2(20, 20), new Vector2(50, 80)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
-                .SetFillColor(Color.Green)
+                .SetFillColor(Color.Aquamarine)
                 .SetText("")
                 .Build();
 
