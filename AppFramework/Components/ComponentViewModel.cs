@@ -208,7 +208,7 @@ namespace Aptacode.AppFramework.Components
             set
             {
                 _borderColor = value;
-                BorderColorName = value.ToKnownColor().ToString();
+                BorderColorName = $"rgba({value.R},{value.G},{value.B},{value.A})";
                 Invalidated = true;
             }
         }
@@ -223,7 +223,7 @@ namespace Aptacode.AppFramework.Components
             set
             {
                 _fillColor = value;
-                FillColorName = value.ToKnownColor().ToString();
+                FillColorName = $"rgba({value.R},{value.G},{value.B},{value.A / 255.0})";
                 Invalidated = true;
             }
         }

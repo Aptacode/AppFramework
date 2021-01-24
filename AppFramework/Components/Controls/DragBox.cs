@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Aptacode.AppFramework.Components.Controls
         {
             OnMouseMoveBubbled += Handle_OnMouseMove;
             OnMouseUpBubbled += Handle_OnMouseUp;
+            OnMouseDownBubbled += Handle_OnMouseDown;
         }
 
         public static DragBox FromPositionAndSize(Vector2 position, Vector2 size)
@@ -30,6 +32,17 @@ namespace Aptacode.AppFramework.Components.Controls
         {
             return new(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
         }
+
+        #endregion
+
+        #region props
+
+        public bool IsDragging { get; set; }
+        public Vector2 LastDragPosition { get; set; }
+        public ComponentViewModel? SelectedChild { get; set; }
+
+        public List<ComponentViewModel> ChildComponents { get; set; } = new();
+        public List<ComponentViewModel> ChildLayouts { get; set; } = new();
 
         #endregion
 
@@ -76,12 +89,10 @@ namespace Aptacode.AppFramework.Components.Controls
 
         public override void Add(ComponentViewModel child)
         {
-            child.OnMouseDown += ChildOnOnMouseDown;
-
             //Ensure child is within the bounds of the DragBox
             var position = GetChildPositionWithinBounds(child);
             child.SetPosition(position);
-            
+
             base.Add(child);
         }
 
@@ -139,15 +150,23 @@ namespace Aptacode.AppFramework.Components.Controls
 
         public override void Remove(ComponentViewModel child)
         {
-            child.OnMouseDown -= ChildOnOnMouseDown;
             base.Remove(child);
         }
 
-        private void ChildOnOnMouseDown(object? sender, MouseDownEvent e)
+        private void Handle_OnMouseDown(object? sender, MouseDownEvent e)
         {
             IsDragging = true;
-            SelectedChild = (ComponentViewModel) sender;
-            LastDragPosition = e.Position;
+            SelectedChild = null;
+            foreach (var child in Children)
+            {
+                if (child.CollidesWith(e.Position))
+                {
+                    SelectedChild = child;
+                    LastDragPosition = e.Position;
+                    return;
+                }
+            }
+            
         }
 
         private void Handle_OnMouseUp(object? sender, MouseUpEvent e)
@@ -156,15 +175,6 @@ namespace Aptacode.AppFramework.Components.Controls
             SelectedChild = null;
         }
 
-        #region props
-
-        public bool IsDragging { get; set; }
-        public Vector2 LastDragPosition { get; set; }
-        public ComponentViewModel? SelectedChild { get; set; }
-
-        #endregion
-        
-        
         #region Events
 
         private void Handle_OnMouseMove(object? sender, MouseMoveEvent e)
@@ -189,10 +199,6 @@ namespace Aptacode.AppFramework.Components.Controls
 
         public override void Dispose()
         {
-            foreach (var child in Children)
-            {
-                child.OnMouseDown -= ChildOnOnMouseDown;
-            }
 
             base.Dispose();
         }

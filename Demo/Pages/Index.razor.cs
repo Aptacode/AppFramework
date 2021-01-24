@@ -38,7 +38,7 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetBase(DragBox.FromPositionAndSize(new Vector2(20, 20), new Vector2(50, 80)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
-                .SetFillColor(Color.LightGray)
+                .SetFillColor(Color.FromArgb(100, 100,40,20))
                 .SetText("")
                 .Build();
 
@@ -82,17 +82,13 @@ namespace Aptacode.AppFramework.Demo.Pages
             var componentBuilder = new ComponentBuilder();
 
             var rand = new Random();
-            var colors = new[]
-            {
-                Color.Green, Color.Blue, Color.Yellow, Color.Red, Color.Chocolate, Color.DarkSlateBlue, Color.LawnGreen, Color.DarkTurquoise
-            };
             for (var i = 0; i < 8; i++)
             {
                 var button = (Button)componentBuilder
                     .SetBase(Button.FromPositionAndSize(new Vector2(i * 10, i * 10), new Vector2(10, 10)))
                     .SetBorderThickness(.5f)
                     .SetMargin(1.0f)
-                    .SetFillColor(colors[i])
+                    .SetFillColor(Color.FromArgb(255, rand.Next(255), rand.Next(255), rand.Next(255)))
                     .SetText($"Button{i + 1}")
                     .Build();
 
