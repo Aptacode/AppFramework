@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Aptacode.AppFramework.Enums;
 using Aptacode.Geometry.Primitives;
 
@@ -13,10 +14,7 @@ namespace Aptacode.AppFramework.Components.Layouts
             {
                 foreach (var child in Children)
                 {
-                    var scale = Size.X / child.BoundingRectangle.Size.X;
-                    child.Scale(new Vector2(scale, 1));
-                    var delta = position - child.BoundingRectangle.TopLeft;
-                    child.Translate(delta);
+                    RepositionChild(child, new Vector2(Size.X, child.BoundingRectangle.Size.Y), position);
                     position += new Vector2(0, child.BoundingRectangle.Size.Y);
                 }
             }
@@ -24,10 +22,7 @@ namespace Aptacode.AppFramework.Components.Layouts
             {
                 foreach (var child in Children)
                 {
-                    var scale = Size.Y / child.BoundingRectangle.Size.Y;
-                    child.Scale(new Vector2(1, scale));
-                    var delta = position - child.BoundingRectangle.TopLeft;
-                    child.Translate(delta);
+                    RepositionChild(child, new Vector2(child.BoundingRectangle.Size.X, Size.Y), position);
                     position += new Vector2(child.BoundingRectangle.Size.X, 0);
                 }
             }

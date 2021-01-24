@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
+using Aptacode.AppFramework.Enums;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.AppFramework.Utilities;
@@ -13,7 +14,7 @@ using Point = Aptacode.Geometry.Primitives.Point;
 
 namespace Aptacode.AppFramework.Components
 {
-    public abstract class ComponentViewModel
+    public abstract class ComponentViewModel : IDisposable
     {
         #region Ctor
 
@@ -133,6 +134,30 @@ namespace Aptacode.AppFramework.Components
         public BoundingRectangle OldBoundingRectangle { get; protected set; }
         public BoundingRectangle BoundingRectangle { get; protected set; }
         public Primitive BoundingPrimitive { get; set; }
+
+        private VerticalAlignment _verticalAlignment = VerticalAlignment.Stretch;
+
+        public VerticalAlignment VerticalAlignment
+        {
+            get => _verticalAlignment;
+            set
+            {
+                _verticalAlignment = value;
+                OnVerticalAlignmentChanged?.Invoke(this, value);
+            }
+        }
+
+        private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Stretch;
+
+        public HorizontalAlignment HorizontalAlignment
+        {
+            get => _horizontalAlignment;
+            set
+            {
+                _horizontalAlignment = value;
+                OnHorizontalAlignmentChanged?.Invoke(this, value);
+            }
+        }
 
         private float _margin;
 
@@ -373,11 +398,37 @@ namespace Aptacode.AppFramework.Components
             OnRotated?.Invoke(this, new RotateEvent());
         }
 
-        public virtual void Scale(Vector2 delta)
+        public virtual void ScaleAboutCenter(Vector2 delta)
         {
             foreach (var child in Children)
             {
-                child.Scale(delta);
+                child.ScaleAboutCenter(delta);
+            }
+
+            UpdateBounds();
+
+            Invalidated = true;
+            OnScaled?.Invoke(this, new ScaleEvent());
+        }
+
+        public virtual void ScaleAboutTopLeft(Vector2 delta)
+        {
+            foreach (var child in Children)
+            {
+                child.ScaleAboutTopLeft(delta);
+            }
+
+            UpdateBounds();
+
+            Invalidated = true;
+            OnScaled?.Invoke(this, new ScaleEvent());
+        }
+        
+        public virtual void Scale(Vector2 scaleCenter, Vector2 delta)
+        {
+            foreach (var child in Children)
+            {
+                child.Scale(scaleCenter, delta);
             }
 
             UpdateBounds();
@@ -399,6 +450,35 @@ namespace Aptacode.AppFramework.Components
             OnSkewed?.Invoke(this, new SkewEvent());
         }
 
+        public virtual void SetPosition(Vector2 position)
+        {
+            var delta = position - BoundingRectangle.TopLeft;
+            foreach (var child in Children)
+            {
+                child.Translate(delta);
+            }
+
+            UpdateBounds();
+
+            Invalidated = true;
+            OnSkewed?.Invoke(this, new SkewEvent());
+        }
+        
+        public virtual void SetSize(Vector2 size)
+        {
+            var scaleFactor = size / BoundingRectangle.Size;
+            
+            foreach (var child in Children)
+            {
+                child.Scale(BoundingRectangle.TopLeft, scaleFactor);
+            }
+
+            UpdateBounds();
+
+            Invalidated = true;
+            OnSkewed?.Invoke(this, new SkewEvent());
+        }
+        
         #endregion
 
         #region Events
@@ -473,7 +553,14 @@ namespace Aptacode.AppFramework.Components
         public event EventHandler<RotateEvent> OnRotated;
         public event EventHandler<ScaleEvent> OnScaled;
         public event EventHandler<SkewEvent> OnSkewed;
+        
+        public event EventHandler<VerticalAlignment> OnVerticalAlignmentChanged;
+        public event EventHandler<HorizontalAlignment> OnHorizontalAlignmentChanged;
 
         #endregion
+
+        public virtual void Dispose()
+        {
+        }
     }
 }

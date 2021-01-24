@@ -39,10 +39,34 @@ namespace Aptacode.AppFramework.Components.Primitives
             base.Translate(delta);
         }
 
-        public override void Scale(Vector2 delta)
+        public override void ScaleAboutCenter(Vector2 delta)
         {
             Primitive.ScaleAboutCenter(delta);
-            base.Scale(delta);
+            base.ScaleAboutCenter(delta);
+        }
+
+        public override void ScaleAboutTopLeft(Vector2 delta)
+        {
+            Primitive.ScaleAboutTopLeft(delta);
+            base.ScaleAboutCenter(delta);
+        }
+
+        public override void Scale(Vector2 scaleCenter,Vector2 delta)
+        {
+            Primitive.Scale(scaleCenter, delta);
+            base.ScaleAboutCenter(delta);
+        }
+
+        public override void SetPosition(Vector2 position)
+        {
+            Primitive.SetPosition(position);
+            base.SetPosition(position);
+        }
+
+        public override void SetSize(Vector2 size)
+        {
+            Primitive.SetSize(size);
+            base.SetSize(size);
         }
 
         public override void Rotate(float theta)

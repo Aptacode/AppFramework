@@ -31,18 +31,18 @@ namespace Aptacode.AppFramework.Demo.Pages
         private ComponentViewModel GetGrid()
         {
             var componentBuilder = new ComponentBuilder();
-            var layout = (GridLayout)componentBuilder
-                .SetBase(new GridLayout(new Vector2(20, 20), new Vector2(160, 80)))
+            var layout = (LinearLayout)componentBuilder
+                .SetBase(new LinearLayout(new Vector2(20, 20), new Vector2(50, 80)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.LightGray)
                 .SetText("")
                 .Build();
 
-            layout.Rows = 3;
-            layout.Columns = 3;
+            //layout.Rows = 3;
+            //layout.Columns = 3;
             layout.HorizontalAlignment = HorizontalAlignment.Stretch;
-            layout.VerticalAlignment = VerticalAlignment.Center;
+            layout.VerticalAlignment = VerticalAlignment.Stretch;
 
             var rand = new Random();
             var colors = new[]
@@ -58,6 +58,10 @@ namespace Aptacode.AppFramework.Demo.Pages
                     .SetFillColor(colors[i])
                     .SetText($"Button{i + 1}")
                     .Build();
+
+                button.VerticalAlignment = (VerticalAlignment) (i % 4);
+                button.HorizontalAlignment = (HorizontalAlignment) (i % 4);
+
 
                 layout.Add(button);
             }

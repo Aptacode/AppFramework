@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Numerics;
-using Aptacode.AppFramework.Enums;
 using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Layouts
@@ -30,30 +28,6 @@ namespace Aptacode.AppFramework.Components.Layouts
         public Vector2 Size => Primitive.BoundingRectangle.Size;
         public Vector2 Position => Primitive.BoundingRectangle.TopLeft;
         public int CellCount => Rows + Columns;
-
-        private VerticalAlignment _verticalAlignment = VerticalAlignment.Stretch;
-
-        public VerticalAlignment VerticalAlignment
-        {
-            get => _verticalAlignment;
-            set
-            {
-                _verticalAlignment = value;
-                Resize();
-            }
-        }
-
-        private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Stretch;
-
-        public HorizontalAlignment HorizontalAlignment
-        {
-            get => _horizontalAlignment;
-            set
-            {
-                _horizontalAlignment = value;
-                Resize();
-            }
-        }
 
         private int _rows = 3;
 
@@ -99,7 +73,11 @@ namespace Aptacode.AppFramework.Components.Layouts
                     if (childIndex < childCount)
                     {
                         var child = Children.ElementAt(childIndex++);
-                        UpdateChild(child, cellSize, cellPosition);
+                        RepositionChild(child, cellSize, cellPosition);
+                    }
+                    else
+                    {
+                        return;
                     }
 
                     cellPosition += new Vector2(cellSize.X, 0);
@@ -108,84 +86,7 @@ namespace Aptacode.AppFramework.Components.Layouts
                 cellPosition += new Vector2(0, cellSize.Y);
             }
         }
-
-        private void UpdateChild(ComponentViewModel child, Vector2 cellSize, Vector2 cellPosition)
-        {
-            var scale = cellSize / child.BoundingRectangle.Size;
-            var xScale = 1.0f;
-            var yScale = 1.0f;
-
-            switch (VerticalAlignment)
-            {
-                case VerticalAlignment.Stretch:
-                    yScale = scale.Y;
-                    break;
-                case VerticalAlignment.Top:
-                    yScale = Math.Min(scale.Y, 1.0f);
-                    break;
-                case VerticalAlignment.Center:
-                    yScale = Math.Min(scale.Y, 1.0f);
-                    break;
-                case VerticalAlignment.Bottom:
-                    yScale = Math.Min(scale.Y, 1.0f);
-                    break;
-            }
-
-            switch (HorizontalAlignment)
-            {
-                case HorizontalAlignment.Stretch:
-                    xScale = scale.X;
-                    break;
-                case HorizontalAlignment.Left:
-                    xScale = Math.Min(scale.X, 1.0f);
-                    break;
-                case HorizontalAlignment.Center:
-                    xScale = Math.Min(scale.X, 1.0f);
-                    break;
-                case HorizontalAlignment.Right:
-                    xScale = Math.Min(scale.X, 1.0f);
-                    break;
-            }
-
-            child.Scale(new Vector2(xScale, yScale));
-
-            var delta = cellPosition - child.BoundingRectangle.TopLeft;
-            var xDelta = delta.X;
-            var yDelta = delta.Y;
-
-            switch (VerticalAlignment)
-            {
-                case VerticalAlignment.Stretch:
-                    break;
-                case VerticalAlignment.Top:
-                    break;
-                case VerticalAlignment.Center:
-                    yDelta += Math.Clamp((cellSize.Y - child.BoundingRectangle.Size.Y) / 2, 0, cellSize.Y);
-                    break;
-                case VerticalAlignment.Bottom:
-                    yDelta += Math.Clamp(cellSize.Y - child.BoundingRectangle.Size.Y, 0, cellSize.Y);
-                    break;
-            }
-
-            switch (HorizontalAlignment)
-            {
-                case HorizontalAlignment.Stretch:
-                    break;
-                case HorizontalAlignment.Left:
-                    break;
-                case HorizontalAlignment.Center:
-                    xDelta += Math.Clamp((cellSize.X - child.BoundingRectangle.Size.X) / 2, 0, cellSize.X);
-                    break;
-                case HorizontalAlignment.Right:
-                    xDelta += Math.Clamp(cellSize.X - child.BoundingRectangle.Size.X, 0, cellSize.X);
-                    break;
-            }
-
-
-            child.Translate(new Vector2(xDelta, yDelta));
-        }
-
-
+        
         #endregion
     }
 }
