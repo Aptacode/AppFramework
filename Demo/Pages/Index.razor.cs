@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -21,16 +22,39 @@ namespace Aptacode.AppFramework.Demo.Pages
             var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
             SceneController = new DemoSceneController(new Vector2(200, 200));
 
-            scene.Add(GetGrid());
+            //scene.Add(GetGrid());
+            scene.Add(CreateDragBox());
 
             SceneController.Add(scene);
 
             await base.OnInitializedAsync();
         }
 
+        private DragBox CreateDragBox()
+        {
+            var componentBuilder = new ComponentBuilder();
+
+            var component = (DragBox)componentBuilder
+                .SetBase(DragBox.FromPositionAndSize(new Vector2(20, 20), new Vector2(50, 80)))
+                .SetBorderThickness(0.2f)
+                .SetMargin(0.0f)
+                .SetFillColor(Color.LightGray)
+                .SetText("")
+                .Build();
+
+
+            foreach (var button in GenerateButtons(8))
+            {
+                component.Add(button);
+            }
+
+            return component;
+        }
+        
         private ComponentViewModel GetGrid()
         {
             var componentBuilder = new ComponentBuilder();
+
             var layout = (LinearLayout) componentBuilder
                 .SetBase(new LinearLayout(new Vector2(20, 20), new Vector2(50, 80)))
                 .SetBorderThickness(0.2f)
@@ -38,11 +62,24 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetFillColor(Color.LightGray)
                 .SetText("")
                 .Build();
-
+            
             //layout.Rows = 3;
             //layout.Columns = 3;
             layout.HorizontalAlignment = HorizontalAlignment.Stretch;
             layout.VerticalAlignment = VerticalAlignment.Stretch;
+
+            foreach (var button in GenerateButtons(8))
+            {
+                layout.Add(button);
+            }
+
+            return layout;
+        }
+        
+        public List<Button> GenerateButtons(int buttonCount)
+        {
+            List<Button> buttons = new();
+            var componentBuilder = new ComponentBuilder();
 
             var rand = new Random();
             var colors = new[]
@@ -51,7 +88,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             };
             for (var i = 0; i < 8; i++)
             {
-                var button = componentBuilder
+                var button = (Button)componentBuilder
                     .SetBase(Button.FromPositionAndSize(new Vector2(i * 10, i * 10), new Vector2(10, 10)))
                     .SetBorderThickness(.5f)
                     .SetMargin(1.0f)
@@ -59,14 +96,14 @@ namespace Aptacode.AppFramework.Demo.Pages
                     .SetText($"Button{i + 1}")
                     .Build();
 
-                button.VerticalAlignment = (VerticalAlignment) (i % 4);
-                button.HorizontalAlignment = (HorizontalAlignment) (i % 4);
+                button.VerticalAlignment = (VerticalAlignment)(i % 4);
+                button.HorizontalAlignment = (HorizontalAlignment)(i % 4);
 
 
-                layout.Add(button);
+                buttons.Add(button);
             }
 
-            return layout;
+            return buttons;
         }
     }
 }

@@ -502,28 +502,37 @@ namespace Aptacode.AppFramework.Components
         {
             if (CollidesWith(mouseEvent.Position))
             {
+                bool isTunnelHandled = false;
                 //Tunnel
                 foreach (var child in Children)
                 {
                     if (child.HandleMouseEvent(mouseEvent))
                     {
-                        return true;
+                        isTunnelHandled = true;
                     }
                 }
 
                 switch (mouseEvent)
                 {
+                    case MouseMoveEvent mouseMoveEvent:
+                        OnMouseMoveBubbled?.Invoke(this, mouseMoveEvent);
+                        if (!isTunnelHandled) OnMouseMove?.Invoke(this, mouseMoveEvent);
+                        break;
                     case MouseDownEvent mouseDownEvent:
-                        OnMouseDown?.Invoke(this, mouseDownEvent);
+                        OnMouseDownBubbled?.Invoke(this, mouseDownEvent);
+                        if (!isTunnelHandled) OnMouseDown?.Invoke(this, mouseDownEvent);
                         break;
                     case MouseUpEvent mouseUpEvent:
-                        OnMouseUp?.Invoke(this, mouseUpEvent);
+                        OnMouseUpBubbled?.Invoke(this, mouseUpEvent);
+                        if (!isTunnelHandled) OnMouseUp?.Invoke(this, mouseUpEvent);
                         break;
                     case MouseClickEvent mouseClickEvent:
-                        OnMouseClick?.Invoke(this, mouseClickEvent);
+                        OnMouseClickBubbled?.Invoke(this, mouseClickEvent);
+                        if (!isTunnelHandled) OnMouseClick?.Invoke(this, mouseClickEvent);
                         break;
                     case MouseDoubleClickEvent mouseDoubleClickEvent:
-                        OnMouseDoubleClick?.Invoke(this, mouseDoubleClickEvent);
+                        OnMouseDoubleClickBubbled?.Invoke(this, mouseDoubleClickEvent);
+                        if (!isTunnelHandled) OnMouseDoubleClick?.Invoke(this, mouseDoubleClickEvent);
                         break;
                 }
 
@@ -548,9 +557,16 @@ namespace Aptacode.AppFramework.Components
 
         //Mouse
         public event EventHandler<MouseDownEvent> OnMouseDown;
+        public event EventHandler<MouseMoveEvent> OnMouseMove;
         public event EventHandler<MouseUpEvent> OnMouseUp;
         public event EventHandler<MouseClickEvent> OnMouseClick;
         public event EventHandler<MouseDoubleClickEvent> OnMouseDoubleClick;
+
+        public event EventHandler<MouseDownEvent> OnMouseDownBubbled;
+        public event EventHandler<MouseMoveEvent> OnMouseMoveBubbled;
+        public event EventHandler<MouseUpEvent> OnMouseUpBubbled;
+        public event EventHandler<MouseClickEvent> OnMouseClickBubbled;
+        public event EventHandler<MouseDoubleClickEvent> OnMouseDoubleClickBubbled;
 
         //Transformation
         public event EventHandler<TranslateEvent> OnTranslated;
