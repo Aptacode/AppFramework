@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Numerics;
-using Aptacode.CSharp.Common.Utilities.Extensions;
+﻿using System.Numerics;
 using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Layouts
@@ -44,13 +40,13 @@ namespace Aptacode.AppFramework.Components.Layouts
         {
             var newCells = new ComponentViewModel[_rows][];
 
-            for (int i = 0; i < newCells.Length; i++)
+            for (var i = 0; i < newCells.Length; i++)
             {
                 var row = newCells[i] = new ComponentViewModel[_columns];
-                for (int j = 0; j < row.Length; j++)
+                for (var j = 0; j < row.Length; j++)
                 {
                     ComponentViewModel cell = null;
-                    if(Cells != null && i < Cells.Length && j < Cells[i].Length)
+                    if (Cells != null && i < Cells.Length && j < Cells[i].Length)
                     {
                         cell = Cells[i][j];
                     }
@@ -65,10 +61,10 @@ namespace Aptacode.AppFramework.Components.Layouts
 
         public (int, int) GetCell(ComponentViewModel child)
         {
-            for (int i = 0; i < Cells.Length; i++)
+            for (var i = 0; i < Cells.Length; i++)
             {
                 var row = Cells[i];
-                for (int j = 0; j < row.Length; j++)
+                for (var j = 0; j < row.Length; j++)
                 {
                     if (row[i] == child)
                     {
@@ -79,19 +75,19 @@ namespace Aptacode.AppFramework.Components.Layouts
 
             return (-1, -1);
         }
-        
+
         public void SetCell(ComponentViewModel child, int rowIndex, int columnIndex)
         {
             Add(child);
 
             var oldCell = GetCell(child);
-           if (oldCell != (-1, -1))
-           {
-               Cells[rowIndex][columnIndex] = null;
-           }
-               
+            if (oldCell != (-1, -1))
+            {
+                Cells[rowIndex][columnIndex] = null;
+            }
+
             Cells[rowIndex][columnIndex] = child;
-            
+
             Resize();
         }
 
@@ -99,10 +95,10 @@ namespace Aptacode.AppFramework.Components.Layouts
         {
             Add(child);
 
-            for (int i = 0; i < Cells.Length; i++)
+            for (var i = 0; i < Cells.Length; i++)
             {
                 var row = Cells[i];
-                for (int j = 0; j < row.Length; j++)
+                for (var j = 0; j < row.Length; j++)
                 {
                     if (row[j] == null)
                     {
@@ -115,8 +111,8 @@ namespace Aptacode.AppFramework.Components.Layouts
 
             return false;
         }
-        
-        
+
+
         private ComponentViewModel[][] Cells;
 
         public override void Remove(ComponentViewModel child)
@@ -126,6 +122,7 @@ namespace Aptacode.AppFramework.Components.Layouts
             {
                 Cells[cell.Item1][cell.Item2] = null;
             }
+
             base.Remove(child);
         }
 

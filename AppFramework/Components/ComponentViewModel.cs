@@ -504,7 +504,7 @@ namespace Aptacode.AppFramework.Components
         {
             if (CollidesWith(mouseEvent.Position))
             {
-                bool isTunnelHandled = false;
+                var isTunnelHandled = false;
                 //Tunnel
                 foreach (var child in Children)
                 {
@@ -518,23 +518,43 @@ namespace Aptacode.AppFramework.Components
                 {
                     case MouseMoveEvent mouseMoveEvent:
                         OnMouseMoveBubbled?.Invoke(this, mouseMoveEvent);
-                        if (!isTunnelHandled) OnMouseMove?.Invoke(this, mouseMoveEvent);
+                        if (!isTunnelHandled)
+                        {
+                            OnMouseMove?.Invoke(this, mouseMoveEvent);
+                        }
+
                         break;
                     case MouseDownEvent mouseDownEvent:
                         OnMouseDownBubbled?.Invoke(this, mouseDownEvent);
-                        if (!isTunnelHandled) OnMouseDown?.Invoke(this, mouseDownEvent);
+                        if (!isTunnelHandled)
+                        {
+                            OnMouseDown?.Invoke(this, mouseDownEvent);
+                        }
+
                         break;
                     case MouseUpEvent mouseUpEvent:
                         OnMouseUpBubbled?.Invoke(this, mouseUpEvent);
-                        if (!isTunnelHandled) OnMouseUp?.Invoke(this, mouseUpEvent);
+                        if (!isTunnelHandled)
+                        {
+                            OnMouseUp?.Invoke(this, mouseUpEvent);
+                        }
+
                         break;
                     case MouseClickEvent mouseClickEvent:
                         OnMouseClickBubbled?.Invoke(this, mouseClickEvent);
-                        if (!isTunnelHandled) OnMouseClick?.Invoke(this, mouseClickEvent);
+                        if (!isTunnelHandled)
+                        {
+                            OnMouseClick?.Invoke(this, mouseClickEvent);
+                        }
+
                         break;
                     case MouseDoubleClickEvent mouseDoubleClickEvent:
                         OnMouseDoubleClickBubbled?.Invoke(this, mouseDoubleClickEvent);
-                        if (!isTunnelHandled) OnMouseDoubleClick?.Invoke(this, mouseDoubleClickEvent);
+                        if (!isTunnelHandled)
+                        {
+                            OnMouseDoubleClick?.Invoke(this, mouseDoubleClickEvent);
+                        }
+
                         break;
                 }
 

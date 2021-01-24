@@ -32,7 +32,6 @@ namespace Aptacode.AppFramework.Components.Primitives
 
         #endregion
 
-
         #region Collision
 
         public override void UpdateBounds()

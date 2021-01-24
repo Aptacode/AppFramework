@@ -22,8 +22,8 @@ namespace Aptacode.AppFramework.Demo.Pages
             var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
             SceneController = new DemoSceneController(new Vector2(200, 200));
 
-             scene.Add(GetGrid());
-             scene.Add(CreateDragBox());
+            scene.Add(GetGrid());
+            scene.Add(CreateDragBox());
             SceneController.Add(scene);
 
             await base.OnInitializedAsync();
@@ -33,7 +33,7 @@ namespace Aptacode.AppFramework.Demo.Pages
         {
             var componentBuilder = new ComponentBuilder();
 
-            var component = (Image)componentBuilder
+            var component = (Image) componentBuilder
                 .SetBase(Image.FromPositionAndSize(new Vector2(10, 10), new Vector2(10, 10), "https://raw.githubusercontent.com/Aptacode/AppFramework/Production/Resources/Images/Logo.png"))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
@@ -49,11 +49,11 @@ namespace Aptacode.AppFramework.Demo.Pages
         {
             var componentBuilder = new ComponentBuilder();
 
-            var component = (DragBox)componentBuilder
+            var component = (DragBox) componentBuilder
                 .SetBase(DragBox.FromPositionAndSize(new Vector2(10, 10), new Vector2(50, 100)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
-                .SetFillColor(Color.FromArgb(100, 100,40,20))
+                .SetFillColor(Color.FromArgb(100, 100, 40, 20))
                 .SetText("")
                 .Build();
 
@@ -66,7 +66,7 @@ namespace Aptacode.AppFramework.Demo.Pages
 
             return component;
         }
-        
+
         private ComponentViewModel GetGrid()
         {
             var componentBuilder = new ComponentBuilder();
@@ -93,7 +93,7 @@ namespace Aptacode.AppFramework.Demo.Pages
 
             return layout;
         }
-        
+
         public List<Button> GenerateButtons(int buttonCount)
         {
             List<Button> buttons = new();
@@ -102,7 +102,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             var rand = new Random();
             for (var i = 0; i < 8; i++)
             {
-                var button = (Button)componentBuilder
+                var button = (Button) componentBuilder
                     .SetBase(Button.FromPositionAndSize(new Vector2(i * 10, i * 10), new Vector2(10, 10)))
                     .SetBorderThickness(.5f)
                     .SetMargin(1.0f)

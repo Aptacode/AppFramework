@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Scene.Events;
@@ -12,6 +11,38 @@ namespace Aptacode.AppFramework.Components.Controls
 {
     public class Image : PolygonViewModel
     {
+        private bool _isLoaded;
+
+        private string _path = string.Empty;
+
+        public string Path
+        {
+            get => _path;
+            set
+            {
+                _path = value;
+                Invalidated = true;
+            }
+        }
+
+        public override async Task CustomDraw(BlazorCanvasInterop ctx)
+        {
+            await base.CustomDraw(ctx);
+
+            if (Path == string.Empty)
+            {
+                return;
+            }
+
+            if (!_isLoaded)
+            {
+                await ctx.LoadImage(Path);
+                _isLoaded = true;
+            }
+
+            ctx.DrawImage(Path, BoundingRectangle.X * SceneScale.Value, BoundingRectangle.Y * SceneScale.Value, BoundingRectangle.Width * SceneScale.Value, BoundingRectangle.Height * SceneScale.Value);
+        }
+
         #region Ctor
 
         public Image(Polygon polygon, string path) : base(polygon)
@@ -33,24 +64,6 @@ namespace Aptacode.AppFramework.Components.Controls
 
         #endregion
 
-        public override async Task CustomDraw(BlazorCanvasInterop ctx)
-        {
-            await base.CustomDraw(ctx);
-
-            if (Path == string.Empty)
-            {
-                return;
-            }
-
-            if (!_isLoaded)
-            {
-                await ctx.LoadImage(Path);
-                _isLoaded = true;
-            }
-
-            ctx.DrawImage(Path, BoundingRectangle.X * SceneScale.Value, BoundingRectangle.Y * SceneScale.Value, BoundingRectangle.Width * SceneScale.Value, BoundingRectangle.Height * SceneScale.Value);
-        }
-
         #region Events
 
         private void Handle_OnMouseDown(object? sender, MouseDownEvent e)
@@ -64,20 +77,5 @@ namespace Aptacode.AppFramework.Components.Controls
         }
 
         #endregion
-
-        private bool _isLoaded = false;
-        
-        private string _path = string.Empty;
-
-        public string Path
-        {
-            get => _path;
-            set
-            {
-                _path = value;
-                Invalidated = true;
-            }
-        }
-
     }
 }

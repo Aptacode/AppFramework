@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -14,38 +13,6 @@ namespace Aptacode.AppFramework.Components.Controls
 {
     public class DragBox : PolygonViewModel
     {
-        #region Ctor
-
-        public DragBox(Polygon polygon) : base(polygon)
-        {
-            OnMouseMoveBubbled += Handle_OnMouseMove;
-            OnMouseUpBubbled += Handle_OnMouseUp;
-            OnMouseDownBubbled += Handle_OnMouseDown;
-        }
-
-        public static DragBox FromPositionAndSize(Vector2 position, Vector2 size)
-        {
-            return new(Polygon.Rectangle.FromPositionAndSize(position, size));
-        }
-
-        public static DragBox FromTwoPoints(Vector2 topLeft, Vector2 bottomRight)
-        {
-            return new(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
-        }
-
-        #endregion
-
-        #region props
-
-        public bool IsDragging { get; set; }
-        public Vector2 LastDragPosition { get; set; }
-        public ComponentViewModel? SelectedChild { get; set; }
-
-        public List<ComponentViewModel> ChildComponents { get; set; } = new();
-        public List<ComponentViewModel> ChildLayouts { get; set; } = new();
-
-        #endregion
-
         public override void UpdateBounds()
         {
             if (Primitive == null)
@@ -100,7 +67,7 @@ namespace Aptacode.AppFramework.Components.Controls
         {
             var xPos = child.BoundingRectangle.TopLeft.X;
             var yPos = child.BoundingRectangle.TopLeft.Y;
-            
+
             if (child.BoundingRectangle.TopLeft.X < BoundingRectangle.TopLeft.X)
             {
                 xPos = BoundingRectangle.TopLeft.X;
@@ -131,7 +98,8 @@ namespace Aptacode.AppFramework.Components.Controls
             {
                 return false;
             }
-            else if (child.BoundingRectangle.TopRight.X > BoundingRectangle.TopRight.X)
+
+            if (child.BoundingRectangle.TopRight.X > BoundingRectangle.TopRight.X)
             {
                 return false;
             }
@@ -140,7 +108,8 @@ namespace Aptacode.AppFramework.Components.Controls
             {
                 return false;
             }
-            else if (child.BoundingRectangle.BottomRight.Y > BoundingRectangle.BottomRight.Y)
+
+            if (child.BoundingRectangle.BottomRight.Y > BoundingRectangle.BottomRight.Y)
             {
                 return false;
             }
@@ -166,7 +135,6 @@ namespace Aptacode.AppFramework.Components.Controls
                     return;
                 }
             }
-            
         }
 
         private void Handle_OnMouseUp(object? sender, MouseUpEvent e)
@@ -188,7 +156,7 @@ namespace Aptacode.AppFramework.Components.Controls
                     SelectedChild.Translate(-delta);
                 }
             }
-            
+
             LastDragPosition = e.Position;
         }
 
@@ -199,9 +167,40 @@ namespace Aptacode.AppFramework.Components.Controls
 
         public override void Dispose()
         {
-
             base.Dispose();
         }
+
+        #endregion
+
+        #region Ctor
+
+        public DragBox(Polygon polygon) : base(polygon)
+        {
+            OnMouseMoveBubbled += Handle_OnMouseMove;
+            OnMouseUpBubbled += Handle_OnMouseUp;
+            OnMouseDownBubbled += Handle_OnMouseDown;
+        }
+
+        public static DragBox FromPositionAndSize(Vector2 position, Vector2 size)
+        {
+            return new(Polygon.Rectangle.FromPositionAndSize(position, size));
+        }
+
+        public static DragBox FromTwoPoints(Vector2 topLeft, Vector2 bottomRight)
+        {
+            return new(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
+        }
+
+        #endregion
+
+        #region props
+
+        public bool IsDragging { get; set; }
+        public Vector2 LastDragPosition { get; set; }
+        public ComponentViewModel? SelectedChild { get; set; }
+
+        public List<ComponentViewModel> ChildComponents { get; set; } = new();
+        public List<ComponentViewModel> ChildLayouts { get; set; } = new();
 
         #endregion
     }
