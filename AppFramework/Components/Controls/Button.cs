@@ -14,6 +14,8 @@ namespace Aptacode.AppFramework.Components.Controls
         {
             OnMouseDown += Handle_OnMouseDown;
             OnMouseUp += Handle_OnMouseUp;
+            OnMouseEnterEvent += Handle_OnMouseEnterEvent;
+            OnMouseLeaveEvent += Handle_OnMouseLeaveEvent;
         }
 
         public static Button FromPositionAndSize(Vector2 position, Vector2 size)
@@ -37,7 +39,24 @@ namespace Aptacode.AppFramework.Components.Controls
 
         private void Handle_OnMouseUp(object? sender, MouseUpEvent e)
         {
+            if (MouseOver)
+            {
+                BorderColor = Color.LightGreen;
+            }
+            else
+            {
+                BorderColor = Color.Black;
+            }
+        }
+        
+        private void Handle_OnMouseLeaveEvent(object? sender, MouseLeaveEvent e)
+        {
             BorderColor = Color.Black;
+        }
+
+        private void Handle_OnMouseEnterEvent(object? sender, MouseEnterEvent e)
+        {
+            BorderColor = Color.LightGreen;
         }
 
         #endregion

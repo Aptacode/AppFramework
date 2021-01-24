@@ -66,7 +66,7 @@ namespace Aptacode.AppFramework.Demo.Pages
 
             return component;
         }
-
+        
         private ComponentViewModel GetGrid()
         {
             var componentBuilder = new ComponentBuilder();
@@ -100,7 +100,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             var componentBuilder = new ComponentBuilder();
 
             var rand = new Random();
-            for (var i = 0; i < 8; i++)
+            for (var i = 0; i < buttonCount; i++)
             {
                 var button = (Button) componentBuilder
                     .SetBase(Button.FromPositionAndSize(new Vector2(i * 10, i * 10), new Vector2(10, 10)))

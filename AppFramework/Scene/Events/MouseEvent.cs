@@ -46,4 +46,18 @@ namespace Aptacode.AppFramework.Scene.Events
         {
         }
     }
+
+    public record MouseEnterEvent : MouseEvent
+    {
+        public MouseEnterEvent(Vector2 position) : base(position)
+        {
+        }
+    }
+
+    public record MouseLeaveEvent : MouseEvent
+    {
+        public MouseLeaveEvent(Vector2 position) : base(position)
+        {
+        }
+    }
 }

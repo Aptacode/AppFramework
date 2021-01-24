@@ -59,7 +59,7 @@ namespace Aptacode.AppFramework.Components.Controls
             //Ensure child is within the bounds of the DragBox
             var position = GetChildPositionWithinBounds(child);
             child.SetPosition(position);
-
+            
             base.Add(child);
         }
 
@@ -122,6 +122,7 @@ namespace Aptacode.AppFramework.Components.Controls
             base.Remove(child);
         }
 
+        #region Events
         private void Handle_OnMouseDown(object? sender, MouseDownEvent e)
         {
             IsDragging = true;
@@ -142,9 +143,7 @@ namespace Aptacode.AppFramework.Components.Controls
             IsDragging = false;
             SelectedChild = null;
         }
-
-        #region Events
-
+        
         private void Handle_OnMouseMove(object? sender, MouseMoveEvent e)
         {
             if (IsDragging && SelectedChild != null)
@@ -156,10 +155,18 @@ namespace Aptacode.AppFramework.Components.Controls
                     SelectedChild.Translate(-delta);
                 }
             }
-
+            
             LastDragPosition = e.Position;
         }
-
+        
+        private void Handle_OnMouseLeaveEvent(object? sender, MouseLeaveEvent e)
+        {
+            if (IsDragging && SelectedChild != null)
+            {
+                IsDragging = false;
+                SelectedChild = null;
+            }
+        }
         #endregion
 
 
@@ -179,6 +186,7 @@ namespace Aptacode.AppFramework.Components.Controls
             OnMouseMoveBubbled += Handle_OnMouseMove;
             OnMouseUpBubbled += Handle_OnMouseUp;
             OnMouseDownBubbled += Handle_OnMouseDown;
+            OnMouseLeaveEvent += Handle_OnMouseLeaveEvent;
         }
 
         public static DragBox FromPositionAndSize(Vector2 position, Vector2 size)

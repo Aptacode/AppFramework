@@ -141,7 +141,9 @@ namespace Aptacode.AppFramework.Components
         public BoundingRectangle OldBoundingRectangle { get; protected set; }
         public BoundingRectangle BoundingRectangle { get; protected set; }
         public Primitive BoundingPrimitive { get; set; }
-
+        public bool MouseOver { get; protected set; }
+        
+        
         private VerticalAlignment _verticalAlignment = VerticalAlignment.Stretch;
 
         public VerticalAlignment VerticalAlignment
@@ -504,6 +506,12 @@ namespace Aptacode.AppFramework.Components
         {
             if (CollidesWith(mouseEvent.Position))
             {
+                if (!MouseOver)
+                {
+                    MouseOver = true;
+                    OnMouseEnterEvent?.Invoke(this, new MouseEnterEvent(mouseEvent.Position));
+                }
+                
                 var isTunnelHandled = false;
                 //Tunnel
                 foreach (var child in Children)
@@ -559,6 +567,14 @@ namespace Aptacode.AppFramework.Components
                 }
 
                 return true;
+            }else if (MouseOver)
+            {
+                MouseOver = false;
+                foreach (var child in Children)
+                {
+                    child.HandleMouseEvent(mouseEvent);
+                }
+                OnMouseLeaveEvent?.Invoke(this, new MouseLeaveEvent(mouseEvent.Position));
             }
 
             return false;
@@ -589,6 +605,8 @@ namespace Aptacode.AppFramework.Components
         public event EventHandler<MouseUpEvent> OnMouseUpBubbled;
         public event EventHandler<MouseClickEvent> OnMouseClickBubbled;
         public event EventHandler<MouseDoubleClickEvent> OnMouseDoubleClickBubbled;
+        public event EventHandler<MouseEnterEvent> OnMouseEnterEvent;
+        public event EventHandler<MouseLeaveEvent> OnMouseLeaveEvent;
 
         //Transformation
         public event EventHandler<TranslateEvent> OnTranslated;
