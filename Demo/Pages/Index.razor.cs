@@ -24,11 +24,26 @@ namespace Aptacode.AppFramework.Demo.Pages
 
              scene.Add(GetGrid());
              scene.Add(CreateDragBox());
-
             SceneController.Add(scene);
 
             await base.OnInitializedAsync();
         }
+
+        private Image CreateImage()
+        {
+            var componentBuilder = new ComponentBuilder();
+
+            var component = (Image)componentBuilder
+                .SetBase(Image.FromPositionAndSize(new Vector2(10, 10), new Vector2(10, 10), "https://raw.githubusercontent.com/Aptacode/AppFramework/Production/Resources/Images/Logo.png"))
+                .SetBorderThickness(0.2f)
+                .SetMargin(0.0f)
+                .SetFillColor(Color.FromArgb(100, 100, 40, 20))
+                .SetText("")
+                .Build();
+
+            return component;
+        }
+
 
         private DragBox CreateDragBox()
         {
@@ -42,6 +57,7 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetText("")
                 .Build();
 
+            component.Add(CreateImage());
 
             foreach (var button in GenerateButtons(8))
             {
