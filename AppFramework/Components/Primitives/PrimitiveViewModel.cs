@@ -51,7 +51,7 @@ namespace Aptacode.AppFramework.Components.Primitives
             base.ScaleAboutCenter(delta);
         }
 
-        public override void Scale(Vector2 scaleCenter,Vector2 delta)
+        public override void Scale(Vector2 scaleCenter, Vector2 delta)
         {
             Primitive.Scale(scaleCenter, delta);
             base.ScaleAboutCenter(delta);

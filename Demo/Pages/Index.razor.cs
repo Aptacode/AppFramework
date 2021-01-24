@@ -22,7 +22,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             SceneController = new DemoSceneController(new Vector2(200, 200));
 
             scene.Add(GetGrid());
-            
+
             SceneController.Add(scene);
 
             await base.OnInitializedAsync();
@@ -31,7 +31,7 @@ namespace Aptacode.AppFramework.Demo.Pages
         private ComponentViewModel GetGrid()
         {
             var componentBuilder = new ComponentBuilder();
-            var layout = (LinearLayout)componentBuilder
+            var layout = (LinearLayout) componentBuilder
                 .SetBase(new LinearLayout(new Vector2(20, 20), new Vector2(50, 80)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
@@ -47,9 +47,9 @@ namespace Aptacode.AppFramework.Demo.Pages
             var rand = new Random();
             var colors = new[]
             {
-                Color.Green,Color.Blue,Color.Yellow,Color.Red,Color.Chocolate,Color.DarkSlateBlue,Color.LawnGreen, Color.DarkTurquoise
+                Color.Green, Color.Blue, Color.Yellow, Color.Red, Color.Chocolate, Color.DarkSlateBlue, Color.LawnGreen, Color.DarkTurquoise
             };
-            for (int i = 0; i < 8; i++)
+            for (var i = 0; i < 8; i++)
             {
                 var button = componentBuilder
                     .SetBase(Button.FromPositionAndSize(new Vector2(i * 10, i * 10), new Vector2(10, 10)))

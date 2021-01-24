@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using Aptacode.AppFramework.Enums;
 using Aptacode.Geometry.Primitives;
 

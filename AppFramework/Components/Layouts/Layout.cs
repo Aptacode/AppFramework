@@ -37,10 +37,10 @@ namespace Aptacode.AppFramework.Components.Layouts
 
         protected void RepositionChild(ComponentViewModel child, Vector2 cellSize, Vector2 cellPosition)
         {
-            float xPos = child.BoundingRectangle.TopLeft.X;
-            float yPos = child.BoundingRectangle.TopLeft.Y;
-            float xSize = child.BoundingRectangle.Size.X;
-            float ySize = child.BoundingRectangle.Size.Y;
+            var xPos = child.BoundingRectangle.TopLeft.X;
+            var yPos = child.BoundingRectangle.TopLeft.Y;
+            var xSize = child.BoundingRectangle.Size.X;
+            var ySize = child.BoundingRectangle.Size.Y;
 
             switch (EnforceVerticalAlignment ? VerticalAlignment : child.VerticalAlignment)
             {
@@ -137,6 +137,21 @@ namespace Aptacode.AppFramework.Components.Layouts
             await containedChildren.Last().Draw(ctx);
         }
 
+        #region IDisposable
+
+        public override void Dispose()
+        {
+            foreach (var child in Children)
+            {
+                child.OnHorizontalAlignmentChanged -= ChildOnOnHorizontalAlignmentChanged;
+                child.OnVerticalAlignmentChanged -= ChildOnOnVerticalAlignmentChanged;
+            }
+
+            base.Dispose();
+        }
+
+        #endregion
+
         #region Events
 
         #endregion
@@ -168,21 +183,6 @@ namespace Aptacode.AppFramework.Components.Layouts
                 _enforceHorizontalAlignment = value;
                 Resize();
             }
-        }
-
-        #endregion
-
-        #region IDisposable
-
-        public override void Dispose()
-        {
-            foreach (var child in Children)
-            {
-                child.OnHorizontalAlignmentChanged -= ChildOnOnHorizontalAlignmentChanged;
-                child.OnVerticalAlignmentChanged -= ChildOnOnVerticalAlignmentChanged;
-            }
-            
-            base.Dispose();
         }
 
         #endregion

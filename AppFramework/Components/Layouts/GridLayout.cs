@@ -6,6 +6,39 @@ namespace Aptacode.AppFramework.Components.Layouts
 {
     public class GridLayout : Layout
     {
+        #region Overrides
+
+        public override void Resize()
+        {
+            var childCount = Children.Count();
+            var childIndex = 0;
+
+            var cellSize = new Vector2(Size.X / _columns, Size.Y / _rows);
+            var cellPosition = Position;
+            for (var j = 0; j < _rows; j++)
+            {
+                cellPosition = new Vector2(Position.X, cellPosition.Y);
+
+                for (var k = 0; k < _columns; k++)
+                {
+                    if (childIndex < childCount)
+                    {
+                        var child = Children.ElementAt(childIndex++);
+                        RepositionChild(child, cellSize, cellPosition);
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+                    cellPosition += new Vector2(cellSize.X, 0);
+                }
+
+                cellPosition += new Vector2(0, cellSize.Y);
+            }
+        }
+
+        #endregion
 
         #region Ctor
 
@@ -53,40 +86,6 @@ namespace Aptacode.AppFramework.Components.Layouts
             }
         }
 
-        #endregion
-
-        #region Overrides
-
-        public override void Resize()
-        {
-            var childCount = Children.Count();
-            var childIndex = 0;
-
-            var cellSize = new Vector2(Size.X / _columns, Size.Y / _rows);
-            var cellPosition = Position;
-            for (var j = 0; j < _rows; j++)
-            {
-                cellPosition = new Vector2(Position.X, cellPosition.Y);
-
-                for (var k = 0; k < _columns; k++)
-                {
-                    if (childIndex < childCount)
-                    {
-                        var child = Children.ElementAt(childIndex++);
-                        RepositionChild(child, cellSize, cellPosition);
-                    }
-                    else
-                    {
-                        return;
-                    }
-
-                    cellPosition += new Vector2(cellSize.X, 0);
-                }
-
-                cellPosition += new Vector2(0, cellSize.Y);
-            }
-        }
-        
         #endregion
     }
 }

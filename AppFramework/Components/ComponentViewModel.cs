@@ -33,6 +33,10 @@ namespace Aptacode.AppFramework.Components
 
         #endregion
 
+        public virtual void Dispose()
+        {
+        }
+
         #region Canvas
 
         public virtual async Task CustomDraw(BlazorCanvasInterop ctx)
@@ -423,7 +427,7 @@ namespace Aptacode.AppFramework.Components
             Invalidated = true;
             OnScaled?.Invoke(this, new ScaleEvent());
         }
-        
+
         public virtual void Scale(Vector2 scaleCenter, Vector2 delta)
         {
             foreach (var child in Children)
@@ -463,11 +467,11 @@ namespace Aptacode.AppFramework.Components
             Invalidated = true;
             OnSkewed?.Invoke(this, new SkewEvent());
         }
-        
+
         public virtual void SetSize(Vector2 size)
         {
             var scaleFactor = size / BoundingRectangle.Size;
-            
+
             foreach (var child in Children)
             {
                 child.Scale(BoundingRectangle.TopLeft, scaleFactor);
@@ -478,7 +482,7 @@ namespace Aptacode.AppFramework.Components
             Invalidated = true;
             OnSkewed?.Invoke(this, new SkewEvent());
         }
-        
+
         #endregion
 
         #region Events
@@ -553,14 +557,10 @@ namespace Aptacode.AppFramework.Components
         public event EventHandler<RotateEvent> OnRotated;
         public event EventHandler<ScaleEvent> OnScaled;
         public event EventHandler<SkewEvent> OnSkewed;
-        
+
         public event EventHandler<VerticalAlignment> OnVerticalAlignmentChanged;
         public event EventHandler<HorizontalAlignment> OnHorizontalAlignmentChanged;
 
         #endregion
-
-        public virtual void Dispose()
-        {
-        }
     }
 }
