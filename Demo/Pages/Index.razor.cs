@@ -72,7 +72,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             var componentBuilder = new ComponentBuilder();
 
             var layout = (GridLayout) componentBuilder
-                .SetBase(new GridLayout(new Vector2(100, 10), new Vector2(50, 100)))
+                .SetBase(new GridLayout(new Vector2(65, 10), new Vector2(120, 100)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.LightGray)
