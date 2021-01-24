@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Numerics;
+using Aptacode.CSharp.Common.Utilities.Extensions;
 using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Layouts
@@ -10,31 +13,18 @@ namespace Aptacode.AppFramework.Components.Layouts
 
         public override void Resize()
         {
-            var childCount = Children.Count();
-            var childIndex = 0;
-
             var cellSize = new Vector2(Size.X / _columns, Size.Y / _rows);
             var cellPosition = Position;
             for (var j = 0; j < _rows; j++)
             {
-                cellPosition = new Vector2(Position.X, cellPosition.Y);
-
                 for (var k = 0; k < _columns; k++)
                 {
-                    if (childIndex < childCount)
+                    var child = Cells[j][k];
+                    if (child != null)
                     {
-                        var child = Children.ElementAt(childIndex++);
-                        RepositionChild(child, cellSize, cellPosition);
+                        RepositionChild(child, cellSize, new Vector2(cellPosition.X + cellSize.X * k, cellPosition.Y + cellSize.Y * j));
                     }
-                    else
-                    {
-                        return;
-                    }
-
-                    cellPosition += new Vector2(cellSize.X, 0);
                 }
-
-                cellPosition += new Vector2(0, cellSize.Y);
             }
         }
 
@@ -48,6 +38,95 @@ namespace Aptacode.AppFramework.Components.Layouts
 
         public GridLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
         {
+        }
+
+        private void ResizeCells()
+        {
+            var newCells = new ComponentViewModel[_rows][];
+
+            for (int i = 0; i < newCells.Length; i++)
+            {
+                var row = newCells[i] = new ComponentViewModel[_columns];
+                for (int j = 0; j < row.Length; j++)
+                {
+                    ComponentViewModel cell = null;
+                    if(Cells != null && i < Cells.Length && j < Cells[i].Length)
+                    {
+                        cell = Cells[i][j];
+                    }
+
+                    row[j] = cell;
+                }
+            }
+
+            Cells = newCells;
+            Resize();
+        }
+
+        public (int, int) GetCell(ComponentViewModel child)
+        {
+            for (int i = 0; i < Cells.Length; i++)
+            {
+                var row = Cells[i];
+                for (int j = 0; j < row.Length; j++)
+                {
+                    if (row[i] == child)
+                    {
+                        return (i, j);
+                    }
+                }
+            }
+
+            return (-1, -1);
+        }
+        
+        public void SetCell(ComponentViewModel child, int rowIndex, int columnIndex)
+        {
+            Add(child);
+
+            var oldCell = GetCell(child);
+           if (oldCell != (-1, -1))
+           {
+               Cells[rowIndex][columnIndex] = null;
+           }
+               
+            Cells[rowIndex][columnIndex] = child;
+            
+            Resize();
+        }
+
+        public bool AddNextAvailableCell(ComponentViewModel child)
+        {
+            Add(child);
+
+            for (int i = 0; i < Cells.Length; i++)
+            {
+                var row = Cells[i];
+                for (int j = 0; j < row.Length; j++)
+                {
+                    if (row[j] == null)
+                    {
+                        row[j] = child;
+                        Resize();
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+        
+        
+        private ComponentViewModel[][] Cells;
+
+        public override void Remove(ComponentViewModel child)
+        {
+            var cell = GetCell(child);
+            if (cell != (-1, -1))
+            {
+                Cells[cell.Item1][cell.Item2] = null;
+            }
+            base.Remove(child);
         }
 
         #endregion
@@ -70,7 +149,7 @@ namespace Aptacode.AppFramework.Components.Layouts
             set
             {
                 _rows = value;
-                Resize();
+                ResizeCells();
             }
         }
 
@@ -82,7 +161,7 @@ namespace Aptacode.AppFramework.Components.Layouts
             set
             {
                 _columns = value;
-                Resize();
+                ResizeCells();
             }
         }
 

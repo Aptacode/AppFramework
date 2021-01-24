@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Enums;
@@ -95,27 +96,29 @@ namespace Aptacode.AppFramework.Components
 
         public virtual void Add(ComponentViewModel child)
         {
-            _children.Add(child);
-            UpdateBounds();
-            Invalidated = true;
+            if (!Children.Contains(child))
+            {
+                _children.Add(child);
+                UpdateBounds();
+                Invalidated = true;
+            }
         }
 
         public virtual void AddRange(IEnumerable<ComponentViewModel> children)
         {
             foreach (var child in children)
             {
-                _children.Add(child);
+                Add(child);
             }
-
-            UpdateBounds();
-            Invalidated = true;
         }
 
         public virtual void Remove(ComponentViewModel child)
         {
-            _children.Add(child);
-            UpdateBounds();
-            Invalidated = true;
+            if (_children.Remove(child))
+            {
+                UpdateBounds();
+                Invalidated = true;
+            }
         }
 
         #endregion
@@ -132,7 +135,7 @@ namespace Aptacode.AppFramework.Components
         #region Properties
 
         public Guid Id { get; init; }
-        private readonly List<ComponentViewModel> _children = new();
+        protected readonly List<ComponentViewModel> _children = new();
         public bool CollisionDetectionEnabled { get; set; }
         public bool Invalidated { get; set; }
         public BoundingRectangle OldBoundingRectangle { get; protected set; }

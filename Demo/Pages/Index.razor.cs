@@ -85,9 +85,10 @@ namespace Aptacode.AppFramework.Demo.Pages
             layout.VerticalAlignment = VerticalAlignment.Stretch;
             layout.EnforceHorizontalAlignment = true;
             layout.EnforceVerticalAlignment = true;
+
             foreach (var button in GenerateButtons(8))
             {
-                layout.Add(button);
+                layout.AddNextAvailableCell(button);
             }
 
             return layout;
