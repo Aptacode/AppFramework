@@ -22,8 +22,8 @@ namespace Aptacode.AppFramework.Demo.Pages
             var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
             SceneController = new DemoSceneController(new Vector2(200, 200));
 
-            //scene.Add(GetGrid());
-            scene.Add(CreateDragBox());
+             scene.Add(GetGrid());
+             scene.Add(CreateDragBox());
 
             SceneController.Add(scene);
 
@@ -35,7 +35,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             var componentBuilder = new ComponentBuilder();
 
             var component = (DragBox)componentBuilder
-                .SetBase(DragBox.FromPositionAndSize(new Vector2(20, 20), new Vector2(50, 80)))
+                .SetBase(DragBox.FromPositionAndSize(new Vector2(10, 10), new Vector2(50, 100)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.FromArgb(100, 100,40,20))
@@ -55,19 +55,20 @@ namespace Aptacode.AppFramework.Demo.Pages
         {
             var componentBuilder = new ComponentBuilder();
 
-            var layout = (LinearLayout) componentBuilder
-                .SetBase(new LinearLayout(new Vector2(20, 20), new Vector2(50, 80)))
+            var layout = (GridLayout) componentBuilder
+                .SetBase(new GridLayout(new Vector2(100, 10), new Vector2(50, 100)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.LightGray)
                 .SetText("")
                 .Build();
-            
-            //layout.Rows = 3;
-            //layout.Columns = 3;
+
+            layout.Rows = 3;
+            layout.Columns = 3;
             layout.HorizontalAlignment = HorizontalAlignment.Stretch;
             layout.VerticalAlignment = VerticalAlignment.Stretch;
-
+            layout.EnforceHorizontalAlignment = true;
+            layout.EnforceVerticalAlignment = true;
             foreach (var button in GenerateButtons(8))
             {
                 layout.Add(button);
@@ -92,8 +93,8 @@ namespace Aptacode.AppFramework.Demo.Pages
                     .SetText($"Button{i + 1}")
                     .Build();
 
-                button.VerticalAlignment = (VerticalAlignment)(i % 4);
-                button.HorizontalAlignment = (HorizontalAlignment)(i % 4);
+                //button.VerticalAlignment = (VerticalAlignment)(i % 4);
+                //button.HorizontalAlignment = (HorizontalAlignment)(i % 4);
 
 
                 buttons.Add(button);

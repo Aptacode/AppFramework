@@ -37,10 +37,10 @@ namespace Aptacode.AppFramework.Components.Layouts
 
         protected void RepositionChild(ComponentViewModel child, Vector2 cellSize, Vector2 cellPosition)
         {
-            var xPos = child.BoundingRectangle.TopLeft.X;
-            var yPos = child.BoundingRectangle.TopLeft.Y;
-            var xSize = child.BoundingRectangle.Size.X;
-            var ySize = child.BoundingRectangle.Size.Y;
+            var xPos = cellPosition.X;
+            var yPos = cellPosition.Y;
+            var xSize = cellSize.X;
+            var ySize = cellSize.Y;
 
             switch (EnforceVerticalAlignment ? VerticalAlignment : child.VerticalAlignment)
             {
@@ -49,14 +49,16 @@ namespace Aptacode.AppFramework.Components.Layouts
                     yPos = cellPosition.Y;
                     break;
                 case VerticalAlignment.Top:
+                    ySize = Math.Min(cellSize.Y, child.BoundingRectangle.Size.Y);
                     yPos = cellPosition.Y;
                     break;
                 case VerticalAlignment.Center:
-                    yPos = cellPosition.Y + (cellSize.Y - child.BoundingRectangle.Size.Y) / 2.0f;
+                    ySize = Math.Min(cellSize.Y, child.BoundingRectangle.Size.Y);
+                    yPos = cellPosition.Y + ySize / 2.0f;
                     break;
                 case VerticalAlignment.Bottom:
                     ySize = Math.Min(cellSize.Y, child.BoundingRectangle.Size.Y);
-                    yPos = cellPosition.Y + (cellSize.Y - child.BoundingRectangle.Size.Y);
+                    yPos = cellPosition.Y + (cellSize.Y - ySize);
                     break;
             }
 
@@ -67,14 +69,16 @@ namespace Aptacode.AppFramework.Components.Layouts
                     xPos = cellPosition.X;
                     break;
                 case HorizontalAlignment.Left:
+                    xSize = Math.Min(cellSize.X, child.BoundingRectangle.Size.X);
                     xPos = cellPosition.X;
                     break;
                 case HorizontalAlignment.Center:
-                    xPos = cellPosition.X + (cellSize.X - child.BoundingRectangle.Size.X) / 2.0f;
+                    xSize = Math.Min(cellSize.X, child.BoundingRectangle.Size.X);
+                    xPos = cellPosition.X + xSize / 2.0f;
                     break;
                 case HorizontalAlignment.Right:
                     xSize = Math.Min(cellSize.X, child.BoundingRectangle.Size.X);
-                    xPos = cellPosition.X + (cellSize.X - child.BoundingRectangle.Size.X);
+                    xPos = cellPosition.X + xSize;
                     break;
             }
 

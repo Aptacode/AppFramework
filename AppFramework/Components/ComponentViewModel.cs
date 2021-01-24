@@ -406,7 +406,7 @@ namespace Aptacode.AppFramework.Components
         {
             foreach (var child in Children)
             {
-                child.ScaleAboutCenter(delta);
+                child.Scale(BoundingRectangle.Center, delta);
             }
 
             UpdateBounds();
@@ -419,7 +419,7 @@ namespace Aptacode.AppFramework.Components
         {
             foreach (var child in Children)
             {
-                child.ScaleAboutTopLeft(delta);
+                child.Scale(BoundingRectangle.TopLeft, delta);
             }
 
             UpdateBounds();
@@ -465,13 +465,12 @@ namespace Aptacode.AppFramework.Components
             UpdateBounds();
 
             Invalidated = true;
-            OnSkewed?.Invoke(this, new SkewEvent());
+            OnTranslated?.Invoke(this, new TranslateEvent());
         }
 
         public virtual void SetSize(Vector2 size)
         {
             var scaleFactor = size / BoundingRectangle.Size;
-
             foreach (var child in Children)
             {
                 child.Scale(BoundingRectangle.TopLeft, scaleFactor);
@@ -480,7 +479,7 @@ namespace Aptacode.AppFramework.Components
             UpdateBounds();
 
             Invalidated = true;
-            OnSkewed?.Invoke(this, new SkewEvent());
+            OnScaled?.Invoke(this, new ScaleEvent());
         }
 
         #endregion
