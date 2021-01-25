@@ -4,10 +4,12 @@ using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Components.Containers;
 using Aptacode.AppFramework.Components.Controls;
 using Aptacode.AppFramework.Components.Layouts;
 using Aptacode.AppFramework.Enums;
 using Aptacode.AppFramework.Utilities;
+using Aptacode.Geometry.Primitives;
 using Microsoft.AspNetCore.Components;
 
 namespace Aptacode.AppFramework.Demo.Pages
@@ -23,10 +25,30 @@ namespace Aptacode.AppFramework.Demo.Pages
             SceneController = new DemoSceneController(new Vector2(200, 200));
 
             scene.Add(GetGrid());
+            scene.Add(CreateScrollBox());
             scene.Add(CreateDragBox());
+
             SceneController.Add(scene);
 
             await base.OnInitializedAsync();
+        }
+
+        private ScrollBox CreateScrollBox()
+        {
+            var componentBuilder = new ComponentBuilder();
+
+            var component = (ScrollBox)componentBuilder
+                .SetBase(ScrollBox.FromPositionAndSize(new Vector2(125, 10), new Vector2(50, 70)))
+                .SetBorderThickness(0.2f)
+                .SetMargin(0.0f)
+                .SetFillColor(Color.FromArgb(20, 100, 40, 20))
+                .SetText("")
+                .Build();
+
+            var child = new Button(Polygon.Rectangle.FromPositionAndSize(new Vector2(140, 25), new Vector2(10, 10)));
+            component.Add(child);
+
+            return component;
         }
 
         private Image CreateImage()

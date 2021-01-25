@@ -19,7 +19,7 @@ namespace Aptacode.AppFramework.Components
     {
         #region Ctor
 
-        public ComponentViewModel()
+        protected ComponentViewModel()
         {
             Id = Guid.NewGuid();
             CollisionDetectionEnabled = true;
@@ -128,7 +128,7 @@ namespace Aptacode.AppFramework.Components
         public static readonly string DefaultBorderColor = Color.Black.ToKnownColor().ToString();
         public static readonly string DefaultFillColor = Color.Black.ToKnownColor().ToString();
         public static readonly float DefaultBorderThickness = 0.1f;
-        public static readonly float DefaultMargin = 1.0f;
+        public static readonly float DefaultMargin = 0.0f;
 
         #endregion
 
@@ -512,53 +512,53 @@ namespace Aptacode.AppFramework.Components
                     OnMouseEnterEvent?.Invoke(this, new MouseEnterEvent(mouseEvent.Position));
                 }
                 
-                var isTunnelHandled = false;
-                //Tunnel
+                var inBubbleHandled = false;
+                //Bubbling
                 foreach (var child in Children)
                 {
                     if (child.HandleMouseEvent(mouseEvent))
                     {
-                        isTunnelHandled = true;
+                        inBubbleHandled = true;
                     }
                 }
 
                 switch (mouseEvent)
                 {
                     case MouseMoveEvent mouseMoveEvent:
-                        OnMouseMoveBubbled?.Invoke(this, mouseMoveEvent);
-                        if (!isTunnelHandled)
+                        OnMouseMoveTunneled?.Invoke(this, mouseMoveEvent);
+                        if (!inBubbleHandled)
                         {
                             OnMouseMove?.Invoke(this, mouseMoveEvent);
                         }
 
                         break;
                     case MouseDownEvent mouseDownEvent:
-                        OnMouseDownBubbled?.Invoke(this, mouseDownEvent);
-                        if (!isTunnelHandled)
+                        OnMouseDownTunneled?.Invoke(this, mouseDownEvent);
+                        if (!inBubbleHandled)
                         {
                             OnMouseDown?.Invoke(this, mouseDownEvent);
                         }
 
                         break;
                     case MouseUpEvent mouseUpEvent:
-                        OnMouseUpBubbled?.Invoke(this, mouseUpEvent);
-                        if (!isTunnelHandled)
+                        OnMouseUpTunneled?.Invoke(this, mouseUpEvent);
+                        if (!inBubbleHandled)
                         {
                             OnMouseUp?.Invoke(this, mouseUpEvent);
                         }
 
                         break;
                     case MouseClickEvent mouseClickEvent:
-                        OnMouseClickBubbled?.Invoke(this, mouseClickEvent);
-                        if (!isTunnelHandled)
+                        OnMouseClickTunneled?.Invoke(this, mouseClickEvent);
+                        if (!inBubbleHandled)
                         {
                             OnMouseClick?.Invoke(this, mouseClickEvent);
                         }
 
                         break;
                     case MouseDoubleClickEvent mouseDoubleClickEvent:
-                        OnMouseDoubleClickBubbled?.Invoke(this, mouseDoubleClickEvent);
-                        if (!isTunnelHandled)
+                        OnMouseDoubleClickTunneled?.Invoke(this, mouseDoubleClickEvent);
+                        if (!inBubbleHandled)
                         {
                             OnMouseDoubleClick?.Invoke(this, mouseDoubleClickEvent);
                         }
@@ -600,11 +600,11 @@ namespace Aptacode.AppFramework.Components
         public event EventHandler<MouseClickEvent> OnMouseClick;
         public event EventHandler<MouseDoubleClickEvent> OnMouseDoubleClick;
 
-        public event EventHandler<MouseDownEvent> OnMouseDownBubbled;
-        public event EventHandler<MouseMoveEvent> OnMouseMoveBubbled;
-        public event EventHandler<MouseUpEvent> OnMouseUpBubbled;
-        public event EventHandler<MouseClickEvent> OnMouseClickBubbled;
-        public event EventHandler<MouseDoubleClickEvent> OnMouseDoubleClickBubbled;
+        public event EventHandler<MouseDownEvent> OnMouseDownTunneled;
+        public event EventHandler<MouseMoveEvent> OnMouseMoveTunneled;
+        public event EventHandler<MouseUpEvent> OnMouseUpTunneled;
+        public event EventHandler<MouseClickEvent> OnMouseClickTunneled;
+        public event EventHandler<MouseDoubleClickEvent> OnMouseDoubleClickTunneled;
         public event EventHandler<MouseEnterEvent> OnMouseEnterEvent;
         public event EventHandler<MouseLeaveEvent> OnMouseLeaveEvent;
 

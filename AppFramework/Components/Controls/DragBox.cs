@@ -183,9 +183,9 @@ namespace Aptacode.AppFramework.Components.Controls
 
         public DragBox(Polygon polygon) : base(polygon)
         {
-            OnMouseMoveBubbled += Handle_OnMouseMove;
-            OnMouseUpBubbled += Handle_OnMouseUp;
-            OnMouseDownBubbled += Handle_OnMouseDown;
+            OnMouseMoveTunneled += Handle_OnMouseMove;
+            OnMouseUpTunneled += Handle_OnMouseUp;
+            OnMouseDownTunneled += Handle_OnMouseDown;
             OnMouseLeaveEvent += Handle_OnMouseLeaveEvent;
         }
 
