@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Aptacode.Geometry.Primitives;
 
-namespace Aptacode.AppFramework.Components.Layouts
+namespace Aptacode.AppFramework.Components.Containers.Layouts
 {
     public class GridLayout : Layout
     {

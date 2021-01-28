@@ -9,7 +9,7 @@ using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 
-namespace Aptacode.AppFramework.Components.Layouts
+namespace Aptacode.AppFramework.Components.Containers.Layouts
 {
     public abstract class Layout : PolygonViewModel
     {

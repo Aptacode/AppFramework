@@ -2,7 +2,7 @@
 using Aptacode.AppFramework.Enums;
 using Aptacode.Geometry.Primitives;
 
-namespace Aptacode.AppFramework.Components.Layouts
+namespace Aptacode.AppFramework.Components.Containers.Layouts
 {
     public class LinearLayout : Layout
     {
