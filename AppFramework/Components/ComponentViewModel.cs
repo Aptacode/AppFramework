@@ -55,7 +55,7 @@ namespace Aptacode.AppFramework.Components
             }
         }
 
-        public virtual async Task Draw(BlazorCanvasInterop ctx)
+        public virtual async Task Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
         {
             OldBoundingRectangle = BoundingRectangle;
             Invalidated = false;
@@ -75,7 +75,7 @@ namespace Aptacode.AppFramework.Components
 
             foreach (var child in _children)
             {
-                await child.Draw(ctx);
+                await child.Draw(scene, ctx);
             }
 
             await DrawText(ctx);

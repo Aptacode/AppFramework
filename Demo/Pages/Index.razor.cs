@@ -79,7 +79,7 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetText("")
                 .Build();
 
-            component.Add(CreateImage());
+           // component.Add(CreateImage());
 
             foreach (var button in GenerateButtons(8))
             {

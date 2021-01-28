@@ -25,7 +25,7 @@ namespace Aptacode.AppFramework.Components.Controls
             }
         }
 
-        public override async Task Draw(BlazorCanvasInterop ctx)
+        public override async Task Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
         {
             OldBoundingRectangle = BoundingRectangle;
             Invalidated = false;
@@ -46,12 +46,12 @@ namespace Aptacode.AppFramework.Components.Controls
             var containedChildren = Children.Where(c => c.CollidesWith(this));
             for (var i = 0; i < containedChildren.Count() - 1; i++)
             {
-                await containedChildren.ElementAt(i).Draw(ctx);
+                await containedChildren.ElementAt(i).Draw(scene, ctx);
             }
 
             //Todo use globalCompositeOperation to clip last element with Source-In
             //Needs temp canvas
-            await containedChildren.Last().Draw(ctx);
+            await containedChildren.Last().Draw(scene, ctx);
         }
 
         public override void Add(ComponentViewModel child)

@@ -112,7 +112,9 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
             Resize();
         }
 
-        public override async Task Draw(BlazorCanvasInterop ctx)
+        private string _tempCanvasName = string.Empty;
+        
+        public override async Task Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
         {
             OldBoundingRectangle = BoundingRectangle;
             Invalidated = false;
@@ -127,18 +129,30 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
             ctx.StrokeStyle(BorderColorName);
 
             ctx.LineWidth(BorderThickness * SceneScale.Value);
-
             await CustomDraw(ctx);
 
-            var containedChildren = Children.Where(c => c.CollidesWith(this));
-            for (var i = 0; i < containedChildren.Count() - 1; i++)
+            if (_tempCanvasName == string.Empty)
             {
-                await containedChildren.ElementAt(i).Draw(ctx);
+                _tempCanvasName = scene.Id + "temp";
+                await ctx.CreateCanvas(_tempCanvasName, scene.Size.X * SceneScale.Value, scene.Size.Y * SceneScale.Value);
             }
 
-            //Todo use globalCompositeOperation to clip last element with Source-In
-            //Needs temp canvas
-            await containedChildren.Last().Draw(ctx);
+            ctx.SelectCanvas(_tempCanvasName);
+            ctx.Save();
+            ctx.ClearRect(0, 0, scene.Size.X * SceneScale.Value, scene.Size.Y * SceneScale.Value);
+
+            foreach (var componentViewModel in Children.Where(c => c.CollidesWith(this)))
+            {
+                await componentViewModel.Draw(scene, ctx);
+            }
+
+            ctx.GlobalCompositeOperation(CompositeOperation.DestinationIn);
+
+            ctx.FillRect(BoundingRectangle.X * SceneScale.Value, BoundingRectangle.Y * SceneScale.Value, BoundingRectangle.Width * SceneScale.Value, BoundingRectangle.Height * SceneScale.Value);
+            ctx.Restore();
+
+            ctx.SelectCanvas(scene.Id.ToString());
+            ctx.DrawCanvas(_tempCanvasName, 0, 0);
         }
 
         #region IDisposable

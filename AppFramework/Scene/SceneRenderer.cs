@@ -42,7 +42,7 @@ namespace Aptacode.AppFramework.Scene
 
                 for (var i = 0; i < scene.Components.Count(); i++)
                 {
-                    await scene.Components.ElementAt(i).Draw(_canvas);
+                    await scene.Components.ElementAt(i).Draw(scene, _canvas);
                 }
 
                 //var invalidatedItems = await InvalidateItems();
