@@ -49,7 +49,7 @@ namespace Aptacode.AppFramework.Components.Controls
                     case "backspace":
                         if (Text.Length >= 1)
                         {
-                            Text = Text[0..^1];
+                            Text = Text[..^1];
                         }
                         break;
                     default:

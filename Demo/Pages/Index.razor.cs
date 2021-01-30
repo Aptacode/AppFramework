@@ -23,13 +23,16 @@ namespace Aptacode.AppFramework.Demo.Pages
         {
             //Scene
             Scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
-            SceneController = new DemoSceneController(new Vector2(200, 200));
-            SceneController.ShowGrid = true;
+            SceneController = new DemoSceneController(new Vector2(200, 200))
+            {
+                ShowGrid = true
+            };
 
             Scene.Add(GetGrid());
             Scene.Add(CreateScrollBox());
             Scene.Add(CreateDragBox());
             Scene.Add(CreateTextbox());
+            Scene.Add(CreateCheckbox());
 
             SceneController.Add(Scene);
 
@@ -78,6 +81,21 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetMargin(0.0f)
                 .SetFillColor(Color.FromArgb(255, 255, 255, 255))
                 .SetText("")
+                .Build();
+
+            return component;
+        }
+
+        private CheckBox CreateCheckbox()
+        {
+            var componentBuilder = new ComponentBuilder();
+
+            var component = (CheckBox)componentBuilder
+                .SetBase(CheckBox.FromPositionAndSize(new Vector2(45, 2), new Vector2(30, 5)))
+                .SetBorderThickness(0.2f)
+                .SetMargin(0.0f)
+                .SetFillColor(Color.FromArgb(255, 255, 255, 255))
+                .SetText("Checkbox test")
                 .Build();
 
             return component;

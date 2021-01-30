@@ -617,21 +617,8 @@ namespace Aptacode.AppFramework.Components
 
         public virtual bool HandleMouseEvent(MouseEvent mouseEvent)
         {
-            var passEventToChildren = false;
-            if (MouseOver)
-            {
-                MouseOver = false;
-                passEventToChildren = true;
+            var hasPassedEventToChildren = false;
 
-                OnMouseLeaveEvent?.Invoke(this, new MouseLeaveEvent(mouseEvent.Position));
-            }
-
-            if (HasFocus && mouseEvent is MouseDownEvent)
-            {
-                HasFocus = false;
-                OnHasFocusChanged?.Invoke(this, false);
-                passEventToChildren = true;
-            }
             
             if (CollidesWith(mouseEvent.Position))
             {
@@ -650,7 +637,7 @@ namespace Aptacode.AppFramework.Components
                 
                 var isBubbleHandled = false;
                 //Already passed to children
-                passEventToChildren = false;
+                hasPassedEventToChildren = true;
                 
                 //Bubbling
                 foreach (var child in Children)
@@ -707,14 +694,37 @@ namespace Aptacode.AppFramework.Components
 
                 return true;
             }
-
-            if (passEventToChildren)
+            else if (HasFocus && mouseEvent is MouseDownEvent)
             {
-                foreach (var child in Children)
+                HasFocus = false;
+                if (!hasPassedEventToChildren)
                 {
-                    child.HandleMouseEvent(mouseEvent);
+                    foreach (var child in Children)
+                    {
+                        child.HandleMouseEvent(mouseEvent);
+                    }
+                    hasPassedEventToChildren = true;
                 }
+
+                OnHasFocusChanged?.Invoke(this, false);
             }
+
+            if (MouseOver)
+            {
+                MouseOver = false;
+                if (!hasPassedEventToChildren)
+                {
+                    foreach (var child in Children)
+                    {
+                        child.HandleMouseEvent(mouseEvent);
+                    }
+                    hasPassedEventToChildren = true;
+                }
+                OnMouseLeaveEvent?.Invoke(this, new MouseLeaveEvent(mouseEvent.Position));
+            }
+
+
+            
     
             return false;
         }
