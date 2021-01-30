@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Scene.Events;
@@ -28,9 +29,9 @@ namespace Aptacode.AppFramework.Scene
 
         private void UserInteractionControllerOnOnMouseEvent(object? sender, MouseEvent e)
         {
-            foreach (var scene in Scenes)
+            foreach (var scene in Scenes.ToList())
             {
-                foreach (var componentViewModel in scene.Components)
+                foreach (var componentViewModel in scene.Components.ToList())
                 {
                     componentViewModel.HandleMouseEvent(e);
                 }

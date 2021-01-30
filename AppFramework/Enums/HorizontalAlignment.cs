@@ -2,6 +2,7 @@
 {
     public enum HorizontalAlignment
     {
+        None,
         Left,
         Right,
         Center,

@@ -15,7 +15,7 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
     {
         #region Ctor
 
-        protected Layout(ComponentViewModel parent, Polygon polygon) : base(parent, polygon)
+        protected Layout(Polygon polygon) : base( polygon)
         {
         }
 

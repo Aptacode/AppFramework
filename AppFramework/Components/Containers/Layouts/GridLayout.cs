@@ -28,11 +28,11 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
 
         #region Ctor
 
-        public GridLayout(ComponentViewModel parent, Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(parent,Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
+        public GridLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
         {
         }
 
-        public GridLayout(ComponentViewModel parent, Vector2 topLeft, Vector2 bottomRight) : base(parent, Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
+        public GridLayout(Vector2 topLeft, Vector2 bottomRight) : base( Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
         {
         }
 

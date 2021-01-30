@@ -14,7 +14,7 @@ namespace Aptacode.AppFramework.Components.Primitives
     {
         #region Ctor
 
-        public PolylineViewModel(ComponentViewModel parent, PolyLine polyLine) : base(parent, polyLine)
+        public PolylineViewModel(PolyLine polyLine) : base( polyLine)
         {
         }
 

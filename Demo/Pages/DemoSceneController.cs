@@ -14,18 +14,7 @@ namespace Aptacode.AppFramework.Demo.Pages
         public DemoSceneController(Vector2 size) : base(size)
         {
             ShowGrid = true;
-            UserInteractionController.OnMouseEvent += UserInteractionControllerOnOnMouseEvent;
-        }
 
-        private void UserInteractionControllerOnOnMouseEvent(object? sender, MouseEvent e)
-        {
-            foreach (var component in Scenes.First().Components)
-            {
-                if (component is Button btn)
-                {
-                    btn.Text = e.Position.ToString();
-                }
-            }
         }
     }
 }

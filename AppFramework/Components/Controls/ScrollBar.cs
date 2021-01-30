@@ -12,9 +12,9 @@ namespace Aptacode.AppFramework.Components.Controls
     {
         #region Ctor
         
-        public ScrollBar(ComponentViewModel parent, Polygon polygon) : base(parent, polygon)
+        public ScrollBar(Polygon polygon) : base( polygon)
         {
-            ScrollButton = new Button(this,
+            ScrollButton = new Button(
                 Polygon.Rectangle.FromPositionAndSize(polygon.BoundingRectangle.TopLeft, new Vector2(polygon.BoundingRectangle.Width, 5)));
             Add(ScrollButton);
 
@@ -60,14 +60,14 @@ namespace Aptacode.AppFramework.Components.Controls
             LastMousePosition = e.Position;
         }
 
-        public static ScrollBar FromPositionAndSize(ComponentViewModel parent, Vector2 position, Vector2 size)
+        public static ScrollBar FromPositionAndSize(Vector2 position, Vector2 size)
         {
-            return new(parent, Polygon.Rectangle.FromPositionAndSize(position, size));
+            return new( Polygon.Rectangle.FromPositionAndSize(position, size));
         }
 
-        public static ScrollBar FromTwoPoints(ComponentViewModel parent, Vector2 topLeft, Vector2 bottomRight)
+        public static ScrollBar FromTwoPoints(Vector2 topLeft, Vector2 bottomRight)
         {
-            return new(parent,Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
+            return new(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
         }
 
         #endregion

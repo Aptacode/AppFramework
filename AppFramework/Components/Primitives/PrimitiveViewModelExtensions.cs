@@ -4,24 +4,24 @@ namespace Aptacode.AppFramework.Components.Primitives
 {
     public static class PrimitiveViewModelExtensions
     {
-        public static EllipseViewModel ToViewModel(this Ellipse ellipse, ComponentViewModel parent)
+        public static EllipseViewModel ToViewModel(this Ellipse ellipse)
         {
-            return new(parent, ellipse);
+            return new( ellipse);
         }
 
-        public static PolygonViewModel ToViewModel(this Polygon polygon, ComponentViewModel parent)
+        public static PolygonViewModel ToViewModel(this Polygon polygon)
         {
-            return new(parent, polygon);
+            return new( polygon);
         }
 
-        public static PolylineViewModel ToViewModel(this PolyLine polyline, ComponentViewModel parent)
+        public static PolylineViewModel ToViewModel(this PolyLine polyline)
         {
-            return new(parent, polyline);
+            return new( polyline);
         }
 
-        public static PointViewModel ToViewModel(this Point point, ComponentViewModel parent)
+        public static PointViewModel ToViewModel(this Point point)
         {
-            return new(parent, point);
+            return new( point);
         }
     }
 }

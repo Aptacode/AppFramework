@@ -19,10 +19,9 @@ namespace Aptacode.AppFramework.Components
     {
         #region Ctor
 
-        protected ComponentViewModel(ComponentViewModel parent)
+        protected ComponentViewModel()
         {
             Id = Guid.NewGuid();
-            Parent = parent;
             CollisionDetectionEnabled = true;
             Margin = DefaultMargin;
             IsShown = true;
@@ -99,6 +98,7 @@ namespace Aptacode.AppFramework.Components
         {
             if (!Children.Contains(child))
             {
+                child.Parent = this;
                 _children.Add(child);
                 UpdateBounds();
                 Invalidated = true;
@@ -137,7 +137,6 @@ namespace Aptacode.AppFramework.Components
 
         public Guid Id { get; init; }
         protected readonly List<ComponentViewModel> _children = new();
-        protected ComponentViewModel Parent { get; init; }
         public bool CollisionDetectionEnabled { get; set; }
         public bool Invalidated { get; set; }
         public BoundingRectangle OldBoundingRectangle { get; protected set; }
@@ -145,8 +144,97 @@ namespace Aptacode.AppFramework.Components
         public Primitive BoundingPrimitive { get; set; }
         public bool MouseOver { get; protected set; }
 
+        #region Parent
 
-        private VerticalAlignment _verticalAlignment = VerticalAlignment.Stretch;
+        private ComponentViewModel _parent;
+        public ComponentViewModel Parent
+        {
+            get => _parent;
+            set
+            {
+                if (_parent != null)
+                {
+                    _parent.OnScaled -= ParentOnOnScaled;
+                }
+                _parent = value;
+                if (_parent != null)
+                {
+                    Reposition();
+                    _parent.OnScaled += ParentOnOnScaled;
+                }
+            }
+        }
+
+        private void ParentOnOnScaled(object? sender, ScaleEvent e)
+        {
+            if (_parent != null)
+            {
+                Reposition();
+            }
+        }
+
+        protected void Reposition()
+        {
+            var cellPosition = Parent.BoundingRectangle.TopLeft;
+            var cellSize = Parent.BoundingRectangle.Size;
+            
+            var xPos = BoundingRectangle.X;
+            var yPos = BoundingRectangle.Y;
+            var xSize = BoundingRectangle.Width;
+            var ySize = BoundingRectangle.Height;
+
+            switch ( VerticalAlignment)
+            {
+                case VerticalAlignment.Stretch:
+                    ySize = cellSize.Y;
+                    yPos = cellPosition.Y;
+                    break;
+                case VerticalAlignment.Top:
+                    ySize = Math.Min(cellSize.Y, this.BoundingRectangle.Size.Y);
+                    yPos = cellPosition.Y;
+                    break;
+                case VerticalAlignment.Center:
+                    ySize = Math.Min(cellSize.Y, this.BoundingRectangle.Size.Y);
+                    yPos = cellPosition.Y + ySize / 2.0f;
+                    break;
+                case VerticalAlignment.Bottom:
+                    ySize = Math.Min(cellSize.Y, this.BoundingRectangle.Size.Y);
+                    yPos = cellPosition.Y + (cellSize.Y - ySize);
+                    break;
+            }
+
+            switch (HorizontalAlignment)
+            {
+                case HorizontalAlignment.Stretch:
+                    xSize = cellSize.X;
+                    xPos = cellPosition.X;
+                    break;
+                case HorizontalAlignment.Left:
+                    xSize = Math.Min(cellSize.X, this.BoundingRectangle.Size.X);
+                    xPos = cellPosition.X;
+                    break;
+                case HorizontalAlignment.Center:
+                    xSize = Math.Min(cellSize.X, this.BoundingRectangle.Size.X);
+                    xPos = cellPosition.X + xSize / 2.0f;
+                    break;
+                case HorizontalAlignment.Right:
+                    xSize = Math.Min(cellSize.X, this.BoundingRectangle.Size.X);
+                    xPos = cellPosition.X + xSize;
+                    break;
+            }
+
+            this.SetPosition(new Vector2(xPos + this.Margin, yPos + this.Margin));
+            this.SetSize(new Vector2(xSize - 2 * this.Margin, ySize - 2 * this.Margin));
+        }
+
+
+        #endregion
+
+
+
+
+
+        private VerticalAlignment _verticalAlignment = VerticalAlignment.None;
 
         public VerticalAlignment VerticalAlignment
         {
@@ -158,7 +246,7 @@ namespace Aptacode.AppFramework.Components
             }
         }
 
-        private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Stretch;
+        private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.None;
 
         public HorizontalAlignment HorizontalAlignment
         {
