@@ -28,8 +28,6 @@ namespace Aptacode.AppFramework.Components.Containers
             base.Add(ScrollBar);
         }
 
-        private string _tempCanvasName = string.Empty;
-
         public override async Task Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
         {
             OldBoundingRectangle = BoundingRectangle;
@@ -84,23 +82,18 @@ namespace Aptacode.AppFramework.Components.Containers
             base.Remove(child);
         }
 
-        private float lastScrollPosition;
-
         private void ScrollBarOnOnScroll(object? sender, float e)
         {
-            Console.WriteLine(e);
-
-            if (lastScrollPosition > Constants.Tolerance)
+            if (_lastScrollPosition > Constants.Tolerance)
             {
-                var delta = new Vector2(0, (e - lastScrollPosition) * BoundingRectangle.Height);
-                Console.WriteLine(delta);
+                var delta = new Vector2(0, (e - _lastScrollPosition) * BoundingRectangle.Height);
                 foreach (var child in ScrollChildren)
                 {
                     child.Translate(delta);
                 }
             }
 
-            lastScrollPosition = e;
+            _lastScrollPosition = e;
         }
 
         public static ScrollBox FromPositionAndSize(Vector2 position, Vector2 size)
@@ -120,6 +113,8 @@ namespace Aptacode.AppFramework.Components.Containers
         public ScrollBar ScrollBar { get; set; }
         public List<ComponentViewModel> ScrollChildren { get; set; } = new();
         public float ScrollBarWidth { get; set; } = 5;
+        private string _tempCanvasName = string.Empty;
+        private float _lastScrollPosition;
 
         #endregion
     }
