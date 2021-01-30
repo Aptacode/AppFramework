@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Components.Controls;
 using Aptacode.AppFramework.Components.Layouts;
-using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Enums;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.AppFramework.Utilities;
@@ -25,20 +24,20 @@ namespace Aptacode.AppFramework.Demo.Pages
             var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
             SceneController = new DemoSceneController(new Vector2(200, 200));
             SceneController.ShowGrid = true;
-            
+
             scene.Add(GetGrid());
             scene.Add(CreateDragBox());
             SceneController.Add(scene);
 
             await base.OnInitializedAsync();
         }
-        
+
         private void ButtonOnOnMouseClick(object? sender, MouseClickEvent e)
         {
             var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
             var sSceneController = new DemoSceneController(new Vector2(200, 200));
             sSceneController.ShowGrid = true;
-            
+
             var componentBuilder = new ComponentBuilder();
             var component = componentBuilder
                 .SetBase(new Button(Polygon.Rectangle.FromPositionAndSize(new Vector2(10, 10), new Vector2(100, 100))))
@@ -81,7 +80,7 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetText("")
                 .Build();
 
-           // component.Add(CreateImage());
+            // component.Add(CreateImage());
 
             foreach (var button in GenerateButtons(8))
             {

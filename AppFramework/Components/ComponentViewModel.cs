@@ -142,8 +142,8 @@ namespace Aptacode.AppFramework.Components
         public BoundingRectangle BoundingRectangle { get; protected set; }
         public Primitive BoundingPrimitive { get; set; }
         public bool MouseOver { get; protected set; }
-        
-        
+
+
         private VerticalAlignment _verticalAlignment = VerticalAlignment.Stretch;
 
         public VerticalAlignment VerticalAlignment
@@ -511,7 +511,7 @@ namespace Aptacode.AppFramework.Components
                     MouseOver = true;
                     OnMouseEnterEvent?.Invoke(this, new MouseEnterEvent(mouseEvent.Position));
                 }
-                
+
                 var isTunnelHandled = false;
                 //Tunnel
                 foreach (var child in Children)
@@ -567,13 +567,16 @@ namespace Aptacode.AppFramework.Components
                 }
 
                 return true;
-            }else if (MouseOver)
+            }
+
+            if (MouseOver)
             {
                 MouseOver = false;
                 foreach (var child in Children)
                 {
                     child.HandleMouseEvent(mouseEvent);
                 }
+
                 OnMouseLeaveEvent?.Invoke(this, new MouseLeaveEvent(mouseEvent.Position));
             }
 

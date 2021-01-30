@@ -1,6 +1,6 @@
 ﻿@using Aptacode.AppFramework.Utilities
 @inherits SceneControllerViewBase
-@if(ViewModel != null)
+@if (ViewModel != null)
 {
     <div @ref="Container"
           tabindex="0"
@@ -30,7 +30,6 @@
 
         @foreach (var scene in ViewModel?.Scenes)
         {
-            <SceneView @key="scene.Id" ViewModel="scene"></SceneView>
-        }
+            <SceneView @key="scene.Id" ViewModel="scene"></SceneView>        }
     </div>
 }
