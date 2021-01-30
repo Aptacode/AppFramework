@@ -25,6 +25,18 @@ namespace Aptacode.AppFramework.Scene
             Scenes = new List<Scene>();
             UserInteractionController = new SceneInteractionController();
             UserInteractionController.OnMouseEvent += UserInteractionControllerOnOnMouseEvent;
+            UserInteractionController.OnKeyboardEvent += UserInteractionControllerOnOnKeyboardEvent;
+        }
+
+        private void UserInteractionControllerOnOnKeyboardEvent(object? sender, KeyboardEvent e)
+        {
+            foreach (var scene in Scenes.ToList())
+            {
+                foreach (var componentViewModel in scene.Components.ToList())
+                {
+                    componentViewModel.HandleKeyboardEvent(e);
+                }
+            }
         }
 
         private void UserInteractionControllerOnOnMouseEvent(object? sender, MouseEvent e)

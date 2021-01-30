@@ -144,7 +144,8 @@ namespace Aptacode.AppFramework.Components
         public BoundingRectangle BoundingRectangle { get; protected set; }
         public Primitive BoundingPrimitive { get; set; }
         public bool MouseOver { get; protected set; }
-
+        public bool HasFocus { get; protected set; }
+        
         #region Parent
 
         private ComponentViewModel _parent;
@@ -228,12 +229,7 @@ namespace Aptacode.AppFramework.Components
             this.SetSize(new Vector2(xSize - 2 * this.Margin, ySize - 2 * this.Margin));
         }
 
-
         #endregion
-
-
-
-
 
         private VerticalAlignment _verticalAlignment = VerticalAlignment.None;
 
@@ -588,28 +584,80 @@ namespace Aptacode.AppFramework.Components
             {
                 case MouseEvent mouseEvent:
                     return HandleMouseEvent(mouseEvent);
+                case KeyboardEvent keyboardEvent:
+                    return HandleKeyboardEvent(keyboardEvent);
                 default:
                     return HandleCustomEvent(uiEvent);
             }
         }
 
+        public virtual bool HandleKeyboardEvent(KeyboardEvent keyboardEvent)
+        {
+            var isBubbleHandled = false;
+
+            foreach (var child in Children)
+            {
+                if (child.HandleKeyboardEvent(keyboardEvent))
+                {
+                    isBubbleHandled = true;
+                    break;
+                }
+            }
+
+            OnKeyboardEventTunneled?.Invoke(this, keyboardEvent);
+            
+            if (!isBubbleHandled)
+            {
+                OnKeyboardEvent?.Invoke(this, keyboardEvent);
+            }
+
+            return true;
+        }
+
+
         public virtual bool HandleMouseEvent(MouseEvent mouseEvent)
         {
+            var passEventToChildren = false;
+            if (MouseOver)
+            {
+                MouseOver = false;
+                passEventToChildren = true;
+
+                OnMouseLeaveEvent?.Invoke(this, new MouseLeaveEvent(mouseEvent.Position));
+            }
+
+            if (HasFocus && mouseEvent is MouseDownEvent)
+            {
+                HasFocus = false;
+                OnHasFocusChanged?.Invoke(this, false);
+                passEventToChildren = true;
+            }
+            
             if (CollidesWith(mouseEvent.Position))
             {
+                if (!HasFocus && mouseEvent is MouseDownEvent)
+                {
+                    HasFocus = true;
+                    OnHasFocusChanged?.Invoke(this, true);
+                }
+
+
                 if (!MouseOver)
                 {
                     MouseOver = true;
                     OnMouseEnterEvent?.Invoke(this, new MouseEnterEvent(mouseEvent.Position));
                 }
                 
-                var inBubbleHandled = false;
+                var isBubbleHandled = false;
+                //Already passed to children
+                passEventToChildren = false;
+                
                 //Bubbling
                 foreach (var child in Children)
                 {
                     if (child.HandleMouseEvent(mouseEvent))
                     {
-                        inBubbleHandled = true;
+                        isBubbleHandled = true;
                     }
                 }
 
@@ -617,7 +665,7 @@ namespace Aptacode.AppFramework.Components
                 {
                     case MouseMoveEvent mouseMoveEvent:
                         OnMouseMoveTunneled?.Invoke(this, mouseMoveEvent);
-                        if (!inBubbleHandled)
+                        if (!isBubbleHandled)
                         {
                             OnMouseMove?.Invoke(this, mouseMoveEvent);
                         }
@@ -625,7 +673,7 @@ namespace Aptacode.AppFramework.Components
                         break;
                     case MouseDownEvent mouseDownEvent:
                         OnMouseDownTunneled?.Invoke(this, mouseDownEvent);
-                        if (!inBubbleHandled)
+                        if (!isBubbleHandled)
                         {
                             OnMouseDown?.Invoke(this, mouseDownEvent);
                         }
@@ -633,7 +681,7 @@ namespace Aptacode.AppFramework.Components
                         break;
                     case MouseUpEvent mouseUpEvent:
                         OnMouseUpTunneled?.Invoke(this, mouseUpEvent);
-                        if (!inBubbleHandled)
+                        if (!isBubbleHandled)
                         {
                             OnMouseUp?.Invoke(this, mouseUpEvent);
                         }
@@ -641,7 +689,7 @@ namespace Aptacode.AppFramework.Components
                         break;
                     case MouseClickEvent mouseClickEvent:
                         OnMouseClickTunneled?.Invoke(this, mouseClickEvent);
-                        if (!inBubbleHandled)
+                        if (!isBubbleHandled)
                         {
                             OnMouseClick?.Invoke(this, mouseClickEvent);
                         }
@@ -649,7 +697,7 @@ namespace Aptacode.AppFramework.Components
                         break;
                     case MouseDoubleClickEvent mouseDoubleClickEvent:
                         OnMouseDoubleClickTunneled?.Invoke(this, mouseDoubleClickEvent);
-                        if (!inBubbleHandled)
+                        if (!isBubbleHandled)
                         {
                             OnMouseDoubleClick?.Invoke(this, mouseDoubleClickEvent);
                         }
@@ -660,17 +708,14 @@ namespace Aptacode.AppFramework.Components
                 return true;
             }
 
-            if (MouseOver)
+            if (passEventToChildren)
             {
-                MouseOver = false;
                 foreach (var child in Children)
                 {
                     child.HandleMouseEvent(mouseEvent);
                 }
-
-                OnMouseLeaveEvent?.Invoke(this, new MouseLeaveEvent(mouseEvent.Position));
             }
-
+    
             return false;
         }
 
@@ -701,6 +746,12 @@ namespace Aptacode.AppFramework.Components
         public event EventHandler<MouseDoubleClickEvent> OnMouseDoubleClickTunneled;
         public event EventHandler<MouseEnterEvent> OnMouseEnterEvent;
         public event EventHandler<MouseLeaveEvent> OnMouseLeaveEvent;
+        
+        public event EventHandler<bool> OnHasFocusChanged;
+
+        //Keyboard
+        public event EventHandler<KeyboardEvent> OnKeyboardEvent;
+        public event EventHandler<KeyboardEvent> OnKeyboardEventTunneled;
 
         //Transformation
         public event EventHandler<TranslateEvent> OnTranslated;

@@ -29,6 +29,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             Scene.Add(GetGrid());
             Scene.Add(CreateScrollBox());
             Scene.Add(CreateDragBox());
+            Scene.Add(CreateTextbox());
 
             SceneController.Add(Scene);
 
@@ -62,6 +63,20 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.FromArgb(100, 100, 40, 20))
+                .SetText("")
+                .Build();
+
+            return component;
+        }
+        private TextBox CreateTextbox()
+        {
+            var componentBuilder = new ComponentBuilder();
+
+            var component = (TextBox)componentBuilder
+                .SetBase(TextBox.FromPositionAndSize(new Vector2(5, 2), new Vector2(30, 5)))
+                .SetBorderThickness(0.2f)
+                .SetMargin(0.0f)
+                .SetFillColor(Color.FromArgb(255, 255, 255, 255))
                 .SetText("")
                 .Build();
 

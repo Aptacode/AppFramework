@@ -39,6 +39,9 @@
         window.theInstance = instance;
         window.requestAnimationFrame(gameLoop);
     };
+    window.onkeydown = function(e) { 
+        return !(e.keyCode == 32);
+    };
 </script>
 <!-- Start Single Page Apps for GitHub Pages -->
 <script type="text/javascript">
