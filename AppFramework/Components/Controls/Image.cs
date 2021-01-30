@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components.Primitives;
@@ -12,6 +13,7 @@ namespace Aptacode.AppFramework.Components.Controls
     public class Image : PolygonViewModel
     {
         private bool _isLoaded;
+        private bool _isLoading;
 
         private string _path = string.Empty;
 
@@ -34,13 +36,23 @@ namespace Aptacode.AppFramework.Components.Controls
                 return;
             }
 
-            if (!_isLoaded)
+            if (!_isLoaded && !_isLoading)
             {
-                await ctx.LoadImage(Path);
-                _isLoaded = true;
+                _isLoading = true;
+                _ = new TaskFactory().StartNew(async () =>
+                {
+                    Console.WriteLine($"Loading: {Path}");
+                    await ctx.LoadImage(Path);
+                    Console.WriteLine($"Loaded: {Path}");
+                    _isLoaded = true;
+                });
+
             }
 
-            ctx.DrawImage(Path, BoundingRectangle.X * SceneScale.Value, BoundingRectangle.Y * SceneScale.Value, BoundingRectangle.Width * SceneScale.Value, BoundingRectangle.Height * SceneScale.Value);
+            if (_isLoaded)
+            {
+                ctx.DrawImage(Path, BoundingRectangle.X * SceneScale.Value, BoundingRectangle.Y * SceneScale.Value, BoundingRectangle.Width * SceneScale.Value, BoundingRectangle.Height * SceneScale.Value);
+            }
         }
 
         #region Ctor

@@ -18,19 +18,19 @@ namespace Aptacode.AppFramework.Demo.Pages
     public class IndexBase : ComponentBase
     {
         public DemoSceneController SceneController { get; set; }
-
+        public Scene.Scene Scene { get; set; }
         protected override async Task OnInitializedAsync()
         {
             //Scene
-            var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
+            Scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
             SceneController = new DemoSceneController(new Vector2(200, 200));
             SceneController.ShowGrid = true;
 
-            scene.Add(GetGrid());
-            scene.Add(CreateScrollBox());
-            scene.Add(CreateDragBox());
+            Scene.Add(GetGrid());
+            Scene.Add(CreateScrollBox());
+            Scene.Add(CreateDragBox());
 
-            SceneController.Add(scene);
+            SceneController.Add(Scene);
 
             await base.OnInitializedAsync();
         }
@@ -80,7 +80,6 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetText("")
                 .Build();
 
-           // component.Add(CreateImage());
 
             foreach (var button in GenerateButtons(8))
             {
@@ -89,6 +88,11 @@ namespace Aptacode.AppFramework.Demo.Pages
             }
 
             return component;
+        }
+
+        private void ButtonOnOnMouseClick(object? sender, MouseClickEvent e)
+        {
+            Scene.Add(CreateImage());
         }
 
         private ComponentViewModel GetGrid()
