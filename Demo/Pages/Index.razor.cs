@@ -29,7 +29,6 @@ namespace Aptacode.AppFramework.Demo.Pages
             Scene.Add(GetGrid());
             Scene.Add(CreateScrollBox());
             Scene.Add(CreateDragBox());
-            Scene.Add(CreateNestedImage());
 
             SceneController.Add(Scene);
 
@@ -108,6 +107,7 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetText("")
                 .Build();
 
+            component.Add(CreateNestedImage());
 
             foreach (var button in GenerateButtons(8))
             {
@@ -120,7 +120,7 @@ namespace Aptacode.AppFramework.Demo.Pages
 
         private void ButtonOnOnMouseClick(object? sender, MouseClickEvent e)
         {
-            Scene.Add(CreateImage());
+
         }
 
         private ComponentViewModel GetGrid()
