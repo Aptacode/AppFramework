@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Components.Controls;
 using Aptacode.AppFramework.Components.Layouts;
+using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Enums;
+using Aptacode.AppFramework.Scene.Events;
 using Aptacode.AppFramework.Utilities;
+using Aptacode.Geometry.Primitives;
 using Microsoft.AspNetCore.Components;
 
 namespace Aptacode.AppFramework.Demo.Pages
@@ -21,12 +24,34 @@ namespace Aptacode.AppFramework.Demo.Pages
             //Scene
             var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
             SceneController = new DemoSceneController(new Vector2(200, 200));
-
+            SceneController.ShowGrid = true;
+            
             scene.Add(GetGrid());
             scene.Add(CreateDragBox());
             SceneController.Add(scene);
 
             await base.OnInitializedAsync();
+        }
+        
+        private void ButtonOnOnMouseClick(object? sender, MouseClickEvent e)
+        {
+            var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
+            var sSceneController = new DemoSceneController(new Vector2(200, 200));
+            sSceneController.ShowGrid = true;
+            
+            var componentBuilder = new ComponentBuilder();
+            var component = componentBuilder
+                .SetBase(new Button(Polygon.Rectangle.FromPositionAndSize(new Vector2(10, 10), new Vector2(100, 100))))
+                .SetBorderThickness(0.2f)
+                .SetMargin(0.0f)
+                .SetFillColor(Color.FromArgb(100, 100, 40, 20))
+                .SetText("")
+                .Build();
+
+            scene.Add(component);
+            sSceneController.Add(scene);
+            SceneController = sSceneController;
+            StateHasChanged();
         }
 
         private Image CreateImage()
@@ -44,7 +69,6 @@ namespace Aptacode.AppFramework.Demo.Pages
             return component;
         }
 
-
         private DragBox CreateDragBox()
         {
             var componentBuilder = new ComponentBuilder();
@@ -57,16 +81,17 @@ namespace Aptacode.AppFramework.Demo.Pages
                 .SetText("")
                 .Build();
 
-            component.Add(CreateImage());
+           // component.Add(CreateImage());
 
             foreach (var button in GenerateButtons(8))
             {
                 component.Add(button);
+                button.OnMouseClick += ButtonOnOnMouseClick;
             }
 
             return component;
         }
-        
+
         private ComponentViewModel GetGrid()
         {
             var componentBuilder = new ComponentBuilder();

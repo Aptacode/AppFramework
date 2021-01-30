@@ -19,7 +19,7 @@ namespace Aptacode.AppFramework.Components
     {
         #region Ctor
 
-        public ComponentViewModel()
+        protected ComponentViewModel()
         {
             Id = Guid.NewGuid();
             CollisionDetectionEnabled = true;

@@ -1,33 +1,36 @@
 ﻿@using Aptacode.AppFramework.Utilities
 @inherits SceneControllerViewBase
+@if(ViewModel != null)
+{
+    <div @ref="Container"
+          tabindex="0"
+          @onkeydown="KeyDown"
+          @onkeyup="KeyUp"
+          style="cursor: @(ViewModel.Cursor);"
+          @onmousemove="MouseMove"
+          @onmousedown="MouseDown"
+          @onmouseup="MouseUp"
+          @onmouseout="MouseOut">
 
-<div @ref="Container"
-      tabindex="0"
-      @onkeydown="KeyDown"
-      @onkeyup="KeyUp"
-      style="cursor: @(ViewModel.Cursor);"
-      @onmousemove="MouseMove"
-      @onmousedown="MouseDown"
-      @onmouseup="MouseUp"
-      @onmouseout="MouseOut">
+        @if (ViewModel.ShowGrid)
+        {
+            <svg width="@(ViewModel.Size.X * SceneScale.Value)" height="@(ViewModel.Size.Y * SceneScale.Value)" style="position: absolute">
+                <defs>
+                    <pattern id="tenthGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="silver" stroke-width="1"/>
+                    </pattern>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <rect width="40" height="40" fill="url(#tenthGrid)"/>
+                        <path d="M 40 0 L 0 0 0 40)" fill="none" stroke="gray" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)"/>
+            </svg>
+        }
 
-    @if (ViewModel.ShowGrid)
-    {
-        <svg width="@(ViewModel.Size.X * SceneScale.Value)" height="@(ViewModel.Size.Y * SceneScale.Value)" style="position: absolute">
-            <defs>
-                <pattern id="tenthGrid" width="10" height="10" patternUnits="userSpaceOnUse">
-                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="silver" stroke-width="1"/>
-                </pattern>
-                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <rect width="40" height="40" fill="url(#tenthGrid)"/>
-                    <path d="M 40 0 L 0 0 0 40)" fill="none" stroke="gray" stroke-width="1"/>
-                </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)"/>
-        </svg>
-    }
-
-    @foreach (var scene in ViewModel.Scenes)
-    {
-        <SceneView ViewModel="scene"></SceneView>    }
-</div>
+        @foreach (var scene in ViewModel?.Scenes)
+        {
+            <SceneView @key="scene.Id" ViewModel="scene"></SceneView>
+        }
+    </div>
+}

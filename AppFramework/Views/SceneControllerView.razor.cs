@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Scene;
 using Aptacode.BlazorCanvas;
@@ -13,13 +15,11 @@ namespace Aptacode.AppFramework.Views
         [JSInvokable]
         public async ValueTask GameLoop(float timeStamp)
         {
-            await ViewModel.Tick();
+            await ViewModel?.Tick();
         }
 
         protected override async Task OnInitializedAsync()
         {
-            await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
-            ViewModel.Setup(BlazorCanvas);
             await base.OnInitializedAsync();
         }
 
@@ -27,18 +27,19 @@ namespace Aptacode.AppFramework.Views
         {
             if (firstRender)
             {
+                await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
                 await JsRuntime.InvokeVoidAsync("SetFocusToElement", Container);
             }
         }
 
         public void MouseDown(MouseEventArgs e)
         {
-            ViewModel.UserInteractionController.MouseDown(e.FromScale());
+            ViewModel?.UserInteractionController.MouseDown(e.FromScale());
         }
 
         public void MouseUp(MouseEventArgs e)
         {
-            ViewModel.UserInteractionController.MouseUp(e.FromScale());
+            ViewModel?.UserInteractionController.MouseUp(e.FromScale());
         }
 
         public void MouseOut(MouseEventArgs e)
@@ -47,24 +48,37 @@ namespace Aptacode.AppFramework.Views
 
         public void MouseMove(MouseEventArgs e)
         {
-            ViewModel.UserInteractionController.MouseMove(e.FromScale());
+            ViewModel?.UserInteractionController.MouseMove(e.FromScale());
         }
 
         public void KeyDown(KeyboardEventArgs e)
         {
-            ViewModel.UserInteractionController.KeyDown(e.Key);
+            ViewModel?.UserInteractionController.KeyDown(e.Key);
         }
 
         public void KeyUp(KeyboardEventArgs e)
         {
-            ViewModel.UserInteractionController.KeyUp(e.Key);
+            ViewModel?.UserInteractionController.KeyUp(e.Key);
         }
 
         #region Properties
 
-        [Parameter] public SceneController ViewModel { get; set; }
+        private SceneController _viewModel;
+
+        [Parameter]
+        public SceneController ViewModel
+        {
+            get => _viewModel;
+            set
+            {
+                _viewModel = value;
+                ViewModel?.Setup(BlazorCanvas);
+                StateHasChanged();
+            }
+        }
 
         [Inject] private IJSRuntime JsRuntime { get; set; }
+
 
         protected ElementReference Container;
 
