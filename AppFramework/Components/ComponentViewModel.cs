@@ -117,6 +117,7 @@ namespace Aptacode.AppFramework.Components
         {
             if (_children.Remove(child))
             {
+                child.Parent = null;
                 UpdateBounds();
                 Invalidated = true;
             }
