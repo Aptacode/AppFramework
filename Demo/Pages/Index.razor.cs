@@ -8,6 +8,7 @@ using Aptacode.AppFramework.Components.Containers;
 using Aptacode.AppFramework.Components.Containers.Layouts;
 using Aptacode.AppFramework.Components.Controls;
 using Aptacode.AppFramework.Enums;
+using Aptacode.AppFramework.Scene.Events;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.Geometry.Primitives;
 using Microsoft.AspNetCore.Components;
@@ -23,6 +24,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             //Scene
             var scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
             SceneController = new DemoSceneController(new Vector2(200, 200));
+            SceneController.ShowGrid = true;
 
             scene.Add(GetGrid());
             scene.Add(CreateScrollBox());
@@ -66,7 +68,6 @@ namespace Aptacode.AppFramework.Demo.Pages
             return component;
         }
 
-
         private DragBox CreateDragBox()
         {
             var componentBuilder = new ComponentBuilder();
@@ -84,11 +85,12 @@ namespace Aptacode.AppFramework.Demo.Pages
             foreach (var button in GenerateButtons(8))
             {
                 component.Add(button);
+                button.OnMouseClick += ButtonOnOnMouseClick;
             }
 
             return component;
         }
-        
+
         private ComponentViewModel GetGrid()
         {
             var componentBuilder = new ComponentBuilder();

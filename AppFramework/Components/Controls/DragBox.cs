@@ -59,7 +59,7 @@ namespace Aptacode.AppFramework.Components.Controls
             //Ensure child is within the bounds of the DragBox
             var position = GetChildPositionWithinBounds(child);
             child.SetPosition(position);
-            
+
             base.Add(child);
         }
 
@@ -122,7 +122,18 @@ namespace Aptacode.AppFramework.Components.Controls
             base.Remove(child);
         }
 
+
+        #region IDisposable
+
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
+
+        #endregion
+
         #region Events
+
         private void Handle_OnMouseDown(object? sender, MouseDownEvent e)
         {
             IsDragging = true;
@@ -143,7 +154,7 @@ namespace Aptacode.AppFramework.Components.Controls
             IsDragging = false;
             SelectedChild = null;
         }
-        
+
         private void Handle_OnMouseMove(object? sender, MouseMoveEvent e)
         {
             if (IsDragging && SelectedChild != null)
@@ -155,10 +166,10 @@ namespace Aptacode.AppFramework.Components.Controls
                     SelectedChild.Translate(-delta);
                 }
             }
-            
+
             LastDragPosition = e.Position;
         }
-        
+
         private void Handle_OnMouseLeaveEvent(object? sender, MouseLeaveEvent e)
         {
             if (IsDragging && SelectedChild != null)
@@ -166,15 +177,6 @@ namespace Aptacode.AppFramework.Components.Controls
                 IsDragging = false;
                 SelectedChild = null;
             }
-        }
-        #endregion
-
-
-        #region IDisposable
-
-        public override void Dispose()
-        {
-            base.Dispose();
         }
 
         #endregion

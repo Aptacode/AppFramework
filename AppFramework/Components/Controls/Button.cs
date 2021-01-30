@@ -48,7 +48,7 @@ namespace Aptacode.AppFramework.Components.Controls
                 BorderColor = Color.Black;
             }
         }
-        
+
         private void Handle_OnMouseLeaveEvent(object? sender, MouseLeaveEvent e)
         {
             BorderColor = Color.Black;

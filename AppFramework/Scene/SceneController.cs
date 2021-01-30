@@ -13,6 +13,7 @@ namespace Aptacode.AppFramework.Scene
         public void Setup(BlazorCanvasInterop canvas)
         {
             Renderer = new SceneRenderer(canvas, this);
+            Id = Guid.NewGuid();
         }
 
         #region Ctor
@@ -48,8 +49,7 @@ namespace Aptacode.AppFramework.Scene
             var delta = currentTime - _lastTick;
             var frameRate = 1.0f / delta.TotalSeconds;
             _lastTick = currentTime;
-            Console.WriteLine($"{frameRate}fps");
-
+            // Console.WriteLine($"{frameRate}fps");
             await Renderer.Redraw();
         }
 
@@ -64,6 +64,7 @@ namespace Aptacode.AppFramework.Scene
         public string Cursor { get; set; }
         public bool ShowGrid { get; set; }
         public Vector2 Size { get; }
+        public Guid Id { get; set; }
 
         #endregion
 

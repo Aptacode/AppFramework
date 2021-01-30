@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Microsoft.AspNetCore.Components;
@@ -18,6 +19,7 @@ namespace Aptacode.AppFramework.Views
         {
             if (firstRender)
             {
+                Console.WriteLine($"Register: {ViewModel.Id.ToString()}");
                 await BlazorCanvas.Register(ViewModel.Id.ToString(), Canvas);
             }
 
