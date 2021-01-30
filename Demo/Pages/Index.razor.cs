@@ -71,6 +71,7 @@ namespace Aptacode.AppFramework.Demo.Pages
 
             return component;
         }
+        
         private TextBox CreateTextbox()
         {
             var componentBuilder = new ComponentBuilder();
@@ -92,6 +93,21 @@ namespace Aptacode.AppFramework.Demo.Pages
 
             var component = (CheckBox)componentBuilder
                 .SetBase(CheckBox.FromPositionAndSize(new Vector2(45, 2), new Vector2(30, 5)))
+                .SetBorderThickness(0.2f)
+                .SetMargin(0.0f)
+                .SetFillColor(Color.FromArgb(255, 255, 255, 255))
+                .SetText("Checkbox test")
+                .Build();
+
+            return component;
+        }
+        
+        private Dropdown CreateDropdown()
+        {
+            var componentBuilder = new ComponentBuilder();
+
+            var component = (Dropdown)componentBuilder
+                .SetBase(Dropdown.FromPositionAndSize(new Vector2(45, 2), new Vector2(30, 5)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.FromArgb(255, 255, 255, 255))
