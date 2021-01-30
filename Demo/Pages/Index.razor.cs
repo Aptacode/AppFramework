@@ -40,14 +40,14 @@ namespace Aptacode.AppFramework.Demo.Pages
             var componentBuilder = new ComponentBuilder();
 
             var component = (ScrollBox)componentBuilder
-                .SetBase(ScrollBox.FromPositionAndSize(new Vector2(125, 10), new Vector2(50, 70)))
+                .SetBase(ScrollBox.FromPositionAndSize(null, new Vector2(125, 10), new Vector2(50, 70)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.FromArgb(20, 100, 40, 20))
                 .SetText("")
                 .Build();
 
-            var child = new Button(Polygon.Rectangle.FromPositionAndSize(new Vector2(140, 25), new Vector2(10, 10)));
+            var child = new Button(null, Polygon.Rectangle.FromPositionAndSize(new Vector2(140, 25), new Vector2(10, 10)));
             component.Add(child);
 
             return component;
@@ -58,7 +58,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             var componentBuilder = new ComponentBuilder();
 
             var component = (Image) componentBuilder
-                .SetBase(Image.FromPositionAndSize(new Vector2(10, 10), new Vector2(10, 10), "https://raw.githubusercontent.com/Aptacode/AppFramework/Production/Resources/Images/Logo.png"))
+                .SetBase(Image.FromPositionAndSize(null,new Vector2(10, 10), new Vector2(10, 10), "https://raw.githubusercontent.com/Aptacode/AppFramework/Production/Resources/Images/Logo.png"))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.FromArgb(100, 100, 40, 20))
@@ -73,7 +73,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             var componentBuilder = new ComponentBuilder();
 
             var component = (DragBox) componentBuilder
-                .SetBase(DragBox.FromPositionAndSize(new Vector2(10, 10), new Vector2(50, 100)))
+                .SetBase(DragBox.FromPositionAndSize(null, new Vector2(10, 10), new Vector2(50, 100)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.FromArgb(100, 100, 40, 20))
@@ -100,7 +100,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             var componentBuilder = new ComponentBuilder();
 
             var layout = (GridLayout) componentBuilder
-                .SetBase(new GridLayout(new Vector2(65, 10), new Vector2(120, 100)))
+                .SetBase(new GridLayout(null, new Vector2(65, 10), new Vector2(120, 100)))
                 .SetBorderThickness(0.2f)
                 .SetMargin(0.0f)
                 .SetFillColor(Color.LightGray)
@@ -131,7 +131,7 @@ namespace Aptacode.AppFramework.Demo.Pages
             for (var i = 0; i < buttonCount; i++)
             {
                 var button = (Button) componentBuilder
-                    .SetBase(Button.FromPositionAndSize(new Vector2(i * 10, i * 10), new Vector2(10, 10)))
+                    .SetBase(Button.FromPositionAndSize(null, new Vector2(i * 10, i * 10), new Vector2(10, 10)))
                     .SetBorderThickness(.5f)
                     .SetMargin(1.0f)
                     .SetFillColor(Color.FromArgb(255, rand.Next(255), rand.Next(255), rand.Next(255)))

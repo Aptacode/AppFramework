@@ -14,7 +14,7 @@ namespace Aptacode.AppFramework.Components.Primitives
     {
         #region Ctor
 
-        public EllipseViewModel(Ellipse ellipse) : base(ellipse)
+        public EllipseViewModel(ComponentViewModel parent, Ellipse ellipse) : base(parent, ellipse)
         {
         }
 

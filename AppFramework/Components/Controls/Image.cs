@@ -57,21 +57,21 @@ namespace Aptacode.AppFramework.Components.Controls
 
         #region Ctor
 
-        public Image(Polygon polygon, string path) : base(polygon)
+        public Image(ComponentViewModel parent, Polygon polygon, string path) : base(parent, polygon)
         {
             Path = path;
             OnMouseDown += Handle_OnMouseDown;
             OnMouseUp += Handle_OnMouseUp;
         }
 
-        public static Image FromPositionAndSize(Vector2 position, Vector2 size, string path)
+        public static Image FromPositionAndSize(ComponentViewModel parent, Vector2 position, Vector2 size, string path)
         {
-            return new(Polygon.Rectangle.FromPositionAndSize(position, size), path);
+            return new(parent, Polygon.Rectangle.FromPositionAndSize( position, size), path);
         }
 
-        public static Image FromTwoPoints(Vector2 topLeft, Vector2 bottomRight, string path)
+        public static Image FromTwoPoints(ComponentViewModel parent, Vector2 topLeft, Vector2 bottomRight, string path)
         {
-            return new(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight), path);
+            return new(parent, Polygon.Rectangle.FromTwoPoints( topLeft, bottomRight), path);
         }
 
         #endregion

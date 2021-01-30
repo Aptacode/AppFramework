@@ -17,9 +17,9 @@ namespace Aptacode.AppFramework.Components.Containers
     {
         #region Ctor
         
-        public ScrollBox(Polygon polygon) : base(polygon)
+        public ScrollBox(ComponentViewModel parent, Polygon polygon) :base(parent, polygon)
         {
-            ScrollBar = new ScrollBar(
+            ScrollBar = new ScrollBar(this,
                 Polygon.Rectangle.FromPositionAndSize(
                     BoundingRectangle.TopRight - new Vector2(ScrollBarWidth, 0), 
                     new Vector2(ScrollBarWidth, polygon.BoundingRectangle.Height)));
@@ -103,14 +103,14 @@ namespace Aptacode.AppFramework.Components.Containers
             lastScrollPosition = e;
         }
 
-        public static ScrollBox FromPositionAndSize(Vector2 position, Vector2 size)
+        public static ScrollBox FromPositionAndSize(ComponentViewModel parent, Vector2 position, Vector2 size)
         {
-            return new(Polygon.Rectangle.FromPositionAndSize(position, size));
+            return new(parent,Polygon.Rectangle.FromPositionAndSize(position, size));
         }
 
-        public static ScrollBox FromTwoPoints(Vector2 topLeft, Vector2 bottomRight)
+        public static ScrollBox FromTwoPoints(ComponentViewModel parent, Vector2 topLeft, Vector2 bottomRight)
         {
-            return new(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
+            return new(parent,Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
         }
 
         #endregion

@@ -7,7 +7,7 @@ namespace Aptacode.AppFramework.Components.Primitives
     {
         #region Ctor
 
-        protected PrimitiveViewModel(TPrimitive primitive)
+        protected PrimitiveViewModel(ComponentViewModel parent, TPrimitive primitive) : base(parent)
         {
             Primitive = primitive;
         }

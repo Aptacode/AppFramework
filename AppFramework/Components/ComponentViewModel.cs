@@ -19,9 +19,10 @@ namespace Aptacode.AppFramework.Components
     {
         #region Ctor
 
-        protected ComponentViewModel()
+        protected ComponentViewModel(ComponentViewModel parent)
         {
             Id = Guid.NewGuid();
+            Parent = parent;
             CollisionDetectionEnabled = true;
             Margin = DefaultMargin;
             IsShown = true;
@@ -136,6 +137,7 @@ namespace Aptacode.AppFramework.Components
 
         public Guid Id { get; init; }
         protected readonly List<ComponentViewModel> _children = new();
+        protected ComponentViewModel Parent { get; init; }
         public bool CollisionDetectionEnabled { get; set; }
         public bool Invalidated { get; set; }
         public BoundingRectangle OldBoundingRectangle { get; protected set; }
