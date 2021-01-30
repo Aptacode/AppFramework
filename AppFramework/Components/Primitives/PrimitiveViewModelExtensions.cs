@@ -6,22 +6,22 @@ namespace Aptacode.AppFramework.Components.Primitives
     {
         public static EllipseViewModel ToViewModel(this Ellipse ellipse)
         {
-            return new( ellipse);
+            return new(ellipse);
         }
 
         public static PolygonViewModel ToViewModel(this Polygon polygon)
         {
-            return new( polygon);
+            return new(polygon);
         }
 
         public static PolylineViewModel ToViewModel(this PolyLine polyline)
         {
-            return new( polyline);
+            return new(polyline);
         }
 
         public static PointViewModel ToViewModel(this Point point)
         {
-            return new( point);
+            return new(point);
         }
     }
 }

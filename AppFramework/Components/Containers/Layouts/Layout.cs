@@ -13,9 +13,11 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
 {
     public abstract class Layout : PolygonViewModel
     {
+        private string _tempCanvasName = string.Empty;
+
         #region Ctor
 
-        protected Layout(Polygon polygon) : base( polygon)
+        protected Layout(Polygon polygon) : base(polygon)
         {
         }
 
@@ -112,8 +114,6 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
             Resize();
         }
 
-        private string _tempCanvasName = string.Empty;
-        
         public override async Task Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
         {
             OldBoundingRectangle = BoundingRectangle;

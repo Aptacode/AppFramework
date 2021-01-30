@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using System.Numerics;
-using Aptacode.AppFramework.Components.Controls;
+﻿using System.Numerics;
 using Aptacode.AppFramework.Scene;
-using Aptacode.AppFramework.Scene.Events;
 using Aptacode.AppFramework.Utilities;
 
 namespace Aptacode.AppFramework.Demo.Pages
@@ -14,7 +11,6 @@ namespace Aptacode.AppFramework.Demo.Pages
         public DemoSceneController(Vector2 size) : base(size)
         {
             ShowGrid = true;
-
         }
     }
 }

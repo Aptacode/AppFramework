@@ -183,7 +183,7 @@ namespace Aptacode.AppFramework.Components.Controls
 
         #region Ctor
 
-        public DragBox(Polygon polygon) : base( polygon)
+        public DragBox(Polygon polygon) : base(polygon)
         {
             OnMouseMoveTunneled += Handle_OnMouseMove;
             OnMouseUpTunneled += Handle_OnMouseUp;
@@ -193,7 +193,7 @@ namespace Aptacode.AppFramework.Components.Controls
 
         public static DragBox FromPositionAndSize(Vector2 position, Vector2 size)
         {
-            return new( Polygon.Rectangle.FromPositionAndSize(position, size));
+            return new(Polygon.Rectangle.FromPositionAndSize(position, size));
         }
 
         public static DragBox FromTwoPoints(Vector2 topLeft, Vector2 bottomRight)

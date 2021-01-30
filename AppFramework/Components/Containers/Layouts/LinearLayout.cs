@@ -29,11 +29,11 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
 
         #region Ctor
 
-        public LinearLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base( Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
+        public LinearLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
         {
         }
 
-        public LinearLayout(Vector2 topLeft, Vector2 bottomRight) : base( Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
+        public LinearLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
         {
         }
 

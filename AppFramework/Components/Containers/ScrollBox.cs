@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -16,19 +15,19 @@ namespace Aptacode.AppFramework.Components.Containers
     public class ScrollBox : PolygonViewModel
     {
         #region Ctor
-        
-        public ScrollBox(Polygon polygon) :base( polygon)
+
+        public ScrollBox(Polygon polygon) : base(polygon)
         {
             ScrollBar = new ScrollBar(
                 Polygon.Rectangle.FromPositionAndSize(
-                    BoundingRectangle.TopRight - new Vector2(ScrollBarWidth, 0), 
+                    BoundingRectangle.TopRight - new Vector2(ScrollBarWidth, 0),
                     new Vector2(ScrollBarWidth, polygon.BoundingRectangle.Height)));
-            
+
             ScrollBar.OnScroll += ScrollBarOnOnScroll;
 
             base.Add(ScrollBar);
         }
-        
+
         private string _tempCanvasName = string.Empty;
 
         public override async Task Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
@@ -58,7 +57,7 @@ namespace Aptacode.AppFramework.Components.Containers
             ctx.SelectCanvas(_tempCanvasName);
             ctx.Save();
             ctx.ClearRect(0, 0, scene.Size.X * SceneScale.Value, scene.Size.Y * SceneScale.Value);
-            
+
             foreach (var componentViewModel in Children.Where(c => c.CollidesWith(this)))
             {
                 await componentViewModel.Draw(scene, ctx);
@@ -68,7 +67,7 @@ namespace Aptacode.AppFramework.Components.Containers
 
             ctx.FillRect(BoundingRectangle.X * SceneScale.Value, BoundingRectangle.Y * SceneScale.Value, BoundingRectangle.Width * SceneScale.Value, BoundingRectangle.Height * SceneScale.Value);
             ctx.Restore();
-            
+
             ctx.SelectCanvas(scene.Id.ToString());
             ctx.DrawCanvas(_tempCanvasName, 0, 0);
         }
@@ -85,12 +84,13 @@ namespace Aptacode.AppFramework.Components.Containers
             base.Remove(child);
         }
 
-        private float lastScrollPosition = 0.0f;
+        private float lastScrollPosition;
+
         private void ScrollBarOnOnScroll(object? sender, float e)
         {
             Console.WriteLine(e);
 
-            if(lastScrollPosition > Constants.Tolerance)
+            if (lastScrollPosition > Constants.Tolerance)
             {
                 var delta = new Vector2(0, (e - lastScrollPosition) * BoundingRectangle.Height);
                 Console.WriteLine(delta);
@@ -99,7 +99,7 @@ namespace Aptacode.AppFramework.Components.Containers
                     child.Translate(delta);
                 }
             }
-            
+
             lastScrollPosition = e;
         }
 
@@ -118,11 +118,9 @@ namespace Aptacode.AppFramework.Components.Containers
         #region Props
 
         public ScrollBar ScrollBar { get; set; }
-        public List<ComponentViewModel> ScrollChildren { get; set; } = new List<ComponentViewModel>();
+        public List<ComponentViewModel> ScrollChildren { get; set; } = new();
         public float ScrollBarWidth { get; set; } = 5;
 
         #endregion
-
-
     }
 }

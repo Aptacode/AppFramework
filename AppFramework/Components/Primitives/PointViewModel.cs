@@ -14,7 +14,7 @@ namespace Aptacode.AppFramework.Components.Primitives
     {
         #region Ctor
 
-        public PointViewModel(Point point) : base( point)
+        public PointViewModel(Point point) : base(point)
         {
         }
 

@@ -7,28 +7,27 @@ namespace Aptacode.AppFramework.Components.Controls
 {
     public class Dropdown : PolygonViewModel
     {
+        #region Properties
+
+        public List<ComponentViewModel> Options { get; set; } = new();
+
+        #endregion
+
         #region Ctor
 
-        public Dropdown(Polygon polygon) : base( polygon)
+        public Dropdown(Polygon polygon) : base(polygon)
         {
-            
         }
 
         public static Dropdown FromPositionAndSize(Vector2 position, Vector2 size)
         {
-            return new( Polygon.Rectangle.FromPositionAndSize(position, size));
+            return new(Polygon.Rectangle.FromPositionAndSize(position, size));
         }
 
         public static Dropdown FromTwoPoints(Vector2 topLeft, Vector2 bottomRight)
         {
-            return new( Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
+            return new(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
         }
-
-        #endregion
-
-        #region Properties
-
-        public List<ComponentViewModel> Options { get; set; } = new List<ComponentViewModel>();
 
         #endregion
 
@@ -50,9 +49,6 @@ namespace Aptacode.AppFramework.Components.Controls
 
         #region Events
 
-
-
         #endregion
-
     }
 }

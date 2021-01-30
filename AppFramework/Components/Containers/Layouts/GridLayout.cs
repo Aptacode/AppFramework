@@ -32,7 +32,7 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
         {
         }
 
-        public GridLayout(Vector2 topLeft, Vector2 bottomRight) : base( Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
+        public GridLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
         {
         }
 

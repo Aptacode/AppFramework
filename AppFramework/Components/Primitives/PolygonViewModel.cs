@@ -13,7 +13,7 @@ namespace Aptacode.AppFramework.Components.Primitives
     {
         #region Canvas
 
-        public PolygonViewModel(Polygon polygon) : base( polygon)
+        public PolygonViewModel(Polygon polygon) : base(polygon)
         {
         }
 

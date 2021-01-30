@@ -145,10 +145,11 @@ namespace Aptacode.AppFramework.Components
         public Primitive BoundingPrimitive { get; set; }
         public bool MouseOver { get; protected set; }
         public bool HasFocus { get; protected set; }
-        
+
         #region Parent
 
         private ComponentViewModel _parent;
+
         public ComponentViewModel Parent
         {
             get => _parent;
@@ -158,6 +159,7 @@ namespace Aptacode.AppFramework.Components
                 {
                     _parent.OnScaled -= ParentOnOnScaled;
                 }
+
                 _parent = value;
                 if (_parent != null)
                 {
@@ -179,28 +181,28 @@ namespace Aptacode.AppFramework.Components
         {
             var cellPosition = Parent.BoundingRectangle.TopLeft;
             var cellSize = Parent.BoundingRectangle.Size;
-            
+
             var xPos = BoundingRectangle.X;
             var yPos = BoundingRectangle.Y;
             var xSize = BoundingRectangle.Width;
             var ySize = BoundingRectangle.Height;
 
-            switch ( VerticalAlignment)
+            switch (VerticalAlignment)
             {
                 case VerticalAlignment.Stretch:
                     ySize = cellSize.Y;
                     yPos = cellPosition.Y;
                     break;
                 case VerticalAlignment.Top:
-                    ySize = Math.Min(cellSize.Y, this.BoundingRectangle.Size.Y);
+                    ySize = Math.Min(cellSize.Y, BoundingRectangle.Size.Y);
                     yPos = cellPosition.Y;
                     break;
                 case VerticalAlignment.Center:
-                    ySize = Math.Min(cellSize.Y, this.BoundingRectangle.Size.Y);
+                    ySize = Math.Min(cellSize.Y, BoundingRectangle.Size.Y);
                     yPos = cellPosition.Y + ySize / 2.0f;
                     break;
                 case VerticalAlignment.Bottom:
-                    ySize = Math.Min(cellSize.Y, this.BoundingRectangle.Size.Y);
+                    ySize = Math.Min(cellSize.Y, BoundingRectangle.Size.Y);
                     yPos = cellPosition.Y + (cellSize.Y - ySize);
                     break;
             }
@@ -212,21 +214,21 @@ namespace Aptacode.AppFramework.Components
                     xPos = cellPosition.X;
                     break;
                 case HorizontalAlignment.Left:
-                    xSize = Math.Min(cellSize.X, this.BoundingRectangle.Size.X);
+                    xSize = Math.Min(cellSize.X, BoundingRectangle.Size.X);
                     xPos = cellPosition.X;
                     break;
                 case HorizontalAlignment.Center:
-                    xSize = Math.Min(cellSize.X, this.BoundingRectangle.Size.X);
+                    xSize = Math.Min(cellSize.X, BoundingRectangle.Size.X);
                     xPos = cellPosition.X + xSize / 2.0f;
                     break;
                 case HorizontalAlignment.Right:
-                    xSize = Math.Min(cellSize.X, this.BoundingRectangle.Size.X);
+                    xSize = Math.Min(cellSize.X, BoundingRectangle.Size.X);
                     xPos = cellPosition.X + xSize;
                     break;
             }
 
-            this.SetPosition(new Vector2(xPos + this.Margin, yPos + this.Margin));
-            this.SetSize(new Vector2(xSize - 2 * this.Margin, ySize - 2 * this.Margin));
+            SetPosition(new Vector2(xPos + Margin, yPos + Margin));
+            SetSize(new Vector2(xSize - 2 * Margin, ySize - 2 * Margin));
         }
 
         #endregion
@@ -605,7 +607,7 @@ namespace Aptacode.AppFramework.Components
             }
 
             OnKeyboardEventTunneled?.Invoke(this, keyboardEvent);
-            
+
             if (!isBubbleHandled)
             {
                 OnKeyboardEvent?.Invoke(this, keyboardEvent);
@@ -619,7 +621,7 @@ namespace Aptacode.AppFramework.Components
         {
             var hasPassedEventToChildren = false;
 
-            
+
             if (CollidesWith(mouseEvent.Position))
             {
                 if (!HasFocus && mouseEvent is MouseDownEvent)
@@ -634,11 +636,11 @@ namespace Aptacode.AppFramework.Components
                     MouseOver = true;
                     OnMouseEnterEvent?.Invoke(this, new MouseEnterEvent(mouseEvent.Position));
                 }
-                
+
                 var isBubbleHandled = false;
                 //Already passed to children
                 hasPassedEventToChildren = true;
-                
+
                 //Bubbling
                 foreach (var child in Children)
                 {
@@ -694,7 +696,8 @@ namespace Aptacode.AppFramework.Components
 
                 return true;
             }
-            else if (HasFocus && mouseEvent is MouseDownEvent)
+
+            if (HasFocus && mouseEvent is MouseDownEvent)
             {
                 HasFocus = false;
                 if (!hasPassedEventToChildren)
@@ -703,6 +706,7 @@ namespace Aptacode.AppFramework.Components
                     {
                         child.HandleMouseEvent(mouseEvent);
                     }
+
                     hasPassedEventToChildren = true;
                 }
 
@@ -718,14 +722,14 @@ namespace Aptacode.AppFramework.Components
                     {
                         child.HandleMouseEvent(mouseEvent);
                     }
+
                     hasPassedEventToChildren = true;
                 }
+
                 OnMouseLeaveEvent?.Invoke(this, new MouseLeaveEvent(mouseEvent.Position));
             }
 
 
-            
-    
             return false;
         }
 
@@ -756,7 +760,7 @@ namespace Aptacode.AppFramework.Components
         public event EventHandler<MouseDoubleClickEvent> OnMouseDoubleClickTunneled;
         public event EventHandler<MouseEnterEvent> OnMouseEnterEvent;
         public event EventHandler<MouseLeaveEvent> OnMouseLeaveEvent;
-        
+
         public event EventHandler<bool> OnHasFocusChanged;
 
         //Keyboard

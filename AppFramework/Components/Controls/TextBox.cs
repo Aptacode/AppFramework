@@ -7,9 +7,15 @@ namespace Aptacode.AppFramework.Components.Controls
 {
     public class TextBox : PolygonViewModel
     {
+        #region Properties
+
+        public bool IsTyping { get; set; }
+
+        #endregion
+
         #region Ctor
 
-        public TextBox(Polygon polygon) : base( polygon)
+        public TextBox(Polygon polygon) : base(polygon)
         {
             OnHasFocusChanged += Handle_OnHasFocusChanged;
             OnKeyboardEventTunneled += Handle_OnKeyboardEventTunneled;
@@ -17,24 +23,18 @@ namespace Aptacode.AppFramework.Components.Controls
 
         public static TextBox FromPositionAndSize(Vector2 position, Vector2 size)
         {
-            return new( Polygon.Rectangle.FromPositionAndSize(position, size));
+            return new(Polygon.Rectangle.FromPositionAndSize(position, size));
         }
 
         public static TextBox FromTwoPoints(Vector2 topLeft, Vector2 bottomRight)
         {
-            return new( Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
+            return new(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
         }
 
         #endregion
 
-        #region Properties
-
-        public bool IsTyping { get; set; }
-
-        #endregion
-
         #region Events
-        
+
         private void Handle_OnHasFocusChanged(object? sender, bool e)
         {
             IsTyping = e;
@@ -51,19 +51,19 @@ namespace Aptacode.AppFramework.Components.Controls
                         {
                             Text = Text[..^1];
                         }
+
                         break;
                     default:
                         if (e.Key.Length == 1)
                         {
                             Text += e.Key;
                         }
+
                         break;
                 }
             }
-
         }
 
         #endregion
-
     }
 }

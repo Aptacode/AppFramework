@@ -1,7 +1,5 @@
-﻿
-using System;
+﻿using System;
 using System.Numerics;
-using Aptacode.AppFramework.Components.Controls;
 using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.Geometry.Primitives;
@@ -10,9 +8,15 @@ namespace Aptacode.AppFramework.Components.Controls
 {
     public class ScrollBar : PolygonViewModel
     {
+        #region Events
+
+        public event EventHandler<float> OnScroll;
+
+        #endregion
+
         #region Ctor
-        
-        public ScrollBar(Polygon polygon) : base( polygon)
+
+        public ScrollBar(Polygon polygon) : base(polygon)
         {
             ScrollButton = new Button(
                 Polygon.Rectangle.FromPositionAndSize(polygon.BoundingRectangle.TopLeft, new Vector2(polygon.BoundingRectangle.Width, 5)));
@@ -62,7 +66,7 @@ namespace Aptacode.AppFramework.Components.Controls
 
         public static ScrollBar FromPositionAndSize(Vector2 position, Vector2 size)
         {
-            return new( Polygon.Rectangle.FromPositionAndSize(position, size));
+            return new(Polygon.Rectangle.FromPositionAndSize(position, size));
         }
 
         public static ScrollBar FromTwoPoints(Vector2 topLeft, Vector2 bottomRight)
@@ -79,13 +83,5 @@ namespace Aptacode.AppFramework.Components.Controls
         public Vector2 LastMousePosition { get; set; }
 
         #endregion
-
-        #region Events
-
-        public event EventHandler<float> OnScroll;
-
-        #endregion
-
-
     }
 }
