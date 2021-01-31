@@ -5,9 +5,9 @@
     <LangVersion>9.0</LangVersion>
     <Authors>Aptacode</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.31</Version>
-    <AssemblyVersion>1.0.31</AssemblyVersion>
-    <FileVersion>1.0.31</FileVersion>
+    <Version>1.0.32</Version>
+    <AssemblyVersion>1.0.32</AssemblyVersion>
+    <FileVersion>1.0.32</FileVersion>
     <RepositoryUrl>https://github.com/Aptacode/AppFramework</RepositoryUrl>
     <Description>High performance .NET 5 application development framework library for Blazor</Description>
     <PackageProjectUrl>https://github.com/Aptacode/AppFramework</PackageProjectUrl>

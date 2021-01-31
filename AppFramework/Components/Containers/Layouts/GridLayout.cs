@@ -66,7 +66,7 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
                 var row = Cells[i];
                 for (var j = 0; j < row.Length; j++)
                 {
-                    if (row[i] == child)
+                    if (row[j] == child)
                     {
                         return (i, j);
                     }
