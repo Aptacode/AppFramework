@@ -15,7 +15,7 @@ using Point = Aptacode.Geometry.Primitives.Point;
 
 namespace Aptacode.AppFramework.Components
 {
-    public abstract class ComponentViewModel : IDisposable
+    public abstract class ComponentViewModel : IDisposable, IEquatable<ComponentViewModel>
     {
         #region Ctor
 
@@ -745,6 +745,15 @@ namespace Aptacode.AppFramework.Components
 
             return false;
         }
+
+        #region IEquatable
+
+        public bool Equals(ComponentViewModel other)
+        {
+            return Id == other.Id;
+        }
+
+        #endregion
 
         //Mouse
         public event EventHandler<MouseDownEvent> OnMouseDown;
