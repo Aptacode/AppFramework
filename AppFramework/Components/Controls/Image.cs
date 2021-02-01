@@ -2,7 +2,6 @@
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components.Primitives;
-using Aptacode.AppFramework.Scene.Events;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Primitives;
@@ -56,8 +55,6 @@ namespace Aptacode.AppFramework.Components.Controls
         public Image(Polygon polygon, string path) : base(polygon)
         {
             Path = path;
-            OnMouseDown += Handle_OnMouseDown;
-            OnMouseUp += Handle_OnMouseUp;
         }
 
         public static Image FromPositionAndSize(Vector2 position, Vector2 size, string path)
@@ -73,16 +70,6 @@ namespace Aptacode.AppFramework.Components.Controls
         #endregion
 
         #region Events
-
-        private void Handle_OnMouseDown(object? sender, MouseDownEvent e)
-        {
-            BorderColor = Color.Green;
-        }
-
-        private void Handle_OnMouseUp(object? sender, MouseUpEvent e)
-        {
-            BorderColor = Color.Black;
-        }
 
         #endregion
     }

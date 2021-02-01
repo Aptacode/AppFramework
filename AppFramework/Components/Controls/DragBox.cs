@@ -21,6 +21,7 @@ namespace Aptacode.AppFramework.Components.Controls
             }
             else
             {
+
                 BoundingRectangle = Primitive.BoundingRectangle;
             }
         }
