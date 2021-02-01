@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Scene.Events;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 
 namespace Aptacode.AppFramework.Scene
@@ -31,8 +32,66 @@ namespace Aptacode.AppFramework.Scene
         public void Add(ComponentViewModel component)
         {
             _components.Add(component);
+            component.OnDrag += Component_OnDrag;
+            component.OnDrop += Component_OnDrop;
             OnComponentAdded?.Invoke(this, component);
         }
+
+        #region Events
+
+        public void Handle(KeyboardEvent e)
+        {
+            foreach (var component in Components)
+            {
+                component.HandleKeyboardEvent(e);
+            }
+        }
+
+        public void Handle(MouseEvent e)
+        {
+            foreach (var component in Components)
+            {
+                component.HandleMouseEvent(e);
+            }
+
+            if(IsDragging)
+            {
+                DragEvent.Component.Handle(e);
+            }
+        }
+
+        #endregion
+
+        #region Drag Drop
+        public bool IsDragging { get; set; }
+        public DragEvent DragEvent { get; set; }
+        public ComponentViewModel DragComponentSource { get; set; }
+        private void Component_OnDrag(object sender, Events.DragEvent e)
+        {
+            Console.WriteLine($"OnDrag: {e.Component.Id}");
+            IsDragging = true;
+            DragEvent = e;
+            DragComponentSource = e.Component.Parent;
+        }
+
+        private void Component_OnDrop(object sender, Events.DropEvent e)
+        {
+            Console.WriteLine($"OnDrop: {e.Component.Id}");
+
+            IsDragging = false;
+
+            foreach (var component in Components)
+            {
+                if (component.Accepts(e))
+                {
+                    return;
+                }
+            }
+
+            DragComponentSource.Accepts(new DropFailedEvent(DragEvent.Component, DragEvent.Position, e.Position));
+        }
+
+        #endregion
 
         public void AddRange(IEnumerable<ComponentViewModel> components)
         {
@@ -45,6 +104,8 @@ namespace Aptacode.AppFramework.Scene
         public bool Remove(ComponentViewModel component)
         {
             var success = _components.Remove(component);
+            component.OnDrag -= Component_OnDrag;
+            component.OnDrop -= Component_OnDrop;
             OnComponentRemoved?.Invoke(this, component);
             return success;
         }

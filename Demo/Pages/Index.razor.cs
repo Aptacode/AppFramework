@@ -30,7 +30,8 @@ namespace Aptacode.AppFramework.Demo.Pages
             };
 
             Scene.Add(GetGrid());
-            Scene.Add(CreateScrollBox());
+            Scene.Add(GetLinearLayout());
+          //  Scene.Add(CreateScrollBox());
             Scene.Add(CreateDragBox());
             Scene.Add(CreateTextbox());
             Scene.Add(CreateCheckbox());
@@ -191,13 +192,45 @@ namespace Aptacode.AppFramework.Demo.Pages
             layout.EnforceHorizontalAlignment = true;
             layout.EnforceVerticalAlignment = true;
 
-            foreach (var button in GenerateButtons(8))
+            layout.CanDrop = true;
+
+            foreach (var button in GenerateButtons(3))
             {
-                layout.AddNextAvailableCell(button);
+                button.CanDrag = true;
+                layout.Add(button);
             }
 
             return layout;
         }
+
+        private ComponentViewModel GetLinearLayout()
+        {
+            var componentBuilder = new ComponentBuilder();
+
+            var layout = (LinearLayout)componentBuilder
+                .SetBase(LinearLayout.FromPositionAndSize(new Vector2(125, 10), new Vector2(50, 70)))
+                .SetBorderThickness(0.2f)
+                .SetMargin(0.0f)
+                .SetFillColor(Color.LightGray)
+                .SetText("")
+                .Build();
+
+            layout.HorizontalAlignment = HorizontalAlignment.Stretch;
+            layout.VerticalAlignment = VerticalAlignment.Center;
+            layout.EnforceHorizontalAlignment = true;
+
+            layout.EnforceVerticalAlignment = true;
+            layout.CanDrop = true;
+
+            foreach (var button in GenerateButtons(3))
+            {
+                button.CanDrag = true;
+                layout.Add(button);
+            }
+
+            return layout;
+        }
+
 
         public List<Button> GenerateButtons(int buttonCount)
         {

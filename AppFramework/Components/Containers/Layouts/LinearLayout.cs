@@ -29,12 +29,18 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
 
         #region Ctor
 
-        public LinearLayout(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) : base(Polygon.Rectangle.Create(topLeft, topRight, bottomRight, bottomLeft))
+        public LinearLayout(Polygon polygon) : base(polygon)
         {
         }
 
-        public LinearLayout(Vector2 topLeft, Vector2 bottomRight) : base(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight))
+        public static LinearLayout FromPositionAndSize(Vector2 position, Vector2 size)
         {
+            return new(Polygon.Rectangle.FromPositionAndSize(position, size));
+        }
+
+        public static LinearLayout FromTwoPoints(Vector2 topLeft, Vector2 bottomRight)
+        {
+            return new(Polygon.Rectangle.FromTwoPoints(topLeft, bottomRight));
         }
 
         #endregion

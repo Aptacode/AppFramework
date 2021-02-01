@@ -99,10 +99,21 @@ namespace Aptacode.AppFramework.Components
             if (!Children.Contains(child))
             {
                 child.Parent = this;
+                child.OnDrag += Child_OnDrag;
+                child.OnDrop += Child_OnDrop;
                 _children.Add(child);
                 UpdateBounds();
                 Invalidated = true;
             }
+        }
+        private void Child_OnDrag(object sender, DragEvent e)
+        {
+            OnDrag?.Invoke(sender, e);
+        }
+
+        private void Child_OnDrop(object sender, DropEvent e)
+        {
+            OnDrop?.Invoke(sender, e);
         }
 
         public virtual void AddRange(IEnumerable<ComponentViewModel> children)
@@ -118,6 +129,8 @@ namespace Aptacode.AppFramework.Components
             if (_children.Remove(child))
             {
                 child.Parent = null;
+                child.OnDrag -= Child_OnDrag;
+                child.OnDrop -= Child_OnDrop;
                 UpdateBounds();
                 Invalidated = true;
             }
@@ -620,7 +633,11 @@ namespace Aptacode.AppFramework.Components
         public virtual bool HandleMouseEvent(MouseEvent mouseEvent)
         {
             var hasPassedEventToChildren = false;
-
+            if (IsDragging && mouseEvent is MouseUpEvent m)
+            {
+                IsDragging = false;
+                OnDrop?.Invoke(this, new DropEvent(this, m.Position));
+            }
 
             if (CollidesWith(mouseEvent.Position))
             {
@@ -653,6 +670,13 @@ namespace Aptacode.AppFramework.Components
                 switch (mouseEvent)
                 {
                     case MouseMoveEvent mouseMoveEvent:
+                        //if (IsDragging)
+                        //{
+                        //    var delta = mouseMoveEvent.Position - LastDragPosition;
+                        //    Translate(delta);
+                        //    LastDragPosition = mouseMoveEvent.Position;
+                        //}
+
                         OnMouseMoveTunneled?.Invoke(this, mouseMoveEvent);
                         if (!isBubbleHandled)
                         {
@@ -661,6 +685,13 @@ namespace Aptacode.AppFramework.Components
 
                         break;
                     case MouseDownEvent mouseDownEvent:
+                        if (CanDrag)
+                        {
+                            LastDragPosition = mouseDownEvent.Position;
+                            IsDragging = true;
+                            OnDrag?.Invoke(this, new DragEvent(this, mouseDownEvent.Position));
+                        }
+
                         OnMouseDownTunneled?.Invoke(this, mouseDownEvent);
                         if (!isBubbleHandled)
                         {
@@ -669,6 +700,7 @@ namespace Aptacode.AppFramework.Components
 
                         break;
                     case MouseUpEvent mouseUpEvent:
+
                         OnMouseUpTunneled?.Invoke(this, mouseUpEvent);
                         if (!isBubbleHandled)
                         {
@@ -775,6 +807,36 @@ namespace Aptacode.AppFramework.Components
 
         public event EventHandler<VerticalAlignment> OnVerticalAlignmentChanged;
         public event EventHandler<HorizontalAlignment> OnHorizontalAlignmentChanged;
+
+        #endregion
+
+        #region DragDrop
+
+        public bool IsDragging { get; set; }
+        public bool CanDrag { get; set; }
+        public bool CanDrop { get; set; }
+        public Vector2 LastDragPosition { get; set; }
+
+        public event EventHandler<DragEvent> OnDrag;
+        public event EventHandler<DropEvent> OnDrop;
+
+        public virtual bool Accepts(DropEvent dropEvent)
+        {
+            if (CanDrop && CollidesWith(dropEvent.Position) && dropEvent.Component != this)
+            {
+                var component = dropEvent.Component;
+                component.Parent?.Remove(component);
+                Add(component);
+                return true;
+            }
+            return false;
+        }
+
+        public virtual bool Accepts(DropFailedEvent dragFailedEvent)
+        {
+            Add(dragFailedEvent.Component);
+            return true;
+        }
 
         #endregion
     }

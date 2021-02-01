@@ -32,10 +32,7 @@ namespace Aptacode.AppFramework.Scene
         {
             foreach (var scene in Scenes.ToList())
             {
-                foreach (var componentViewModel in scene.Components.ToList())
-                {
-                    componentViewModel.HandleKeyboardEvent(e);
-                }
+                scene.Handle(e);
             }
         }
 
@@ -43,10 +40,7 @@ namespace Aptacode.AppFramework.Scene
         {
             foreach (var scene in Scenes.ToList())
             {
-                foreach (var componentViewModel in scene.Components.ToList())
-                {
-                    componentViewModel.HandleMouseEvent(e);
-                }
+                scene.Handle(e);
             }
         }
 

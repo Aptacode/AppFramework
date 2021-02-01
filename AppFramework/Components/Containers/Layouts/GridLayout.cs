@@ -91,9 +91,9 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
             Resize();
         }
 
-        public bool AddNextAvailableCell(ComponentViewModel child)
+        public override void Add(ComponentViewModel child)
         {
-            Add(child);
+            base.Add(child);
 
             for (var i = 0; i < Cells.Length; i++)
             {
@@ -104,12 +104,10 @@ namespace Aptacode.AppFramework.Components.Containers.Layouts
                     {
                         row[j] = child;
                         Resize();
-                        return true;
+                        return;
                     }
                 }
             }
-
-            return false;
         }
 
 
