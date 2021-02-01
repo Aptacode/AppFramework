@@ -659,7 +659,7 @@ namespace Aptacode.AppFramework.Components
                 hasPassedEventToChildren = true;
 
                 //Bubbling
-                foreach (var child in Children)
+                foreach (var child in Children.ToList())
                 {
                     if (child.HandleMouseEvent(mouseEvent))
                     {
@@ -734,7 +734,7 @@ namespace Aptacode.AppFramework.Components
                 HasFocus = false;
                 if (!hasPassedEventToChildren)
                 {
-                    foreach (var child in Children)
+                    foreach (var child in Children.ToList())
                     {
                         child.HandleMouseEvent(mouseEvent);
                     }
@@ -750,7 +750,7 @@ namespace Aptacode.AppFramework.Components
                 MouseOver = false;
                 if (!hasPassedEventToChildren)
                 {
-                    foreach (var child in Children)
+                    foreach (var child in Children.ToList())
                     {
                         child.HandleMouseEvent(mouseEvent);
                     }
