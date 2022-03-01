@@ -1,121 +1,120 @@
 ﻿using System.Numerics;
 using Aptacode.Geometry.Primitives;
 
-namespace Aptacode.AppFramework.Components.Primitives
+namespace Aptacode.AppFramework.Components.Primitives;
+
+public abstract class PrimitiveViewModel<TPrimitive> : ComponentViewModel where TPrimitive : Primitive
 {
-    public abstract class PrimitiveViewModel<TPrimitive> : ComponentViewModel where TPrimitive : Primitive
+    #region Ctor
+
+    protected PrimitiveViewModel(TPrimitive primitive)
     {
-        #region Ctor
-
-        protected PrimitiveViewModel(TPrimitive primitive)
-        {
-            Primitive = primitive;
-        }
-
-        #endregion
-
-        #region Props
-
-        private TPrimitive _primitive;
-
-        public TPrimitive Primitive
-        {
-            get => _primitive;
-            set
-            {
-                _primitive = value;
-                UpdateBounds();
-                Invalidated = true;
-            }
-        }
-
-        #endregion
-
-        #region Transformations
-
-        public override void Translate(Vector2 delta)
-        {
-            Primitive.Translate(delta);
-            base.Translate(delta);
-        }
-
-        public override void ScaleAboutCenter(Vector2 delta)
-        {
-            Primitive.ScaleAboutCenter(delta);
-            base.ScaleAboutCenter(delta);
-        }
-
-        public override void ScaleAboutTopLeft(Vector2 delta)
-        {
-            Primitive.ScaleAboutTopLeft(delta);
-            base.ScaleAboutCenter(delta);
-        }
-
-        public override void Scale(Vector2 scaleCenter, Vector2 delta)
-        {
-            Primitive.Scale(scaleCenter, delta);
-            base.ScaleAboutCenter(delta);
-        }
-
-        public override void SetPosition(Vector2 position)
-        {
-            Primitive.SetPosition(position);
-            base.SetPosition(position);
-        }
-
-        public override void SetSize(Vector2 size)
-        {
-            Primitive.SetSize(size);
-            base.SetSize(size);
-        }
-
-        public override void Rotate(float theta)
-        {
-            Primitive.Rotate(theta);
-            base.Rotate(theta);
-        }
-
-        public override void Rotate(Vector2 rotationCenter, float theta)
-        {
-            Primitive.Rotate(rotationCenter, theta);
-            base.Rotate(rotationCenter, theta);
-        }
-
-        public override void Skew(Vector2 delta)
-        {
-            Primitive.Skew(delta);
-            base.Skew(delta);
-        }
-
-        #endregion
-
-        #region Collision
-
-        public override bool CollidesWith(Point point)
-        {
-            return CollisionDetectionEnabled && (Primitive.HybridCollidesWith(point) || base.CollidesWith(point));
-        }
-
-        public override bool CollidesWith(PolyLine polyLine)
-        {
-            return CollisionDetectionEnabled && (Primitive.HybridCollidesWith(polyLine) || base.CollidesWith(polyLine));
-        }
-
-        public override bool CollidesWith(Ellipse ellipse)
-        {
-            return CollisionDetectionEnabled && (Primitive.HybridCollidesWith(ellipse) || base.CollidesWith(ellipse));
-        }
-
-        public override bool CollidesWith(Polygon polygon)
-        {
-            return CollisionDetectionEnabled && (Primitive.HybridCollidesWith(polygon) || base.CollidesWith(polygon));
-        }
-
-        public override bool CollidesWith(Vector2 point)
-        {
-            return CollisionDetectionEnabled && (Primitive.HybridCollidesWith(point) || base.CollidesWith(point));
-        }
-
-        #endregion
+        Primitive = primitive;
     }
+
+    #endregion
+
+    #region Props
+
+    private TPrimitive _primitive;
+
+    public TPrimitive Primitive
+    {
+        get => _primitive;
+        set
+        {
+            _primitive = value;
+            UpdateBounds();
+            Invalidated = true;
+        }
+    }
+
+    #endregion
+
+    #region Transformations
+
+    public override void Translate(Vector2 delta)
+    {
+        Primitive.Translate(delta);
+        base.Translate(delta);
+    }
+
+    public override void ScaleAboutCenter(Vector2 delta)
+    {
+        Primitive.ScaleAboutCenter(delta);
+        base.ScaleAboutCenter(delta);
+    }
+
+    public override void ScaleAboutTopLeft(Vector2 delta)
+    {
+        Primitive.Scale(delta, BoundingRectangle.TopLeft);
+        base.ScaleAboutCenter(delta);
+    }
+
+    public override void Scale(Vector2 scaleCenter, Vector2 delta)
+    {
+        Primitive.Scale(scaleCenter, delta);
+        base.ScaleAboutCenter(delta);
+    }
+
+    public override void SetPosition(Vector2 position)
+    {
+        Primitive.SetPosition(position);
+        base.SetPosition(position);
+    }
+
+    public override void SetSize(Vector2 size)
+    {
+        Primitive.SetSize(size);
+        base.SetSize(size);
+    }
+
+    public override void Rotate(float theta)
+    {
+        Primitive.Rotate(theta);
+        base.Rotate(theta);
+    }
+
+    public override void Rotate(Vector2 rotationCenter, float theta)
+    {
+        Primitive.Rotate(rotationCenter, theta);
+        base.Rotate(rotationCenter, theta);
+    }
+
+    public override void Skew(Vector2 delta)
+    {
+        Primitive.Skew(delta);
+        base.Skew(delta);
+    }
+
+    #endregion
+
+    #region Collision
+
+    public override bool CollidesWith(Point point)
+    {
+        return CollisionDetectionEnabled && (Primitive.CollidesWith(point) || base.CollidesWith(point));
+    }
+
+    public override bool CollidesWith(PolyLine polyLine)
+    {
+        return CollisionDetectionEnabled && (Primitive.CollidesWith(polyLine) || base.CollidesWith(polyLine));
+    }
+
+    public override bool CollidesWith(Ellipse ellipse)
+    {
+        return CollisionDetectionEnabled && (Primitive.CollidesWith(ellipse) || base.CollidesWith(ellipse));
+    }
+
+    public override bool CollidesWith(Polygon polygon)
+    {
+        return CollisionDetectionEnabled && (Primitive.CollidesWith(polygon) || base.CollidesWith(polygon));
+    }
+
+    public override bool CollidesWith(Vector2 point)
+    {
+        return CollisionDetectionEnabled && (Primitive.CollidesWith(point) || base.CollidesWith(point));
+    }
+
+    #endregion
 }

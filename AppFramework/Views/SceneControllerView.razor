@@ -3,14 +3,14 @@
 @if (ViewModel != null)
 {
     <div @ref="Container"
-          tabindex="0"
-          @onkeydown="KeyDown"
-          @onkeyup="KeyUp"
-          style="cursor: @(ViewModel.Cursor);"
-          @onmousemove="MouseMove"
-          @onmousedown="MouseDown"
-          @onmouseup="MouseUp"
-          @onmouseout="MouseOut">
+         tabindex="0"
+         @onkeydown="KeyDown"
+         @onkeyup="KeyUp"
+         style="cursor: @(ViewModel.Cursor);"
+         @onmousemove="MouseMove"
+         @onmousedown="MouseDown"
+         @onmouseup="MouseUp"
+         @onmouseout="MouseOut">
 
         @if (ViewModel.ShowGrid)
         {
@@ -30,6 +30,7 @@
 
         @foreach (var scene in ViewModel?.Scenes)
         {
-            <SceneView @key="scene.Id" ViewModel="scene"></SceneView>        }
+            <SceneView @key="scene.Id" ViewModel="scene"></SceneView>
+        }
     </div>
 }

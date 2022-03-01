@@ -1,261 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Threading.Tasks;
-using Aptacode.AppFramework.Components;
-using Aptacode.AppFramework.Components.Containers;
-using Aptacode.AppFramework.Components.Containers.Layouts;
-using Aptacode.AppFramework.Components.Controls;
-using Aptacode.AppFramework.Enums;
-using Aptacode.AppFramework.Scene.Events;
+using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.Geometry.Primitives;
 using Microsoft.AspNetCore.Components;
 
-namespace Aptacode.AppFramework.Demo.Pages
+namespace Aptacode.AppFramework.Demo.Pages;
+
+public class IndexBase : ComponentBase
 {
-    public class IndexBase : ComponentBase
+    public DemoSceneController SceneController { get; set; }
+    public Scene.Scene Scene { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        public DemoSceneController SceneController { get; set; }
-        public Scene.Scene Scene { get; set; }
-
-        protected override async Task OnInitializedAsync()
+        //Scene
+        Scene = new SceneBuilder().SetWidth(200).SetHeight(200).Build();
+        SceneController = new DemoSceneController(new Vector2(200, 200))
         {
-            //Scene
-            Scene = new SceneBuilder().SetWidth(200).SetHeight(100).Build();
-            SceneController = new DemoSceneController(new Vector2(200, 200))
-            {
-                ShowGrid = true
-            };
+            ShowGrid = true
+        };
 
-            Scene.Add(GetGrid());
-            Scene.Add(GetLinearLayout());
-          //  Scene.Add(CreateScrollBox());
-            Scene.Add(CreateDragBox());
-            Scene.Add(CreateTextbox());
-            Scene.Add(CreateCheckbox());
+        var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(10, 10), new Vector2(20, 20)).ToViewModel();
+        Scene.Add(rectangle);
 
-            SceneController.Add(Scene);
+        var ellipse = Ellipse.Circle.Create(new Vector2(10, 10), 10).ToViewModel();
+        Scene.Add(ellipse);
 
-            await base.OnInitializedAsync();
-        }
+        SceneController.Add(Scene);
 
-        private ScrollBox CreateScrollBox()
-        {
-            var componentBuilder = new ComponentBuilder();
-
-            var component = (ScrollBox) componentBuilder
-                .SetBase(ScrollBox.FromPositionAndSize(new Vector2(125, 10), new Vector2(50, 70)))
-                .SetBorderThickness(0.2f)
-                .SetMargin(0.0f)
-                .SetFillColor(Color.FromArgb(20, 100, 40, 20))
-                .SetText("")
-                .Build();
-
-            var child = new Button(Polygon.Rectangle.FromPositionAndSize(new Vector2(140, 25), new Vector2(10, 10)));
-            component.Add(child);
-
-            return component;
-        }
-
-        private Image CreateImage()
-        {
-            var componentBuilder = new ComponentBuilder();
-
-            var component = (Image) componentBuilder
-                .SetBase(Image.FromPositionAndSize(new Vector2(10, 10), new Vector2(10, 10), "https://raw.githubusercontent.com/Aptacode/AppFramework/Production/Resources/Images/Logo.png"))
-                .SetBorderThickness(0.2f)
-                .SetMargin(0.0f)
-                .SetFillColor(Color.FromArgb(100, 100, 40, 20))
-                .SetText("")
-                .Build();
-
-            return component;
-        }
-
-        private TextBox CreateTextbox()
-        {
-            var componentBuilder = new ComponentBuilder();
-
-            var component = (TextBox) componentBuilder
-                .SetBase(TextBox.FromPositionAndSize(new Vector2(5, 2), new Vector2(30, 5)))
-                .SetBorderThickness(0.2f)
-                .SetMargin(0.0f)
-                .SetFillColor(Color.FromArgb(255, 255, 255, 255))
-                .SetText("")
-                .Build();
-
-            return component;
-        }
-
-        private CheckBox CreateCheckbox()
-        {
-            var componentBuilder = new ComponentBuilder();
-
-            var component = (CheckBox) componentBuilder
-                .SetBase(CheckBox.FromPositionAndSize(new Vector2(45, 2), new Vector2(30, 5)))
-                .SetBorderThickness(0.2f)
-                .SetMargin(0.0f)
-                .SetFillColor(Color.FromArgb(255, 255, 255, 255))
-                .SetText("Checkbox test")
-                .Build();
-
-            return component;
-        }
-
-        private Dropdown CreateDropdown()
-        {
-            var componentBuilder = new ComponentBuilder();
-
-            var component = (Dropdown) componentBuilder
-                .SetBase(Dropdown.FromPositionAndSize(new Vector2(45, 2), new Vector2(30, 5)))
-                .SetBorderThickness(0.2f)
-                .SetMargin(0.0f)
-                .SetFillColor(Color.FromArgb(255, 255, 255, 255))
-                .SetText("Checkbox test")
-                .Build();
-
-            return component;
-        }
-
-        private Button CreateNestedImage()
-        {
-            var componentBuilder = new ComponentBuilder();
-
-            var button = (Button) componentBuilder
-                .SetBase(Button.FromPositionAndSize(new Vector2(0, 0), new Vector2(20, 10)))
-                .SetBorderThickness(0.2f)
-                .SetMargin(0.0f)
-                .SetFillColor(Color.FromArgb(255, 100, 40, 20))
-                .SetText("123")
-                .Build();
-
-            var image = (Image) componentBuilder
-                .SetBase(Image.FromPositionAndSize(new Vector2(10, 10), new Vector2(10, 10), "https://raw.githubusercontent.com/Aptacode/AppFramework/Production/Resources/Images/Logo.png"))
-                .SetBorderThickness(0.2f)
-                .SetMargin(0.0f)
-                .SetFillColor(Color.FromArgb(100, 40, 40, 20))
-                .SetText("test")
-                .Build();
-
-            image.VerticalAlignment = VerticalAlignment.Stretch;
-            image.HorizontalAlignment = HorizontalAlignment.Stretch;
-            button.Add(image);
-
-            return button;
-        }
-
-        private DragBox CreateDragBox()
-        {
-            var componentBuilder = new ComponentBuilder();
-
-            var component = (DragBox) componentBuilder
-                .SetBase(DragBox.FromPositionAndSize(new Vector2(10, 10), new Vector2(50, 100)))
-                .SetBorderThickness(0.2f)
-                .SetMargin(0.0f)
-                .SetFillColor(Color.FromArgb(100, 100, 40, 20))
-                .SetText("")
-                .Build();
-
-            component.Add(CreateNestedImage());
-
-            foreach (var button in GenerateButtons(8))
-            {
-                component.Add(button);
-                button.OnMouseClick += ButtonOnOnMouseClick;
-            }
-
-            return component;
-        }
-
-        private void ButtonOnOnMouseClick(object? sender, MouseClickEvent e)
-        {
-        }
-
-        private ComponentViewModel GetGrid()
-        {
-            var componentBuilder = new ComponentBuilder();
-
-            var layout = (GridLayout) componentBuilder
-                .SetBase(new GridLayout(new Vector2(65, 10), new Vector2(120, 100)))
-                .SetBorderThickness(0.2f)
-                .SetMargin(0.0f)
-                .SetFillColor(Color.LightGray)
-                .SetText("")
-                .Build();
-
-            layout.Rows = 3;
-            layout.Columns = 3;
-            layout.HorizontalAlignment = HorizontalAlignment.Stretch;
-            layout.VerticalAlignment = VerticalAlignment.Stretch;
-            layout.EnforceHorizontalAlignment = true;
-            layout.EnforceVerticalAlignment = true;
-
-            layout.CanDrop = true;
-
-            foreach (var button in GenerateButtons(3))
-            {
-                button.CanDrag = true;
-                layout.Add(button);
-            }
-
-            return layout;
-        }
-
-        private ComponentViewModel GetLinearLayout()
-        {
-            var componentBuilder = new ComponentBuilder();
-
-            var layout = (LinearLayout)componentBuilder
-                .SetBase(LinearLayout.FromPositionAndSize(new Vector2(125, 10), new Vector2(50, 70)))
-                .SetBorderThickness(0.2f)
-                .SetMargin(0.0f)
-                .SetFillColor(Color.LightGray)
-                .SetText("")
-                .Build();
-
-            layout.HorizontalAlignment = HorizontalAlignment.Stretch;
-            layout.VerticalAlignment = VerticalAlignment.Center;
-            layout.EnforceHorizontalAlignment = true;
-
-            layout.EnforceVerticalAlignment = true;
-            layout.CanDrop = true;
-
-            foreach (var button in GenerateButtons(3))
-            {
-                button.CanDrag = true;
-                layout.Add(button);
-            }
-
-            return layout;
-        }
-
-
-        public List<Button> GenerateButtons(int buttonCount)
-        {
-            List<Button> buttons = new();
-            var componentBuilder = new ComponentBuilder();
-
-            var rand = new Random();
-            for (var i = 0; i < buttonCount; i++)
-            {
-                var button = (Button) componentBuilder
-                    .SetBase(Button.FromPositionAndSize(new Vector2(i * 10, i * 10), new Vector2(10, 10)))
-                    .SetBorderThickness(.5f)
-                    .SetMargin(1.0f)
-                    .SetFillColor(Color.FromArgb(255, rand.Next(255), rand.Next(255), rand.Next(255)))
-                    .SetText($"Button{i + 1}")
-                    .Build();
-
-                //button.VerticalAlignment = (VerticalAlignment)(i % 4);
-                //button.HorizontalAlignment = (HorizontalAlignment)(i % 4);
-
-
-                buttons.Add(button);
-            }
-
-            return buttons;
-        }
+        await base.OnInitializedAsync();
     }
 }

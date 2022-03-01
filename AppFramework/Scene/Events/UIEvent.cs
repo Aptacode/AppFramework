@@ -1,6 +1,5 @@
-﻿namespace Aptacode.AppFramework.Scene.Events
+﻿namespace Aptacode.AppFramework.Scene.Events;
+
+public abstract record UiEvent
 {
-    public abstract record UIEvent
-    {
-    }
 }
