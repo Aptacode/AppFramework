@@ -8,7 +8,8 @@ namespace Aptacode.AppFramework.Behaviours.Transformation;
 
 public class CollisionBehaviour : TransformationBehaviour
 {
-    public CollisionBehaviour(Scene.Scene scene, ComponentViewModel component) : base(scene, component, nameof(CollisionBehaviour))
+    public CollisionBehaviour(Scene.Scene scene, ComponentViewModel component) : base(scene, component,
+        nameof(CollisionBehaviour))
     {
     }
 
@@ -18,7 +19,7 @@ public class CollisionBehaviour : TransformationBehaviour
 
         if (transformationEvent is not TranslateEvent { Source: true } translationEvent) return false;
 
-        Move(new List<ComponentViewModel>() {Component}, translationEvent.Delta);
+        Move(new List<ComponentViewModel> { Component }, translationEvent.Delta);
 
         return true;
     }

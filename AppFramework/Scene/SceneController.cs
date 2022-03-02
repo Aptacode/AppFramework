@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
+using Aptacode.AppFramework.Behaviours.Tick;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.BlazorCanvas;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
@@ -18,22 +18,25 @@ public class SceneController : BindableBase
 
     #region Ctor
 
-    public SceneController(Vector2 size)
+    public SceneController(Scene scene)
     {
-        Size = size;
-        Scenes = new List<Scene>();
+        Size = scene.Size;
+        Scene = scene;
         UserInteractionController = new SceneInteractionController();
         UserInteractionController.OnUiEvent += UserInteractionControllerOnUiEvent;
+        _behaviors = new List<GlobalBehavior> { new GlobalPhysicsBehaviour(Scene) };
     }
 
     private void UserInteractionControllerOnUiEvent(object? sender, UiEvent e)
     {
-        foreach (var scene in Scenes.ToList()) scene.Handle(e);
+        Scene.Handle(e);
     }
 
     #endregion
 
     #region Events
+
+    private readonly List<GlobalBehavior> _behaviors;
 
     private DateTime _lastTick = DateTime.Now;
 
@@ -45,13 +48,9 @@ public class SceneController : BindableBase
         _lastTick = currentTime;
         //Console.WriteLine($"{frameRate}");
 
-        foreach (var scene in Scenes)
-        {
-            foreach (var component in scene.Components)        
-            {
-                component.HandleTick(timestamp);
-            }
-        }
+        foreach (var globalBehavior in _behaviors) globalBehavior.Handle(timestamp);
+
+        foreach (var component in Scene.Components) component.HandleTick(timestamp);
 
         Renderer.Redraw();
     }
@@ -62,26 +61,12 @@ public class SceneController : BindableBase
 
     public SceneRenderer Renderer { get; private set; }
     public SceneInteractionController UserInteractionController { get; }
-    public List<Scene> Scenes { get; set; }
+    public Scene Scene { get; set; }
 
     public string Cursor { get; set; }
     public bool ShowGrid { get; set; }
     public Vector2 Size { get; }
     public Guid Id { get; set; }
-
-    #endregion
-
-    #region Scene
-
-    public void Add(Scene scene)
-    {
-        Scenes.Add(scene);
-    }
-
-    public bool Remove(Scene scene)
-    {
-        return Scenes.Remove(scene);
-    }
 
     #endregion
 }

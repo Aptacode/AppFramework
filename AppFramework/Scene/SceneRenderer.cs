@@ -32,24 +32,22 @@ public class SceneRenderer
 
     public void Redraw()
     {
-        foreach (var scene in _sceneController.Scenes)
-        {
-            _canvas.SelectCanvas(scene.Id.ToString());
-            _canvas.FillStyle(ComponentViewModel.DefaultFillColor);
-            _canvas.StrokeStyle(ComponentViewModel.DefaultBorderColor);
-            _canvas.LineWidth(ComponentViewModel.DefaultBorderThickness);
-            _canvas.ClearRect(0, 0, scene.Size.X * SceneScale.Value, scene.Size.Y * SceneScale.Value);
+        _canvas.SelectCanvas(_sceneController.Scene.Id.ToString());
+        _canvas.FillStyle(ComponentViewModel.DefaultFillColor);
+        _canvas.StrokeStyle(ComponentViewModel.DefaultBorderColor);
+        _canvas.LineWidth(ComponentViewModel.DefaultBorderThickness);
+        _canvas.ClearRect(0, 0, _sceneController.Size.X * SceneScale.Value, _sceneController.Size.Y * SceneScale.Value);
 
-            for (var i = 0; i < scene.Components.Count(); i++) scene.Components.ElementAt(i).Draw(scene, _canvas);
+        for (var i = 0; i < _sceneController.Scene.Components.Count(); i++)
+            _sceneController.Scene.Components.ElementAt(i).Draw(_sceneController.Scene, _canvas);
 
-            //var invalidatedItems = await InvalidateItems();
+        //var invalidatedItems = await InvalidateItems();
 
-            //for (var i = 0; i < invalidatedItems.Count; i++)
-            //{
-            //    var component = invalidatedItems[i];
-            //    await component.Draw(_canvas);
-            //}
-        }
+        //for (var i = 0; i < invalidatedItems.Count; i++)
+        //{
+        //    var component = invalidatedItems[i];
+        //    await component.Draw(_canvas);
+        //}
     }
 
     public async Task<List<ComponentViewModel>> InvalidateItems(Scene scene)

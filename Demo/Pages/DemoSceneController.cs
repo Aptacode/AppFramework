@@ -1,11 +1,10 @@
-﻿using System.Numerics;
-using Aptacode.AppFramework.Scene;
+﻿using Aptacode.AppFramework.Scene;
 
 namespace Aptacode.AppFramework.Demo.Pages;
 
 public class DemoSceneController : SceneController
 {
-    public DemoSceneController(Vector2 size) : base(size)
+    public DemoSceneController(Scene.Scene scene) : base(scene)
     {
         ShowGrid = true;
     }

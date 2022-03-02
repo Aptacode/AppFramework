@@ -28,9 +28,6 @@
             </svg>
         }
 
-        @foreach (var scene in ViewModel?.Scenes)
-        {
-            <SceneView @key="scene.Id" ViewModel="scene"></SceneView>
-        }
+        <SceneView @key="ViewModel?.Scene.Id" ViewModel="ViewModel?.Scene"></SceneView>
     </div>
 }

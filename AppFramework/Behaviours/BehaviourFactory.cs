@@ -11,14 +11,14 @@ public static class BehaviourFactory
     {
         component.AddTransformationBehaviour(new CollisionBehaviour(scene, component));
         return component;
-    }  
-    
+    }
+
     public static ComponentViewModel AddDragToMove(this ComponentViewModel component, Scene.Scene scene)
     {
         component.AddUiBehaviour(new DragBehaviour(scene, component));
         return component;
-    }  
-    
+    }
+
     public static ComponentViewModel AddVelocity(this ComponentViewModel component, Scene.Scene scene)
     {
         component.AddTickBehaviour(new PhysicsBehaviour(scene, component));

@@ -4,15 +4,6 @@ namespace Aptacode.AppFramework.Behaviours.Tick;
 
 public abstract class TickBehaviour
 {
-    #region Properties
-
-    public Scene.Scene Scene { get; init; }
-    public ComponentViewModel Component { get; init; }
-    public bool Enabled { get; set; } = true;
-    public string Name { get; init; }
-
-    #endregion
-
     protected TickBehaviour(Scene.Scene scene, ComponentViewModel component, string name)
     {
         Scene = scene;
@@ -21,4 +12,13 @@ public abstract class TickBehaviour
     }
 
     public abstract bool HandleEvent(float time);
+
+    #region Properties
+
+    public Scene.Scene Scene { get; init; }
+    public ComponentViewModel Component { get; init; }
+    public bool Enabled { get; set; } = true;
+    public string Name { get; init; }
+
+    #endregion
 }

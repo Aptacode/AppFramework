@@ -6,13 +6,8 @@ namespace Aptacode.AppFramework.Behaviours.Ui;
 
 public class DragBehaviour : UiBehaviour
 {
-    #region Properties
-    public bool IsDragging { get; set; }
-    public Vector2 LastDragPosition { get; set; }
-
-    #endregion
-
-    public DragBehaviour(Scene.Scene scene, ComponentViewModel component) : base(scene, component, nameof(DragBehaviour))
+    public DragBehaviour(Scene.Scene scene, ComponentViewModel component) : base(scene, component,
+        nameof(DragBehaviour))
     {
     }
 
@@ -55,4 +50,11 @@ public class DragBehaviour : UiBehaviour
 
         return false;
     }
+
+    #region Properties
+
+    public bool IsDragging { get; set; }
+    public Vector2 LastDragPosition { get; set; }
+
+    #endregion
 }

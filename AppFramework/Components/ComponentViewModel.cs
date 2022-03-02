@@ -354,7 +354,7 @@ public abstract class ComponentViewModel : IDisposable
         UpdateBounds();
 
         Invalidated = true;
-        HandleTransformationEvent( new TranslateEvent(delta, source));
+        HandleTransformationEvent(new TranslateEvent(delta, source));
     }
 
     public virtual void SetSize(Vector2 size)
@@ -412,11 +412,17 @@ public abstract class ComponentViewModel : IDisposable
     }
 
     #region Ui
+
     public void AddUiBehaviour<T>(T behaviour) where T : UiBehaviour
     {
         _uiBehaviours[typeof(T).Name] = behaviour;
     }
-    public bool HasUiBehaviour<T>() where T : UiBehaviour => _uiBehaviours.ContainsKey(typeof(T).Name);
+
+    public bool HasUiBehaviour<T>() where T : UiBehaviour
+    {
+        return _uiBehaviours.ContainsKey(typeof(T).Name);
+    }
+
     private readonly Dictionary<string, UiBehaviour> _uiBehaviours = new();
 
     #endregion
@@ -427,9 +433,16 @@ public abstract class ComponentViewModel : IDisposable
     {
         _transformationBehaviours[typeof(T).Name] = behaviour;
     }
-    public bool HasTransformationBehaviour<T>() where T : TransformationBehaviour => _transformationBehaviours.ContainsKey(typeof(T).Name);
 
-    public T? GetTransformationBehaviour<T>() where T : TransformationBehaviour => _transformationBehaviours.TryGetValue(typeof(T).Name, out var value) ? value as T : null;
+    public bool HasTransformationBehaviour<T>() where T : TransformationBehaviour
+    {
+        return _transformationBehaviours.ContainsKey(typeof(T).Name);
+    }
+
+    public T? GetTransformationBehaviour<T>() where T : TransformationBehaviour
+    {
+        return _transformationBehaviours.TryGetValue(typeof(T).Name, out var value) ? value as T : null;
+    }
 
     private readonly Dictionary<string, TransformationBehaviour> _transformationBehaviours = new();
 
@@ -441,19 +454,25 @@ public abstract class ComponentViewModel : IDisposable
     {
         _tickBehaviours[typeof(T).Name] = behaviour;
     }
-    public bool HasTickBehaviour<T>() where T : TickBehaviour => _tickBehaviours.ContainsKey(typeof(T).Name);
+
+    public bool HasTickBehaviour<T>() where T : TickBehaviour
+    {
+        return _tickBehaviours.ContainsKey(typeof(T).Name);
+    }
+
+    public T? GetTickBehaviour<T>() where T : TickBehaviour
+    {
+        return _tickBehaviours.TryGetValue(typeof(T).Name, out var value) ? value as T : null;
+    }
+
     private readonly Dictionary<string, TickBehaviour> _tickBehaviours = new();
 
     public void HandleTick(float timestamp)
     {
-        foreach (var tickBehaviour in _tickBehaviours.Values)
-        {
-            tickBehaviour.HandleEvent(timestamp);
-        }
+        foreach (var tickBehaviour in _tickBehaviours.Values) tickBehaviour.HandleEvent(timestamp);
     }
 
     #endregion
-
 
     #endregion
 }

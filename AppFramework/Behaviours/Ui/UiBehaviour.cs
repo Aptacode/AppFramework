@@ -5,6 +5,15 @@ namespace Aptacode.AppFramework.Behaviours.Ui;
 
 public abstract class UiBehaviour
 {
+    protected UiBehaviour(Scene.Scene scene, ComponentViewModel component, string name)
+    {
+        Scene = scene;
+        Component = component;
+        Name = name;
+    }
+
+    public abstract bool HandleEvent(UiEvent uiEvent);
+
     #region Properties
 
     public Scene.Scene Scene { get; init; }
@@ -13,12 +22,4 @@ public abstract class UiBehaviour
     public string Name { get; init; }
 
     #endregion
-
-    protected UiBehaviour(Scene.Scene scene, ComponentViewModel component, string name)
-    {
-        Scene = scene;
-        Component = component;
-        Name = name;
-    }
-    public abstract bool HandleEvent(UiEvent uiEvent);
 }

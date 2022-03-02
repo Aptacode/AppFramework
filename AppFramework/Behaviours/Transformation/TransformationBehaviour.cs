@@ -5,15 +5,6 @@ namespace Aptacode.AppFramework.Behaviours.Transformation;
 
 public abstract class TransformationBehaviour
 {
-    #region Properties
-
-    public Scene.Scene Scene { get; init; }
-    public ComponentViewModel Component { get; init; }
-    public bool Enabled { get; set; } = true;
-    public string Name { get; init; }
-
-    #endregion
-
     protected TransformationBehaviour(Scene.Scene scene, ComponentViewModel component, string name)
     {
         Scene = scene;
@@ -22,4 +13,13 @@ public abstract class TransformationBehaviour
     }
 
     public abstract bool HandleEvent(TransformationEvent transformationEvent);
+
+    #region Properties
+
+    public Scene.Scene Scene { get; init; }
+    public ComponentViewModel Component { get; init; }
+    public bool Enabled { get; set; } = true;
+    public string Name { get; init; }
+
+    #endregion
 }

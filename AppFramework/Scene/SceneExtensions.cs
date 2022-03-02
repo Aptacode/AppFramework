@@ -18,7 +18,8 @@ public static class SceneExtensions
         List<ComponentViewModel> movingComponents,
         CancellationTokenSource cancellationToken)
     {
-        var unselectedItems = scene.Components.Except(movingComponents).Where(c => c.HasTransformationBehaviour<CollisionBehaviour>());
+        var unselectedItems = scene.Components.Except(movingComponents)
+            .Where(c => c.HasTransformationBehaviour<CollisionBehaviour>());
 
         var collidingItems = unselectedItems
             .Where(i => i.CollidesWith(component)).ToList();
@@ -36,7 +37,8 @@ public static class SceneExtensions
         List<ComponentViewModel> movingComponents,
         CancellationTokenSource cancellationToken)
     {
-        var unselectedItems = scene.Components.Except(movingComponents).Where(c => c.HasTransformationBehaviour<CollisionBehaviour>());
+        var unselectedItems = scene.Components.Except(movingComponents)
+            .Where(c => c.HasTransformationBehaviour<CollisionBehaviour>());
 
         component.Translate(delta, false);
 
