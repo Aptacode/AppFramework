@@ -49,10 +49,5 @@ public class EllipseViewModel : PrimitiveViewModel<Ellipse>
             BoundingPrimitive = PolyLine.Create(Primitive.Vertices.Vertices.ToArray());
     }
 
-    public override bool CollidesWith(ComponentViewModel component)
-    {
-        return (component.CollidesWith(Primitive) || base.CollidesWith(component));
-    }
-
     #endregion
 }

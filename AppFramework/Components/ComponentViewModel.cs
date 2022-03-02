@@ -223,39 +223,17 @@ public abstract class ComponentViewModel : IDisposable
 
     #region CollisionDetection
 
-    public virtual bool CollidesWith(ComponentViewModel component)
-    {
-        return component.BoundingRectangle.CollidesWith(BoundingRectangle) && Children.Any(child => child.CollidesWith(component));
-    }
-
-    public virtual bool CollidesWith(Point point)
-    {
-        return BoundingRectangle.CollidesWith(point.BoundingRectangle) && Children.Any(child => child.CollidesWith(point));
-    }
-
-    public virtual bool CollidesWith(PolyLine point)
-    {
-        return BoundingRectangle.CollidesWith(point.BoundingRectangle) && Children.Any(child => child.CollidesWith(point));
-    }
-
-    public virtual bool CollidesWith(Polygon point)
-    {
-        return BoundingRectangle.CollidesWith(point.BoundingRectangle) && Children.Any(child => child.CollidesWith(point));
-    }
-
-    public virtual bool CollidesWith(Ellipse point)
-    {
-        return BoundingRectangle.CollidesWith(point.BoundingRectangle) && Children.Any(child => child.CollidesWith(point));
-    }
-
     public virtual bool CollidesWith(Vector2 point)
     {
         return BoundingRectangle.CollidesWith(point) && Children.Any(child => child.CollidesWith(point));
     }
-
-    public virtual bool CollidesWith(BoundingRectangle rectangle)
+    public virtual bool CollidesWith(Primitive primitive)
     {
-        return BoundingRectangle.CollidesWith(rectangle);
+        return primitive.BoundingRectangle.CollidesWith(BoundingRectangle) && Children.Any(child => child.CollidesWith(primitive));
+    }
+    public virtual bool CollidesWith(ComponentViewModel component)
+    {
+        return component.BoundingRectangle.CollidesWith(BoundingRectangle) && Children.Any(child => child.CollidesWith(component));
     }
 
     #endregion

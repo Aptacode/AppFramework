@@ -20,14 +20,6 @@ public class PolylineViewModel : PrimitiveViewModel<PolyLine>
 
     #endregion
 
-    #region Collision
-
-    public override bool CollidesWith(ComponentViewModel component)
-    {
-        return (component.CollidesWith(Primitive) || base.CollidesWith(component));
-    }
-
-    #endregion
 
     #region Canvas
 

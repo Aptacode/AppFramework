@@ -47,10 +47,5 @@ public class PointViewModel : PrimitiveViewModel<Point>
             BoundingPrimitive = PolyLine.Create(Primitive.Vertices.Vertices.ToArray());
     }
 
-    public override bool CollidesWith(ComponentViewModel component)
-    {
-        return (component.CollidesWith(Primitive) || base.CollidesWith(component));
-    }
-
     #endregion
 }

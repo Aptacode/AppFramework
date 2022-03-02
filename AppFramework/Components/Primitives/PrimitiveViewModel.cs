@@ -91,29 +91,17 @@ public abstract class PrimitiveViewModel<TPrimitive> : ComponentViewModel where 
 
     #region Collision
 
-    public override bool CollidesWith(Point point)
-    {
-        return (Primitive.CollidesWith(point) || base.CollidesWith(point));
-    }
-
-    public override bool CollidesWith(PolyLine polyLine)
-    {
-        return (Primitive.CollidesWith(polyLine) || base.CollidesWith(polyLine));
-    }
-
-    public override bool CollidesWith(Ellipse ellipse)
-    {
-        return (Primitive.CollidesWith(ellipse) || base.CollidesWith(ellipse));
-    }
-
-    public override bool CollidesWith(Polygon polygon)
-    {
-        return (Primitive.CollidesWith(polygon) || base.CollidesWith(polygon));
-    }
-
     public override bool CollidesWith(Vector2 point)
     {
         return (Primitive.CollidesWith(point) || base.CollidesWith(point));
+    }
+    public override bool CollidesWith(Primitive primitive)
+    {
+        return (primitive.CollidesWithPrimitive(Primitive) || base.CollidesWith(primitive));
+    }
+    public override bool CollidesWith(ComponentViewModel component)
+    {
+        return (component.CollidesWith(Primitive) || base.CollidesWith(component));
     }
 
     #endregion
