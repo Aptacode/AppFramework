@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
@@ -22,7 +21,7 @@ public class EllipseViewModel : PrimitiveViewModel<Ellipse>
 
     #region Canvase
 
-    public override async Task CustomDraw(BlazorCanvasInterop ctx)
+    public override void CustomDraw(BlazorCanvasInterop ctx)
     {
         ctx.BeginPath();
 

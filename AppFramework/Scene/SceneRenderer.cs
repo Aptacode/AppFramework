@@ -30,7 +30,7 @@ public class SceneRenderer
 
     #region Redraw
 
-    public async Task Redraw()
+    public void Redraw()
     {
         foreach (var scene in _sceneController.Scenes)
         {
@@ -40,7 +40,7 @@ public class SceneRenderer
             _canvas.LineWidth(ComponentViewModel.DefaultBorderThickness);
             _canvas.ClearRect(0, 0, scene.Size.X * SceneScale.Value, scene.Size.Y * SceneScale.Value);
 
-            for (var i = 0; i < scene.Components.Count(); i++) await scene.Components.ElementAt(i).Draw(scene, _canvas);
+            for (var i = 0; i < scene.Components.Count(); i++) scene.Components.ElementAt(i).Draw(scene, _canvas);
 
             //var invalidatedItems = await InvalidateItems();
 

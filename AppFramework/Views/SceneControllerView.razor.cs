@@ -11,14 +11,10 @@ namespace Aptacode.AppFramework.Views;
 
 public class SceneControllerViewBase : ComponentBase
 {
-    private float lastTime;
-
     [JSInvokable]
-    public async ValueTask GameLoop(float timeStamp)
+    public void GameLoop(float timeStamp)
     {
-        Console.WriteLine(1000.0f / (timeStamp - lastTime));
-        lastTime = timeStamp;
-        await ViewModel?.Tick()!;
+        ViewModel.Tick();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

@@ -38,14 +38,14 @@ public class SceneController : BindableBase
 
     private DateTime _lastTick = DateTime.Now;
 
-    public virtual async Task Tick()
+    public virtual void Tick()
     {
         var currentTime = DateTime.Now;
         var delta = currentTime - _lastTick;
         var frameRate = 1.0f / delta.TotalSeconds;
         _lastTick = currentTime;
-        // Console.WriteLine($"{frameRate}fps");
-        await Renderer.Redraw();
+        Console.WriteLine($"{frameRate}fps");
+        Renderer.Redraw();
     }
 
     #endregion

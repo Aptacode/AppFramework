@@ -10,7 +10,6 @@ using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
-using Point = Aptacode.Geometry.Primitives.Point;
 
 namespace Aptacode.AppFramework.Components;
 
@@ -38,11 +37,11 @@ public abstract class ComponentViewModel : IDisposable
 
     #region Canvas
 
-    public virtual async Task CustomDraw(BlazorCanvasInterop ctx)
+    public virtual void CustomDraw(BlazorCanvasInterop ctx)
     {
     }
 
-    public virtual async Task DrawText(BlazorCanvasInterop ctx)
+    public virtual void DrawText(BlazorCanvasInterop ctx)
     {
         if (!string.IsNullOrEmpty(Text))
         {
@@ -55,7 +54,7 @@ public abstract class ComponentViewModel : IDisposable
         }
     }
 
-    public virtual async Task Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
+    public virtual void Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
     {
         OldBoundingRectangle = BoundingRectangle;
         Invalidated = false;
@@ -68,11 +67,11 @@ public abstract class ComponentViewModel : IDisposable
 
         ctx.LineWidth(BorderThickness * SceneScale.Value);
 
-        await CustomDraw(ctx);
+        CustomDraw(ctx);
 
-        foreach (var child in _children) await child.Draw(scene, ctx);
+        foreach (var child in _children) child.Draw(scene, ctx);
 
-        await DrawText(ctx);
+        DrawText(ctx);
     }
 
     #endregion

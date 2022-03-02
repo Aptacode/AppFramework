@@ -21,7 +21,7 @@ public class PolygonViewModel : PrimitiveViewModel<Polygon>
 
     #region Ctor
 
-    public override async Task CustomDraw(BlazorCanvasInterop ctx)
+    public override void CustomDraw(BlazorCanvasInterop ctx)
     {
         var vertices = new Vector2[Primitive.Vertices.Length];
         for (var i = 0; i < Primitive.Vertices.Length; i++) vertices[i] = Primitive.Vertices[i] * SceneScale.Value;

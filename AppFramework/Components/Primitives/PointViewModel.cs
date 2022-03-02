@@ -22,7 +22,7 @@ public class PointViewModel : PrimitiveViewModel<Point>
 
     #region Canvas
 
-    public override async Task CustomDraw(BlazorCanvasInterop ctx)
+    public override void CustomDraw(BlazorCanvasInterop ctx)
     {
         ctx.BeginPath();
         ctx.Ellipse((int)Primitive.Position.X * SceneScale.Value, (int)Primitive.Position.Y * SceneScale.Value,
