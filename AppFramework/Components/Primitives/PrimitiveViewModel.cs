@@ -33,58 +33,58 @@ public abstract class PrimitiveViewModel<TPrimitive> : ComponentViewModel where 
 
     #region Transformations
 
-    public override void Translate(Vector2 delta)
+    public override void Translate(Scene.Scene scene, Vector2 delta, bool source)
     {
         Primitive.Translate(delta);
-        base.Translate(delta);
+        base.Translate(scene, delta, source);
     }
 
-    public override void ScaleAboutCenter(Vector2 delta)
+    public override void ScaleAboutCenter(Scene.Scene scene, Vector2 delta)
     {
         Primitive.ScaleAboutCenter(delta);
-        base.ScaleAboutCenter(delta);
+        base.ScaleAboutCenter(scene, delta);
     }
 
-    public override void ScaleAboutTopLeft(Vector2 delta)
+    public override void ScaleAboutTopLeft(Scene.Scene scene, Vector2 delta)
     {
         Primitive.Scale(delta, BoundingRectangle.TopLeft);
-        base.ScaleAboutCenter(delta);
+        base.ScaleAboutCenter(scene, delta);
     }
 
-    public override void Scale(Vector2 scaleCenter, Vector2 delta)
+    public override void Scale(Scene.Scene scene, Vector2 scaleCenter, Vector2 delta)
     {
         Primitive.Scale(scaleCenter, delta);
-        base.ScaleAboutCenter(delta);
+        base.ScaleAboutCenter(scene, delta);
     }
 
-    public override void SetPosition(Vector2 position)
+    public override void SetPosition(Scene.Scene scene, Vector2 position, bool source)
     {
         Primitive.SetPosition(position);
-        base.SetPosition(position);
+        base.SetPosition(scene, position, source);
     }
 
-    public override void SetSize(Vector2 size)
+    public override void SetSize(Scene.Scene scene, Vector2 size)
     {
         Primitive.SetSize(size);
-        base.SetSize(size);
+        base.SetSize(scene, size);
     }
 
-    public override void Rotate(float theta)
+    public override void Rotate(Scene.Scene scene, float theta)
     {
         Primitive.Rotate(theta);
-        base.Rotate(theta);
+        base.Rotate(scene, theta);
     }
 
-    public override void Rotate(Vector2 rotationCenter, float theta)
+    public override void Rotate(Scene.Scene scene, Vector2 rotationCenter, float theta)
     {
         Primitive.Rotate(rotationCenter, theta);
-        base.Rotate(rotationCenter, theta);
+        base.Rotate(scene, rotationCenter, theta);
     }
 
-    public override void Skew(Vector2 delta)
+    public override void Skew(Scene.Scene scene, Vector2 delta)
     {
         Primitive.Skew(delta);
-        base.Skew(delta);
+        base.Skew(scene, delta);
     }
 
     #endregion
@@ -93,27 +93,27 @@ public abstract class PrimitiveViewModel<TPrimitive> : ComponentViewModel where 
 
     public override bool CollidesWith(Point point)
     {
-        return CollisionDetectionEnabled && (Primitive.CollidesWith(point) || base.CollidesWith(point));
+        return (Primitive.CollidesWith(point) || base.CollidesWith(point));
     }
 
     public override bool CollidesWith(PolyLine polyLine)
     {
-        return CollisionDetectionEnabled && (Primitive.CollidesWith(polyLine) || base.CollidesWith(polyLine));
+        return (Primitive.CollidesWith(polyLine) || base.CollidesWith(polyLine));
     }
 
     public override bool CollidesWith(Ellipse ellipse)
     {
-        return CollisionDetectionEnabled && (Primitive.CollidesWith(ellipse) || base.CollidesWith(ellipse));
+        return (Primitive.CollidesWith(ellipse) || base.CollidesWith(ellipse));
     }
 
     public override bool CollidesWith(Polygon polygon)
     {
-        return CollisionDetectionEnabled && (Primitive.CollidesWith(polygon) || base.CollidesWith(polygon));
+        return (Primitive.CollidesWith(polygon) || base.CollidesWith(polygon));
     }
 
     public override bool CollidesWith(Vector2 point)
     {
-        return CollisionDetectionEnabled && (Primitive.CollidesWith(point) || base.CollidesWith(point));
+        return (Primitive.CollidesWith(point) || base.CollidesWith(point));
     }
 
     #endregion

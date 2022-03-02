@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.AppFramework.Utilities;
@@ -22,7 +21,6 @@ public abstract class ComponentViewModel : IDisposable
     protected ComponentViewModel()
     {
         Id = Guid.NewGuid();
-        CollisionDetectionEnabled = true;
         Margin = DefaultMargin;
         IsShown = true;
         BorderThickness = DefaultBorderThickness;
@@ -131,13 +129,10 @@ public abstract class ComponentViewModel : IDisposable
 
     public Guid Id { get; init; }
     protected readonly List<ComponentViewModel> _children = new();
-    public bool CollisionDetectionEnabled { get; set; }
     public bool Invalidated { get; set; }
     public BoundingRectangle OldBoundingRectangle { get; protected set; }
     public BoundingRectangle BoundingRectangle { get; protected set; }
     public Primitive BoundingPrimitive { get; set; }
-    public bool MouseOver { get; protected set; }
-    public bool HasFocus { get; protected set; }
 
     #region Parent
 
@@ -230,68 +225,32 @@ public abstract class ComponentViewModel : IDisposable
 
     public virtual bool CollidesWith(ComponentViewModel component)
     {
-        if (!component.BoundingRectangle.CollidesWith(BoundingRectangle)) return false;
-
-        foreach (var child in Children)
-            if (child.CollidesWith(component))
-                return true;
-
-        return false;
+        return component.BoundingRectangle.CollidesWith(BoundingRectangle) && Children.Any(child => child.CollidesWith(component));
     }
 
     public virtual bool CollidesWith(Point point)
     {
-        if (!BoundingRectangle.CollidesWith(point.BoundingRectangle)) return false;
-
-        foreach (var child in Children)
-            if (child.CollidesWith(point))
-                return true;
-
-        return false;
+        return BoundingRectangle.CollidesWith(point.BoundingRectangle) && Children.Any(child => child.CollidesWith(point));
     }
 
     public virtual bool CollidesWith(PolyLine point)
     {
-        if (!BoundingRectangle.CollidesWith(point.BoundingRectangle)) return false;
-
-        foreach (var child in Children)
-            if (child.CollidesWith(point))
-                return true;
-
-        return false;
+        return BoundingRectangle.CollidesWith(point.BoundingRectangle) && Children.Any(child => child.CollidesWith(point));
     }
 
     public virtual bool CollidesWith(Polygon point)
     {
-        if (!BoundingRectangle.CollidesWith(point.BoundingRectangle)) return false;
-
-        foreach (var child in Children)
-            if (child.CollidesWith(point))
-                return true;
-
-        return false;
+        return BoundingRectangle.CollidesWith(point.BoundingRectangle) && Children.Any(child => child.CollidesWith(point));
     }
 
     public virtual bool CollidesWith(Ellipse point)
     {
-        if (!BoundingRectangle.CollidesWith(point.BoundingRectangle)) return false;
-
-        foreach (var child in Children)
-            if (child.CollidesWith(point))
-                return true;
-
-        return false;
+        return BoundingRectangle.CollidesWith(point.BoundingRectangle) && Children.Any(child => child.CollidesWith(point));
     }
 
     public virtual bool CollidesWith(Vector2 point)
     {
-        if (!BoundingRectangle.CollidesWith(point)) return false;
-
-        foreach (var child in Children)
-            if (child.CollidesWith(point))
-                return true;
-
-        return false;
+        return BoundingRectangle.CollidesWith(point) && Children.Any(child => child.CollidesWith(point));
     }
 
     public virtual bool CollidesWith(BoundingRectangle rectangle)
@@ -303,96 +262,104 @@ public abstract class ComponentViewModel : IDisposable
 
     #region Transformation
 
-    public virtual void Translate(Vector2 delta)
+    public virtual void Translate(Scene.Scene scene, Vector2 delta, bool source)
     {
-        foreach (var child in Children) child.Translate(delta);
+        foreach (var child in Children) child.Translate(scene, delta, false);
 
         UpdateBounds();
 
         Invalidated = true;
-        OnTransformationEvent?.Invoke(this, new TranslateEvent());
+        HandleTransformationEvent(scene, new TranslateEvent(){Source = source, Delta = delta});
     }
 
-    public virtual void Rotate(float theta)
+    public virtual void Rotate(Scene.Scene scene, float theta)
     {
-        foreach (var child in Children) child.Rotate(theta);
+        foreach (var child in Children) child.Rotate(scene, theta);
 
         UpdateBounds();
 
         Invalidated = true;
-        OnTransformationEvent?.Invoke(this, new RotateEvent());
+        HandleTransformationEvent(scene, new RotateEvent());
     }
 
-    public virtual void Rotate(Vector2 rotationCenter, float theta)
+    public virtual void Rotate(Scene.Scene scene, Vector2 rotationCenter, float theta)
     {
-        foreach (var child in Children) child.Rotate(rotationCenter, theta);
+        foreach (var child in Children) child.Rotate(scene, rotationCenter, theta);
 
         UpdateBounds();
 
         Invalidated = true;
-        OnTransformationEvent?.Invoke(this, new RotateEvent());
+        HandleTransformationEvent(scene, new RotateEvent());
     }
 
-    public virtual void ScaleAboutCenter(Vector2 delta)
+    public virtual void ScaleAboutCenter(Scene.Scene scene, Vector2 delta)
     {
-        foreach (var child in Children) child.Scale(BoundingRectangle.Center, delta);
+        foreach (var child in Children) child.Scale(scene, BoundingRectangle.Center, delta);
 
         UpdateBounds();
 
         Invalidated = true;
-        OnTransformationEvent?.Invoke(this, new ScaleEvent());
+        HandleTransformationEvent(scene, new ScaleEvent());
     }
 
-    public virtual void ScaleAboutTopLeft(Vector2 delta)
+    public virtual void ScaleAboutTopLeft(Scene.Scene scene, Vector2 delta)
     {
-        foreach (var child in Children) child.Scale(BoundingRectangle.TopLeft, delta);
+        foreach (var child in Children) child.Scale(scene, BoundingRectangle.TopLeft, delta);
 
         UpdateBounds();
 
         Invalidated = true;
-        OnTransformationEvent?.Invoke(this, new ScaleEvent());
+        HandleTransformationEvent(scene, new ScaleEvent());
     }
 
-    public virtual void Scale(Vector2 scaleCenter, Vector2 delta)
+    public virtual void Scale(Scene.Scene scene, Vector2 scaleCenter, Vector2 delta)
     {
-        foreach (var child in Children) child.Scale(scaleCenter, delta);
+        foreach (var child in Children) child.Scale(scene, scaleCenter, delta);
 
         UpdateBounds();
 
         Invalidated = true;
-        OnTransformationEvent?.Invoke(this, new ScaleEvent());
+        HandleTransformationEvent(scene, new ScaleEvent());
     }
 
-    public virtual void Skew(Vector2 delta)
+    public virtual void Skew(Scene.Scene scene, Vector2 delta)
     {
-        foreach (var child in Children) child.Skew(delta);
+        foreach (var child in Children) child.Skew(scene, delta);
 
         UpdateBounds();
 
         Invalidated = true;
-        OnTransformationEvent?.Invoke(this, new SkewEvent());
+        HandleTransformationEvent(scene, new SkewEvent());
     }
 
-    public virtual void SetPosition(Vector2 position)
+    public virtual void SetPosition(Scene.Scene scene, Vector2 position, bool source)
     {
         var delta = position - BoundingRectangle.TopLeft;
-        foreach (var child in Children) child.Translate(delta);
+        foreach (var child in Children) child.Translate(scene, delta, source);
 
         UpdateBounds();
 
         Invalidated = true;
-        OnTransformationEvent?.Invoke(this, new TranslateEvent());
+        HandleTransformationEvent(scene, new TranslateEvent());
+
     }
 
-    public virtual void SetSize(Vector2 size)
+    public virtual void SetSize(Scene.Scene scene, Vector2 size)
     {
         var scaleFactor = size / BoundingRectangle.Size;
-        foreach (var child in Children) child.Scale(BoundingRectangle.TopLeft, scaleFactor);
+        foreach (var child in Children) child.Scale(scene, BoundingRectangle.TopLeft, scaleFactor);
 
         UpdateBounds();
 
         Invalidated = true;
-        OnTransformationEvent?.Invoke(this, new ScaleEvent());
+
+        HandleTransformationEvent(scene, new ScaleEvent());
+    }
+
+    private void HandleTransformationEvent(Scene.Scene scene, TransformationEvent transformationEvent)
+    {
+        _transformationBehaviours.All(t => t.HandleEvent(scene, this, transformationEvent));
+        OnTransformationEvent?.Invoke(this, transformationEvent);
     }
 
     #endregion
@@ -404,16 +371,16 @@ public abstract class ComponentViewModel : IDisposable
     public event EventHandler<UiEvent> OnUiEventTunneled;
     public event EventHandler<TransformationEvent> OnTransformationEvent;
 
-    public bool Handle(UiEvent uiEvent)
+    public bool Handle(Scene.Scene scene, UiEvent uiEvent)
     {
         //Firstly try and handle the event with the most nested child component
         var isBubbleHandled = false;
         foreach (var child in Children)
-            if (child.Handle(uiEvent))
+            if (child.Handle(scene, uiEvent))
                 isBubbleHandled = true; //The child handles the event
 
         //Try and handle the event with this component
-        if (!HandleEvent(uiEvent))
+        if (!HandleEvent(scene, uiEvent))
             return false;
 
         OnUiEventTunneled?.Invoke(this, uiEvent);
@@ -424,17 +391,20 @@ public abstract class ComponentViewModel : IDisposable
         return true;
     }
 
-    public bool HandleEvent(UiEvent uiEvent)
+    public bool HandleEvent(Scene.Scene scene, UiEvent uiEvent)
     {
         var eventHandled = false;
-        foreach (var behaviour in _behaviours)
-            if (behaviour.HandleEvent(this, uiEvent))
+        foreach (var behaviour in _uiBehaviours)
+            if (behaviour.HandleEvent(scene, this, uiEvent))
                 eventHandled = true;
 
         return eventHandled;
     }
 
-    private readonly List<Behaviour> _behaviours = new() { new DragBehaviour() };
+    private readonly List<UiBehaviour> _uiBehaviours = new() { new DragBehaviour() };
+    private readonly List<TransformationBehaviour> _transformationBehaviours = new() { new CollisionBehaviour() };
+
+    public bool HasCollisionBehaviour() => true;
 
     #endregion
 }

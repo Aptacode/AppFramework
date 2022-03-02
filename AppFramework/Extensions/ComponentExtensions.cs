@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using Aptacode.AppFramework.Components;
 using Aptacode.Geometry.Collision.Rectangles;
@@ -42,21 +41,4 @@ public static class ComponentExtensions
 
         return new BoundingRectangle(new Vector2(minX, minY), new Vector2(maxX, maxY));
     }
-
-    #region CollisionDetection
-
-    public static IEnumerable<ComponentViewModel> CollidingWith(this IEnumerable<ComponentViewModel> components,
-        Vector2 point)
-    {
-        return components.Where(c =>
-            c.CollisionDetectionEnabled && c.CollidesWith(point));
-    }
-
-    public static IEnumerable<ComponentViewModel> CollidingWith(this IEnumerable<ComponentViewModel> components,
-        ComponentViewModel component)
-    {
-        return components.Where(c => c.CollisionDetectionEnabled && c.CollidesWith(component));
-    }
-
-    #endregion
 }

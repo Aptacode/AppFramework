@@ -49,7 +49,7 @@ public class PointViewModel : PrimitiveViewModel<Point>
 
     public override bool CollidesWith(ComponentViewModel component)
     {
-        return CollisionDetectionEnabled && (component.CollidesWith(Primitive) || base.CollidesWith(component));
+        return (component.CollidesWith(Primitive) || base.CollidesWith(component));
     }
 
     #endregion

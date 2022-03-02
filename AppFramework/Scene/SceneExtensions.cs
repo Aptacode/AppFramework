@@ -10,6 +10,24 @@ public static class SceneExtensions
 {
     #region Movement
 
+    public static void Translated(
+        this Scene scene,
+        ComponentViewModel component,
+        Vector2 delta,
+        List<ComponentViewModel> movingComponents,
+        CancellationTokenSource cancellationToken)
+    {
+        var unselectedItems = scene.Components.Except(movingComponents).Where(c => c.HasCollisionBehaviour());
+
+        var collidingItems = unselectedItems
+            .Where(i => i.CollidesWith(component)).ToList();
+
+        movingComponents.AddRange(collidingItems);
+
+        foreach (var collidingItem in collidingItems)
+            scene.Translate(collidingItem, delta, movingComponents, cancellationToken);
+    }
+
     public static void Translate(
         this Scene scene,
         ComponentViewModel component,
@@ -17,9 +35,9 @@ public static class SceneExtensions
         List<ComponentViewModel> movingComponents,
         CancellationTokenSource cancellationToken)
     {
-        var unselectedItems = scene.Components.Except(movingComponents).Where(c => c.CollisionDetectionEnabled);
+        var unselectedItems = scene.Components.Except(movingComponents).Where(c => c.HasCollisionBehaviour());
 
-        component.Translate(delta);
+        component.Translate(scene, delta, false);
 
         var collidingItems = unselectedItems
             .Where(i => i.CollidesWith(component)).ToList();
@@ -29,7 +47,7 @@ public static class SceneExtensions
         foreach (var collidingItem in collidingItems)
             scene.Translate(collidingItem, delta, movingComponents, cancellationToken);
 
-        if (cancellationToken.IsCancellationRequested) component.Translate(-delta);
+        if (cancellationToken.IsCancellationRequested) component.Translate(scene , - delta, false);
     }
 
     #endregion

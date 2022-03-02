@@ -24,7 +24,7 @@ public class PolylineViewModel : PrimitiveViewModel<PolyLine>
 
     public override bool CollidesWith(ComponentViewModel component)
     {
-        return CollisionDetectionEnabled && (component.CollidesWith(Primitive) || base.CollidesWith(component));
+        return (component.CollidesWith(Primitive) || base.CollidesWith(component));
     }
 
     #endregion

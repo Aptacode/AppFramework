@@ -13,6 +13,7 @@ public abstract record TransformationEvent : ComponentEvent
 
 public record TranslateEvent : TransformationEvent
 {
+    public bool Source { get; set; }
     public Vector2 Delta { get; set; }
 }
 
