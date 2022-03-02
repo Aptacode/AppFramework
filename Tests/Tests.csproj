@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <Folder Include="Component\Events\" />
-    <Folder Include="Component\Collision\" />
+    <Folder Include="Component\Behaviours\" />
     <Folder Include="Component\Transformations\" />
   </ItemGroup>
 
