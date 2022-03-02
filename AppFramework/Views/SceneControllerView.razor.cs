@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Scene;
 using Aptacode.BlazorCanvas;
@@ -10,6 +11,8 @@ namespace Aptacode.AppFramework.Views;
 
 public class SceneControllerViewBase : ComponentBase
 {
+    #region Lifecycle
+
     [JSInvokable]
     public void GameLoop(float timeStamp)
     {
@@ -20,10 +23,18 @@ public class SceneControllerViewBase : ComponentBase
     {
         if (firstRender)
         {
+            Console.WriteLine($"Register canvas for scene: {ViewModel.Scene.Id}");
+            await BlazorCanvas.Register(ViewModel.Scene.Id.ToString(), Canvas);
             await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
             await JsRuntime.InvokeVoidAsync("SetFocusToElement", Container);
         }
+
+        await base.OnAfterRenderAsync(firstRender);
     }
+
+    #endregion
+
+    #region Events
 
     public void MouseDown(MouseEventArgs e)
     {
@@ -54,6 +65,15 @@ public class SceneControllerViewBase : ComponentBase
         ViewModel?.UserInteractionController.KeyUp(e.Key);
     }
 
+    #endregion
+
+    #region Dependencies
+
+    [Inject] private IJSRuntime JsRuntime { get; set; }
+    [Inject] public BlazorCanvasInterop BlazorCanvas { get; set; }
+
+    #endregion
+
     #region Properties
 
     private SceneController _viewModel;
@@ -65,17 +85,16 @@ public class SceneControllerViewBase : ComponentBase
         set
         {
             _viewModel = value;
-            ViewModel?.Setup(BlazorCanvas);
             StateHasChanged();
         }
     }
 
-    [Inject] private IJSRuntime JsRuntime { get; set; }
-
-
     protected ElementReference Container;
 
-    [Inject] public BlazorCanvasInterop BlazorCanvas { get; set; }
+    public ElementReference Canvas { get; set; }
+
+    public string Style { get; set; } =
+        "position: absolute; "; //-moz-transform: scale({SceneScale.Value}); -moz-transform-origin: 0 0; zoom: {SceneScale.Value};";
 
     #endregion
 }

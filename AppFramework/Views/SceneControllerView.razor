@@ -28,6 +28,7 @@
             </svg>
         }
 
-        <SceneView @key="ViewModel?.Scene.Id" ViewModel="ViewModel?.Scene"></SceneView>
-    </div>
+        <canvas @ref="Canvas" width="@(ViewModel.Size.X * SceneScale.Value)" height="@(ViewModel.Size.Y * SceneScale.Value)"
+                style="@(Style)"/>
+        </div>
 }

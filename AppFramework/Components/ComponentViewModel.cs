@@ -30,7 +30,6 @@ public abstract class ComponentViewModel : IDisposable
         BorderThickness = DefaultBorderThickness;
         BorderColor = Color.Black;
         FillColor = Color.White;
-
         UpdateBounds();
         OldBoundingRectangle = BoundingPrimitive.BoundingRectangle;
         Invalidated = true;

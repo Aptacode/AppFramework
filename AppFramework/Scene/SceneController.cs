@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Aptacode.AppFramework.Behaviours.Tick;
+using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Scene.Events;
+using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 
@@ -10,16 +13,11 @@ namespace Aptacode.AppFramework.Scene;
 
 public class SceneController : BindableBase
 {
-    public void Setup(BlazorCanvasInterop canvas)
-    {
-        Renderer = new SceneRenderer(canvas, this);
-        Id = Guid.NewGuid();
-    }
-
     #region Ctor
-
-    public SceneController(Scene scene)
+    public SceneController(BlazorCanvasInterop canvas, Scene scene)
     {
+        _canvas = canvas;
+        Id = Guid.NewGuid();
         Size = scene.Size;
         Scene = scene;
         UserInteractionController = new SceneInteractionController();
@@ -36,30 +34,39 @@ public class SceneController : BindableBase
 
     #region Events
 
-    private readonly List<GlobalBehavior> _behaviors;
-
-    private DateTime _lastTick = DateTime.Now;
-
+    private float lastTimeStamp = -1;
     public virtual void Tick(float timestamp)
     {
-        var currentTime = DateTime.Now;
-        var delta = currentTime - _lastTick;
-        var frameRate = 1.0f / delta.TotalSeconds;
-        _lastTick = currentTime;
-        //Console.WriteLine($"{frameRate}");
+        if (lastTimeStamp == -1)
+        {
+            lastTimeStamp = timestamp;
+            return;
+        }
 
-        foreach (var globalBehavior in _behaviors) globalBehavior.Handle(timestamp);
+        var delta = timestamp - lastTimeStamp;
+        lastTimeStamp = timestamp;
 
-        foreach (var component in Scene.Components) component.HandleTick(timestamp);
+        //Execute global behaviors
+        foreach (var globalBehavior in _behaviors) globalBehavior.Handle(delta);
 
-        Renderer.Redraw();
+        //Execute tick behaviours
+        foreach (var component in Scene.Components) component.HandleTick(delta);
+
+        //Reset canvas
+        _canvas.SelectCanvas(Scene.Id.ToString());
+        _canvas.FillStyle(ComponentViewModel.DefaultFillColor);
+        _canvas.StrokeStyle(ComponentViewModel.DefaultBorderColor);
+        _canvas.LineWidth(ComponentViewModel.DefaultBorderThickness);
+        _canvas.ClearRect(0, 0, Scene.Size.X * SceneScale.Value, Scene.Size.Y * SceneScale.Value);
+
+        //Draw each element
+        for (var i = 0; i < Scene.Components.Count(); i++)
+            Scene.Components.ElementAt(i).Draw(Scene, _canvas);
     }
 
     #endregion
 
     #region Properties
-
-    public SceneRenderer Renderer { get; private set; }
     public SceneInteractionController UserInteractionController { get; }
     public Scene Scene { get; set; }
 
@@ -68,5 +75,7 @@ public class SceneController : BindableBase
     public Vector2 Size { get; }
     public Guid Id { get; set; }
 
+    private readonly List<GlobalBehavior> _behaviors;
+    private readonly BlazorCanvasInterop _canvas;
     #endregion
 }

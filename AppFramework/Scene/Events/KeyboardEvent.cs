@@ -1,25 +1,7 @@
 ﻿namespace Aptacode.AppFramework.Scene.Events;
 
-public abstract record KeyboardEvent : UiEvent
-{
-    public readonly string Key;
+public abstract record KeyboardEvent(string Key) : UiEvent;
 
-    protected KeyboardEvent(string key)
-    {
-        Key = key;
-    }
-}
+public record KeyDownEvent(string Key) : KeyboardEvent(Key);
 
-public record KeyDownEvent : KeyboardEvent
-{
-    public KeyDownEvent(string key) : base(key)
-    {
-    }
-}
-
-public record KeyUpEvent : KeyboardEvent
-{
-    public KeyUpEvent(string key) : base(key)
-    {
-    }
-}
+public record KeyUpEvent(string Key) : KeyboardEvent(Key);

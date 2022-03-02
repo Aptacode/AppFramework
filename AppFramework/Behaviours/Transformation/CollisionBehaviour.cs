@@ -8,8 +8,7 @@ namespace Aptacode.AppFramework.Behaviours.Transformation;
 
 public class CollisionBehaviour : TransformationBehaviour
 {
-    public CollisionBehaviour(Scene.Scene scene, ComponentViewModel component) : base(scene, component,
-        nameof(CollisionBehaviour))
+    public CollisionBehaviour(Scene.Scene scene, ComponentViewModel component) : base(scene, component)
     {
     }
 
