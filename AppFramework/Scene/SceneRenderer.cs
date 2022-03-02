@@ -77,8 +77,8 @@ public class SceneRenderer
                 invalidItem.OldBoundingRectangle.TopLeft - 4 * invalidItemBorder,
                 invalidItem.OldBoundingRectangle.BottomRight + 8 * invalidItemBorder);
             var newBoundingRecWithBorder = new BoundingRectangle(
-                invalidItem.BoundingRectangle.TopLeft - 4 * invalidItemBorder,
-                invalidItem.BoundingRectangle.BottomRight + 8 * invalidItemBorder);
+                invalidItem.BoundingPrimitive.BoundingRectangle.TopLeft - 4 * invalidItemBorder,
+                invalidItem.BoundingPrimitive.BoundingRectangle.BottomRight + 8 * invalidItemBorder);
 
 
             for (var validItemIndex = 0; validItemIndex < validItems.Count;)
@@ -89,8 +89,8 @@ public class SceneRenderer
                 var validItemBorder = new Vector2(validThickness);
 
                 var newValidBoundingRect = new BoundingRectangle(
-                    validComponent.BoundingRectangle.TopLeft - 4 * validItemBorder,
-                    validComponent.BoundingRectangle.BottomRight + 8 * validItemBorder);
+                    validComponent.BoundingPrimitive.BoundingRectangle.TopLeft - 4 * validItemBorder,
+                    validComponent.BoundingPrimitive.BoundingRectangle.BottomRight + 8 * validItemBorder);
 
                 if (oldBoundingRecWithBorder.CollidesWith(newValidBoundingRect) ||
                     newBoundingRecWithBorder.CollidesWith(newValidBoundingRect)
@@ -107,7 +107,7 @@ public class SceneRenderer
             }
 
             await Invalidate(invalidItem.OldBoundingRectangle, thickness);
-            await Invalidate(invalidItem.BoundingRectangle, thickness);
+            await Invalidate(invalidItem.BoundingPrimitive.BoundingRectangle, thickness);
         }
 
         return invalidItems;

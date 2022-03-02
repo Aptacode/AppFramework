@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Aptacode.AppFramework.Components;
 
 namespace Aptacode.AppFramework.Scene.Events;
 
@@ -11,34 +10,10 @@ public abstract record TransformationEvent : ComponentEvent
 {
 }
 
-public record TranslateEvent : TransformationEvent
-{
-    public bool Source { get; set; }
-    public Vector2 Delta { get; set; }
-}
+public record TranslateEvent(Vector2 Delta, bool Source) : TransformationEvent;
 
-public record RotateEvent : TransformationEvent
-{
-    public Vector2 Delta { get; set; }
-}
+public record RotateEvent(Vector2 Point, float Theta) : TransformationEvent;
 
-public record ScaleEvent : TransformationEvent
-{
-    public Vector2 Delta { get; set; }
-}
+public record ScaleEvent(Vector2 Point, Vector2 Delta) : TransformationEvent;
 
-public record SkewEvent : TransformationEvent
-{
-    public Vector2 Delta { get; set; }
-}
-
-public abstract record DragDropEvent : ComponentEvent
-{
-}
-
-public record DragEvent(ComponentViewModel Component, Vector2 Position) : DragDropEvent;
-
-public record DropEvent(ComponentViewModel Component, Vector2 Position) : DragDropEvent;
-
-public record DropFailedEvent
-    (ComponentViewModel Component, Vector2 StartPosition, Vector2 EndPosition) : DragDropEvent;
+public record SkewEvent(Vector2 Delta) : TransformationEvent;

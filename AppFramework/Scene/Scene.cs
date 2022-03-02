@@ -40,12 +40,8 @@ public class Scene : BindableBase
     public void Handle(UiEvent e)
     {
         foreach (var component in Components)
-        {
             if (component.Handle(this, e))
-            {
                 return;
-            }
-        }
     }
 
     #endregion

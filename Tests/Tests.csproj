@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Component\Events\" />
     <Folder Include="Component\Behaviours\" />
-    <Folder Include="Component\Transformations\" />
   </ItemGroup>
 
 </Project>

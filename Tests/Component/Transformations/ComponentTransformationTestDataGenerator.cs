@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.Geometry.Primitives;
 
-namespace Tests.Component.Collision;
+namespace Tests.Component.Transformations;
 
-public class ComponentComponentCollisionTestDataGenerator : IEnumerable<object[]>
+public class ComponentTransformationTestDataGenerator : IEnumerable<object[]>
 {
     private readonly List<object[]> _data = new()
     {
-        new object[] { Point.Zero.ToViewModel(), Point.Zero.ToViewModel(), true },
-        new object[] { Point.Unit.ToViewModel(), Point.Zero.ToViewModel(), false }
+        new object[] { Point.Zero.ToViewModel(), Vector2.One }
     };
 
     public IEnumerator<object[]> GetEnumerator()

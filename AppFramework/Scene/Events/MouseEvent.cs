@@ -2,61 +2,26 @@
 
 namespace Aptacode.AppFramework.Scene.Events;
 
-public abstract record MouseEvent : UiEvent
+public abstract record MouseEvent(Vector2 Position) : UiEvent
 {
-    public readonly Vector2 Position;
+    public readonly Vector2 Position = Position;
 
-    protected MouseEvent(Vector2 position)
+    public override string ToString()
     {
-        Position = position;
+        return $"{GetType()} ({Position.X},{Position.Y})";
     }
 }
 
-public record MouseDownEvent : MouseEvent
-{
-    public MouseDownEvent(Vector2 position) : base(position)
-    {
-    }
-}
+public record MouseDownEvent(Vector2 Position) : MouseEvent(Position);
 
-public record MouseUpEvent : MouseEvent
-{
-    public MouseUpEvent(Vector2 position) : base(position)
-    {
-    }
-}
+public record MouseUpEvent(Vector2 Position) : MouseEvent(Position);
 
-public record MouseClickEvent : MouseEvent
-{
-    public MouseClickEvent(Vector2 position) : base(position)
-    {
-    }
-}
+public record MouseClickEvent(Vector2 Position) : MouseEvent(Position);
 
-public record MouseMoveEvent : MouseEvent
-{
-    public MouseMoveEvent(Vector2 position) : base(position)
-    {
-    }
-}
+public record MouseMoveEvent(Vector2 Position) : MouseEvent(Position);
 
-public record MouseDoubleClickEvent : MouseEvent
-{
-    public MouseDoubleClickEvent(Vector2 position) : base(position)
-    {
-    }
-}
+public record MouseDoubleClickEvent(Vector2 Position) : MouseEvent(Position);
 
-public record MouseEnterEvent : MouseEvent
-{
-    public MouseEnterEvent(Vector2 position) : base(position)
-    {
-    }
-}
+public record MouseEnterEvent(Vector2 Position) : MouseEvent(Position);
 
-public record MouseLeaveEvent : MouseEvent
-{
-    public MouseLeaveEvent(Vector2 position) : base(position)
-    {
-    }
-}
+public record MouseLeaveEvent(Vector2 Position) : MouseEvent(Position);

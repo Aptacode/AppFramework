@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Numerics;
 using System.Threading;
+using Aptacode.AppFramework.Behaviours.Transformation;
 using Aptacode.AppFramework.Components;
 
 namespace Aptacode.AppFramework.Scene;
@@ -17,7 +18,7 @@ public static class SceneExtensions
         List<ComponentViewModel> movingComponents,
         CancellationTokenSource cancellationToken)
     {
-        var unselectedItems = scene.Components.Except(movingComponents).Where(c => c.HasCollisionBehaviour());
+        var unselectedItems = scene.Components.Except(movingComponents).Where(c => c.HasTransformationBehaviour<CollisionBehaviour>());
 
         var collidingItems = unselectedItems
             .Where(i => i.CollidesWith(component)).ToList();
@@ -35,9 +36,9 @@ public static class SceneExtensions
         List<ComponentViewModel> movingComponents,
         CancellationTokenSource cancellationToken)
     {
-        var unselectedItems = scene.Components.Except(movingComponents).Where(c => c.HasCollisionBehaviour());
+        var unselectedItems = scene.Components.Except(movingComponents).Where(c => c.HasTransformationBehaviour<CollisionBehaviour>());
 
-        component.Translate(scene, delta, false);
+        component.Translate(delta, false);
 
         var collidingItems = unselectedItems
             .Where(i => i.CollidesWith(component)).ToList();
@@ -47,7 +48,7 @@ public static class SceneExtensions
         foreach (var collidingItem in collidingItems)
             scene.Translate(collidingItem, delta, movingComponents, cancellationToken);
 
-        if (cancellationToken.IsCancellationRequested) component.Translate(scene , - delta, false);
+        if (cancellationToken.IsCancellationRequested) component.Translate(-delta, false);
     }
 
     #endregion

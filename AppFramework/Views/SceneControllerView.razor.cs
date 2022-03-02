@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.AppFramework.Scene;
 using Aptacode.BlazorCanvas;
@@ -14,7 +13,7 @@ public class SceneControllerViewBase : ComponentBase
     [JSInvokable]
     public void GameLoop(float timeStamp)
     {
-        ViewModel.Tick();
+        ViewModel.Tick(timeStamp);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

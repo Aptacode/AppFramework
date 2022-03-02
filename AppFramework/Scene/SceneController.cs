@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.BlazorCanvas;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
@@ -38,13 +37,22 @@ public class SceneController : BindableBase
 
     private DateTime _lastTick = DateTime.Now;
 
-    public virtual void Tick()
+    public virtual void Tick(float timestamp)
     {
         var currentTime = DateTime.Now;
         var delta = currentTime - _lastTick;
         var frameRate = 1.0f / delta.TotalSeconds;
         _lastTick = currentTime;
-        Console.WriteLine($"{frameRate}fps");
+        //Console.WriteLine($"{frameRate}");
+
+        foreach (var scene in Scenes)
+        {
+            foreach (var component in scene.Components)        
+            {
+                component.HandleTick(timestamp);
+            }
+        }
+
         Renderer.Redraw();
     }
 
