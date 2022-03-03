@@ -32,7 +32,12 @@ public class IndexBase : ComponentBase
 
         var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 70), new Vector2(35, 60)).ToViewModel()
             .AddDragToMove(Scene).AddVelocity(Scene);
-        Scene.Add(rectangle2);
+        rectangle.Add(rectangle2);
+
+
+        var rectangle3 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 30), new Vector2(35, 40)).ToViewModel()
+            .AddDragToMove(Scene).AddVelocity(Scene);
+        Scene.Add(rectangle3);
 
         await base.OnInitializedAsync();
     }

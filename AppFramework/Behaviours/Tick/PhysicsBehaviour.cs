@@ -32,7 +32,7 @@ public class PhysicsBehaviour : TickBehaviour
         if (Component.CollidesWith(left) || Component.CollidesWith(right)) Velocity *= new Vector2(-1, 1);
 
         var distance = Velocity * deltaT;
-        Component.Translate(distance, true);
+        Component.Translate(distance);
 
         return true;
     }

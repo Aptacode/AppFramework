@@ -258,17 +258,23 @@ public abstract class ComponentViewModel : IDisposable
 
     #region Transformation
 
-    public virtual void Translate(Vector2 delta, bool source)
+    public virtual void Translate(Vector2 delta)
     {
+        //Translate the components primitive
         Primitive.Translate(delta);
 
+        //Translate each child component
         foreach (var child in Children)
-            child.Translate(delta, false);
+            child.Translate(delta);
 
+        //Update the components bounds
         UpdateBounds();
 
+        //Invalidate the component
         Invalidated = true;
-        HandleTransformationEvent(new TranslateEvent(delta, source));
+        
+        //Handle the transformation event
+        HandleTransformationEvent(new TranslateEvent(delta));
     }
 
     public virtual void Rotate(float theta)
@@ -348,12 +354,12 @@ public abstract class ComponentViewModel : IDisposable
         Primitive.SetPosition(position);
 
         var delta = position - BoundingPrimitive.BoundingRectangle.TopLeft;
-        foreach (var child in Children) child.Translate(delta, source);
+        foreach (var child in Children) child.Translate(delta);
 
         UpdateBounds();
 
         Invalidated = true;
-        HandleTransformationEvent(new TranslateEvent(delta, source));
+        HandleTransformationEvent(new TranslateEvent(delta));
     }
 
     public virtual void SetSize(Vector2 size)

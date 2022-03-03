@@ -10,7 +10,7 @@ public abstract record TransformationEvent : ComponentEvent
 {
 }
 
-public record TranslateEvent(Vector2 Delta, bool Source) : TransformationEvent;
+public record TranslateEvent(Vector2 Delta) : TransformationEvent;
 
 public record RotateEvent(Vector2 Point, float Theta) : TransformationEvent;
 

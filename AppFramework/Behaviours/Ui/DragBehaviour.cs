@@ -30,7 +30,7 @@ public class DragBehaviour : UiBehaviour
                 if (IsDragging)
                 {
                     var delta = mouseMoveEvent.Position - LastDragPosition;
-                    Component.Translate(delta, true);
+                    Component.Translate(delta);
 
                     LastDragPosition = mouseMoveEvent.Position;
                     return true;
