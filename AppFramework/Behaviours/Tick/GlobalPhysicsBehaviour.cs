@@ -17,6 +17,8 @@ public class GlobalPhysicsBehaviour : GlobalBehavior
         {
             var a = physicsBehaviours[i];
 
+            a.ApplyGravity().ApplyFriction();
+
             for (var j = i + 1; j < physicsBehaviours.Count(); j++)
             {
                 var b = physicsBehaviours[j];

@@ -22,7 +22,7 @@ public class SceneController : BindableBase
         Scene = scene;
         UserInteractionController = new SceneInteractionController();
         UserInteractionController.OnUiEvent += UserInteractionControllerOnUiEvent;
-        _behaviors = new List<GlobalBehavior> { new GlobalPhysicsBehaviour(Scene) };
+        _behaviors = new List<GlobalBehavior>(){ new GlobalPhysicsBehaviour(Scene) };
     }
 
     private void UserInteractionControllerOnUiEvent(object? sender, UiEvent e)
@@ -34,17 +34,17 @@ public class SceneController : BindableBase
 
     #region Events
 
-    private float lastTimeStamp = -1;
+    private float _lastTimeStamp = -1;
     public virtual void Tick(float timestamp)
     {
-        if (lastTimeStamp == -1)
+        if (_lastTimeStamp == -1)
         {
-            lastTimeStamp = timestamp;
+            _lastTimeStamp = timestamp;
             return;
         }
 
-        var delta = timestamp - lastTimeStamp;
-        lastTimeStamp = timestamp;
+        var delta = timestamp - _lastTimeStamp;
+        _lastTimeStamp = timestamp;
 
         //Execute global behaviors
         foreach (var globalBehavior in _behaviors) globalBehavior.Handle(delta);
@@ -54,9 +54,9 @@ public class SceneController : BindableBase
 
         //Reset canvas
         _canvas.SelectCanvas(Scene.Id.ToString());
-        _canvas.FillStyle(ComponentViewModel.DefaultFillColor);
-        _canvas.StrokeStyle(ComponentViewModel.DefaultBorderColor);
-        _canvas.LineWidth(ComponentViewModel.DefaultBorderThickness);
+        _canvas.FillStyle(Component.DefaultFillColor);
+        _canvas.StrokeStyle(Component.DefaultBorderColor);
+        _canvas.LineWidth(Component.DefaultBorderThickness);
         _canvas.ClearRect(0, 0, Scene.Size.X * SceneScale.Value, Scene.Size.Y * SceneScale.Value);
 
         //Draw each element

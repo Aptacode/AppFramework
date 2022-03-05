@@ -5,11 +5,11 @@ using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Primitives;
 
-public class PolygonViewModel : ComponentViewModel
+public class PolygonComponent : Component
 {
     #region Canvas
 
-    public PolygonViewModel(Polygon polygon) : base(polygon)
+    public PolygonComponent(Polygon polygon) : base(polygon)
     {
     }
 

@@ -5,11 +5,11 @@ using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Primitives;
 
-public class EllipseViewModel : ComponentViewModel
+public class EllipseComponent : Component
 {
     #region Ctor
 
-    public EllipseViewModel(Ellipse ellipse) : base(ellipse)
+    public EllipseComponent(Ellipse ellipse) : base(ellipse)
     {
     }
 

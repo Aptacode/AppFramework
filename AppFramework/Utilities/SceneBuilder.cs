@@ -6,7 +6,7 @@ namespace Aptacode.AppFramework.Utilities;
 
 public class SceneBuilder
 {
-    private readonly List<ComponentViewModel> _components = new();
+    private readonly List<Component> _components = new();
     private float _height;
     private float _width;
 
@@ -22,7 +22,7 @@ public class SceneBuilder
         return this;
     }
 
-    public SceneBuilder AddComponent(ComponentViewModel component)
+    public SceneBuilder AddComponent(Component component)
     {
         _components.Add(component);
         return this;

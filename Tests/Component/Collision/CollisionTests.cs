@@ -7,7 +7,7 @@ public class CollisionTests
 {
     [Theory]
     [ClassData(typeof(ComponentComponentCollisionTestDataGenerator))]
-    public void ComponentComponentCollision(ComponentViewModel a, ComponentViewModel b, bool shouldCollide)
+    public void ComponentComponentCollision(Aptacode.AppFramework.Components.Component a, Aptacode.AppFramework.Components.Component b, bool shouldCollide)
     {
         //Arrange
         //Act

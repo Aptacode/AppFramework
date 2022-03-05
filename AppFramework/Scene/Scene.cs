@@ -20,7 +20,7 @@ public class Scene : BindableBase
 
     #region Properties
 
-    private readonly List<ComponentViewModel> _components = new();
+    private readonly List<Component> _components = new();
 
     public Vector2 Size { get; init; }
     public Guid Id { get; init; } = Guid.NewGuid();
@@ -29,10 +29,11 @@ public class Scene : BindableBase
 
     #region Components
 
-    public void Add(ComponentViewModel component)
+    public Scene Add(Component component)
     {
         _components.Add(component);
         OnComponentAdded?.Invoke(this, component);
+        return this;
     }
 
     #region Events
@@ -46,46 +47,46 @@ public class Scene : BindableBase
 
     #endregion
 
-    public void AddRange(IEnumerable<ComponentViewModel> components)
+    public void AddRange(IEnumerable<Component> components)
     {
         foreach (var component in components) Add(component);
     }
 
-    public bool Remove(ComponentViewModel component)
+    public bool Remove(Component component)
     {
         var success = _components.Remove(component);
         OnComponentRemoved?.Invoke(this, component);
         return success;
     }
 
-    public IEnumerable<ComponentViewModel> Components => _components;
+    public IEnumerable<Component> Components => _components;
 
     #endregion
 
     #region Events
 
-    public event EventHandler<ComponentViewModel> OnComponentAdded;
-    public event EventHandler<ComponentViewModel> OnComponentRemoved;
+    public event EventHandler<Component> OnComponentAdded;
+    public event EventHandler<Component> OnComponentRemoved;
 
     #endregion
 
     #region Layering
 
-    public void BringToFront(ComponentViewModel componentViewModel)
+    public void BringToFront(Component componentViewModel)
     {
         if (!_components.Remove(componentViewModel)) return;
 
         _components.Add(componentViewModel);
     }
 
-    public void SendToBack(ComponentViewModel componentViewModel)
+    public void SendToBack(Component componentViewModel)
     {
         if (!_components.Remove(componentViewModel)) return;
 
         _components.Insert(0, componentViewModel);
     }
 
-    public void BringForward(ComponentViewModel componentViewModel)
+    public void BringForward(Component componentViewModel)
     {
         var index = _components.IndexOf(componentViewModel);
         if (index == _components.Count - 1) return;
@@ -94,7 +95,7 @@ public class Scene : BindableBase
         _components.Insert(index + 1, componentViewModel);
     }
 
-    public void SendBackward(ComponentViewModel componentViewModel)
+    public void SendBackward(Component componentViewModel)
     {
         var index = _components.IndexOf(componentViewModel);
         if (index == 0) return;

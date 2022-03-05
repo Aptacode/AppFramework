@@ -16,11 +16,11 @@ using Aptacode.Geometry.Vertices;
 
 namespace Aptacode.AppFramework.Components;
 
-public abstract class ComponentViewModel : IDisposable
+public abstract class Component : IDisposable
 {
     #region Ctor
 
-    protected ComponentViewModel(Primitive primitive)
+    protected Component(Primitive primitive)
     {
         Primitive = primitive;
 
@@ -85,7 +85,7 @@ public abstract class ComponentViewModel : IDisposable
 
     #region Children
 
-    public IEnumerable<ComponentViewModel> Children => _children;
+    public IEnumerable<Component> Children => _children;
 
     protected void UpdateBounds()
     {
@@ -103,7 +103,7 @@ public abstract class ComponentViewModel : IDisposable
         return vertexArrays;
     }
 
-    public virtual void Add(ComponentViewModel child)
+    public virtual void Add(Component child)
     {
         if (!Children.Contains(child))
         {
@@ -114,12 +114,12 @@ public abstract class ComponentViewModel : IDisposable
         }
     }
 
-    public virtual void AddRange(IEnumerable<ComponentViewModel> children)
+    public virtual void AddRange(IEnumerable<Component> children)
     {
         foreach (var child in children) Add(child);
     }
 
-    public virtual void Remove(ComponentViewModel child)
+    public virtual void Remove(Component child)
     {
         if (_children.Remove(child))
         {
@@ -144,14 +144,14 @@ public abstract class ComponentViewModel : IDisposable
     #region Properties
 
     public Guid Id { get; init; }
-    protected readonly List<ComponentViewModel> _children = new();
+    protected readonly List<Component> _children = new();
     public bool Invalidated { get; set; }
     public BoundingRectangle OldBoundingRectangle { get; protected set; }
     public Primitive BoundingPrimitive { get; set; }
 
     #region Parent
 
-    public ComponentViewModel Parent { get; set; }
+    public Component Parent { get; set; }
 
     #endregion
 
@@ -248,7 +248,7 @@ public abstract class ComponentViewModel : IDisposable
         return Primitive.CollidesWithPrimitive(primitive) || Children.Any(child => child.CollidesWith(primitive));
     }
 
-    public virtual bool CollidesWith(ComponentViewModel component)
+    public virtual bool CollidesWith(Component component)
     {
         return Primitive.CollidesWithPrimitive(component.Primitive) ||
                Children.Any(child => child.CollidesWith(component));

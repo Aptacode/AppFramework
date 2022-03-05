@@ -10,7 +10,7 @@ public class ComponentTransformationTestDataGenerator : IEnumerable<object[]>
 {
     private readonly List<object[]> _data = new()
     {
-        new object[] { Point.Zero.ToViewModel(), Vector2.One }
+        new object[] { Point.Zero.ToComponent(), Vector2.One }
     };
 
     public IEnumerator<object[]> GetEnumerator()

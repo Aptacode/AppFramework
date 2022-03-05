@@ -26,19 +26,28 @@ public class IndexBase : ComponentBase
             ShowGrid = true
         };
 
-        var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 10), new Vector2(35, 20)).ToViewModel()
-            .AddDragToMove(Scene).AddVelocity(Scene);
+        var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 20), new Vector2(35, 30)).ToComponent()
+            .AddPhysics(Scene);
         Scene.Add(rectangle);
 
-        var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 70), new Vector2(35, 60)).ToViewModel()
-            .AddDragToMove(Scene).AddVelocity(Scene);
-        rectangle.Add(rectangle2);
+        var ball = Ellipse.Circle.Create(new Vector2(50, 50), 5).ToComponent().AddPhysics(Scene);
+        Scene.Add(ball);
+
+        // var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 70), new Vector2(35, 60)).ToComponent()
+        //     .AddDragToMove(Scene).AddPhysics(Scene);
+        //Scene.Add(rectangle2);
 
 
-        var rectangle3 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 30), new Vector2(35, 40)).ToViewModel()
-            .AddDragToMove(Scene).AddVelocity(Scene);
-        Scene.Add(rectangle3);
+        // var rectangle3 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 30), new Vector2(35, 40)).ToComponent()
+        //     .AddDragToMove(Scene).AddPhysics(Scene);
+        // Scene.Add(rectangle3);
 
-        await base.OnInitializedAsync();
+        var top = PolyLine.Create(10, 10, 90, 10).ToComponent();
+        var right = PolyLine.Create(90, 10, 90, 90).ToComponent();
+        var bottom = PolyLine.Create(90, 90, 10, 90).ToComponent();
+        var left = PolyLine.Create(10, 90, 10, 10).ToComponent();
+        Scene.Add(top).Add(right).Add(bottom).Add(left);
+
+    await base.OnInitializedAsync();
     }
 }

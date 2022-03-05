@@ -5,11 +5,11 @@ using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Primitives;
 
-public class PointViewModel : ComponentViewModel
+public class PointComponent : Component
 {
     #region Ctor
 
-    public PointViewModel(Point point) : base(point)
+    public PointComponent(Point point) : base(point)
     {
     }
 

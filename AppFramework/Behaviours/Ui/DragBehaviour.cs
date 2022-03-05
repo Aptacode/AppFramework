@@ -6,7 +6,7 @@ namespace Aptacode.AppFramework.Behaviours.Ui;
 
 public class DragBehaviour : UiBehaviour
 {
-    public DragBehaviour(Scene.Scene scene, ComponentViewModel component) : base(scene, component)
+    public DragBehaviour(Scene.Scene scene, Component component) : base(scene, component)
     {
     }
 

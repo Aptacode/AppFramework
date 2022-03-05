@@ -5,11 +5,11 @@ using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Primitives;
 
-public class PolylineViewModel : ComponentViewModel
+public class PolylineComponent : Component
 {
     #region Ctor
 
-    public PolylineViewModel(PolyLine polyLine) : base(polyLine)
+    public PolylineComponent(PolyLine polyLine) : base(polyLine)
     {
     }
 

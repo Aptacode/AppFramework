@@ -4,7 +4,7 @@ namespace Aptacode.AppFramework.Behaviours.Tick;
 
 public abstract class TickBehaviour
 {
-    protected TickBehaviour(Scene.Scene scene, ComponentViewModel component)
+    protected TickBehaviour(Scene.Scene scene, Component component)
     {
         Scene = scene;
         Component = component;
@@ -15,7 +15,7 @@ public abstract class TickBehaviour
     #region Properties
 
     public Scene.Scene Scene { get; init; }
-    public ComponentViewModel Component { get; init; }
+    public Component Component { get; init; }
     public bool Enabled { get; set; } = true;
 
     #endregion

@@ -6,13 +6,13 @@ namespace Aptacode.AppFramework.Behaviours;
 
 public static class BehaviourFactory
 {
-    public static ComponentViewModel AddDragToMove(this ComponentViewModel component, Scene.Scene scene)
+    public static Component AddDragToMove(this Component component, Scene.Scene scene)
     {
         component.AddUiBehaviour(new DragBehaviour(scene, component));
         return component;
     }
 
-    public static ComponentViewModel AddVelocity(this ComponentViewModel component, Scene.Scene scene)
+    public static Component AddPhysics(this Component component, Scene.Scene scene)
     {
         component.AddTickBehaviour(new PhysicsBehaviour(scene, component));
         return component;

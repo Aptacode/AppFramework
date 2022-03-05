@@ -36,19 +36,19 @@ public class ComponentBuilder
         return this;
     }
 
-    public ComponentBuilder SetBase(ComponentViewModel component)
+    public ComponentBuilder SetBase(Component component)
     {
         _baseComponent = component;
         return this;
     }
 
-    public ComponentBuilder AddChild(ComponentViewModel child)
+    public ComponentBuilder AddChild(Component child)
     {
         _children.Add(child);
         return this;
     }
 
-    public ComponentViewModel Build()
+    public Component Build()
     {
         var component = _baseComponent;
         component.BorderColor = _borderColor;
@@ -69,8 +69,8 @@ public class ComponentBuilder
         _children.Clear();
         _borderColor = Color.Black;
         _fillColor = Color.White;
-        _borderThickness = ComponentViewModel.DefaultBorderThickness;
-        _margin = ComponentViewModel.DefaultMargin;
+        _borderThickness = Component.DefaultBorderThickness;
+        _margin = Component.DefaultMargin;
         _text = "";
     }
 
@@ -82,11 +82,11 @@ public class ComponentBuilder
 
     private Color _fillColor = Color.White;
     private Color _borderColor = Color.Black;
-    private float _borderThickness = ComponentViewModel.DefaultBorderThickness;
-    private float _margin = ComponentViewModel.DefaultMargin;
+    private float _borderThickness = Component.DefaultBorderThickness;
+    private float _margin = Component.DefaultMargin;
     private string _text = "";
-    private readonly List<ComponentViewModel> _children = new();
-    private ComponentViewModel _baseComponent;
+    private readonly List<Component> _children = new();
+    private Component _baseComponent;
 
     #endregion
 }
