@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
-using Aptacode.AppFramework.Behaviours.Tick;
-using Aptacode.AppFramework.Behaviours.Transformation;
-using Aptacode.AppFramework.Behaviours.Ui;
+using Aptacode.AppFramework.Components.Behaviours.Tick;
+using Aptacode.AppFramework.Components.Behaviours.Transformation;
+using Aptacode.AppFramework.Components.Behaviours.Ui;
+using Aptacode.AppFramework.Components.States;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
@@ -476,6 +477,27 @@ public abstract class Component : IDisposable
     {
         foreach (var tickBehaviour in _tickBehaviours.Values) tickBehaviour.HandleEvent(timestamp);
     }
+
+    #endregion
+
+    #region States
+
+    public void AddState<T>(T behaviour) where T : ComponentState
+    {
+        _states[typeof(T).Name] = behaviour;
+    }
+
+    public bool HasState<T>() where T : ComponentState
+    {
+        return _states.ContainsKey(typeof(T).Name);
+    }
+
+    public T? GetState<T>() where T : ComponentState
+    {
+        return _states.TryGetValue(typeof(T).Name, out var value) ? value as T : null;
+    }
+
+    private readonly Dictionary<string, ComponentState> _states = new();
 
     #endregion
 

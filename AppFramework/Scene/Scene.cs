@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Components.Behaviours.Scene;
+using Aptacode.AppFramework.Components.Behaviours.Tick;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 
@@ -14,6 +16,36 @@ public class Scene : BindableBase
     public Scene(Vector2 size)
     {
         Size = size;
+    }
+
+    #endregion
+
+    #region Behaviours
+
+    private readonly List<SceneBehavior> _behaviors = new();
+
+    public Scene Add(SceneBehavior behavior)
+    {
+        _behaviors.Add(behavior);
+        return this;
+    }
+
+    public Scene Remove(SceneBehavior behavior)
+    {
+        _behaviors.Remove(behavior);
+        return this;
+    }
+
+    public void Handle(float deltaT)
+    {
+        //Execute scene behaviours
+        foreach (var sceneBehavior in _behaviors)
+        {
+            sceneBehavior.Handle(deltaT);
+        }
+
+        //Execute tick behaviours
+        foreach (var component in Components) {component.HandleTick(deltaT);}
     }
 
     #endregion
@@ -59,7 +91,7 @@ public class Scene : BindableBase
         return success;
     }
 
-    public IEnumerable<Component> Components => _components;
+    public IReadOnlyList<Component> Components => _components;
 
     #endregion
 

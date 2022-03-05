@@ -1,7 +1,9 @@
-﻿using System.Numerics;
+﻿using System.Drawing;
+using System.Numerics;
 using System.Threading.Tasks;
-using Aptacode.AppFramework.Behaviours;
-using Aptacode.AppFramework.Components.Primitives;
+using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Components.Behaviours;
+using Aptacode.AppFramework.Components.States;
 using Aptacode.AppFramework.Scene;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
@@ -19,36 +21,62 @@ public class IndexBase : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         //Scene
-        Scene = new SceneBuilder().SetWidth(100).SetHeight(100).Build();
+        Scene = new SceneBuilder().SetWidth(100).SetHeight(100).AddPhysics().Build();
 
         SceneController = new SceneController(BlazorCanvas, Scene)
         {
             ShowGrid = true
         };
 
-        //var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 20), new Vector2(35, 30)).ToComponent()
-        //    .AddPhysics(Scene);
-        //Scene.Add(rectangle);
+        var ball = Ellipse.Create(new Vector2(50, 50), 5).ToComponent().AddDragToMove(Scene);
+        ball.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
+        ball.FillColor = Color.LightSlateGray;
+        ball.BorderColor = Color.SlateGray;
 
-        var ball = Ellipse.Create(new Vector2(50, 50), 5).ToComponent().AddPhysics(Scene).AddDragToMove(Scene);
         Scene.Add(ball);
 
-        var ball2 = Ellipse.Create(new Vector2(60, 50), 5).ToComponent().AddPhysics(Scene).AddDragToMove(Scene);
+        var ball2 = Ellipse.Create(new Vector2(65, 45), 5).ToComponent().AddDragToMove(Scene);
+        ball2.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
+        ball2.FillColor = Color.SlateGray;
+        ball2.BorderColor = Color.SlateGray;
+
         Scene.Add(ball2);
 
-        var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 70), new Vector2(35, 60)).ToComponent()
-            .AddDragToMove(Scene).AddPhysics(Scene);
+        var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 20), new Vector2(35, 30)).ToComponent().AddDragToMove(Scene);
+        rectangle.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
+        rectangle.FillColor = Color.SlateGray;
+        rectangle.BorderColor = Color.SlateGray;
+
+        Scene.Add(rectangle);
+
+        var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 70), new Vector2(35, 60)).ToComponent().AddDragToMove(Scene);
+        rectangle2.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
+        rectangle2.FillColor = Color.SlateGray;
+        rectangle2.BorderColor = Color.SlateGray;
+
         Scene.Add(rectangle2);
 
-
-        var rectangle3 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 30), new Vector2(35, 40)).ToComponent()
-            .AddDragToMove(Scene).AddPhysics(Scene);
-        Scene.Add(rectangle3);
-
         var bottom = Polygon.Create(10, 10, 90, 10, 100, 0, 0, 0).ToComponent();
+        bottom.FillColor = Color.SlateGray;
+        bottom.BorderColor = Color.SlateGray;
+
         var right = Polygon.Create(90, 10, 90, 90, 100, 100, 100, 0).ToComponent();
+        right.FillColor = Color.SlateGray;
+        right.BorderColor = Color.SlateGray;
+
         var top = Polygon.Create(90, 90, 10, 90, 0, 100, 100, 100).ToComponent();
+        top.FillColor = Color.SlateGray;
+        top.BorderColor = Color.SlateGray;
+
         var left = Polygon.Create(10, 90, 10, 10, 0, 0, 0, 100).ToComponent();
+        left.FillColor = Color.SlateGray;
+        left.BorderColor = Color.SlateGray;
+
+        top.AddPhysics().IsFixed();
+        bottom.AddPhysics().IsFixed();
+        left.AddPhysics().IsFixed();
+        right.AddPhysics().IsFixed();
+
         Scene.Add(top).Add(right).Add(bottom).Add(left);
 
         await base.OnInitializedAsync();

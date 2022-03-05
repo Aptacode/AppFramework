@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Aptacode.AppFramework.Behaviours.Tick;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
@@ -21,7 +19,6 @@ public class SceneController : BindableBase
         Size = scene.Size;
         Scene = scene;
         UserInteractionController = new SceneInteractionController(scene);
-        _behaviors = new List<GlobalBehavior> { new GlobalPhysicsBehaviour(Scene) };
     }
 
     #endregion
@@ -42,11 +39,8 @@ public class SceneController : BindableBase
         var delta = timestamp - _lastTimeStamp;
         _lastTimeStamp = timestamp;
 
-        //Execute global behaviors
-        foreach (var globalBehavior in _behaviors) globalBehavior.Handle(delta);
-
-        //Execute tick behaviours
-        foreach (var component in Scene.Components) component.HandleTick(delta);
+        //Execute behaviors
+        Scene.Handle(delta);
 
         //Reset canvas
         _canvas.SelectCanvas(Scene.Id.ToString());
@@ -58,8 +52,9 @@ public class SceneController : BindableBase
 
         //Draw each element
         for (var i = 0; i < Scene.Components.Count(); i++)
-            Scene.Components.ElementAt(i).Draw(Scene, _canvas);
+            Scene.Components[i].Draw(Scene, _canvas);
 
+        //Flip canvas
         _canvas.Transform(1, 0, 0, -1, 0, Scene.Size.Y * SceneScale.Value);
     }
 
@@ -75,7 +70,6 @@ public class SceneController : BindableBase
     public Vector2 Size { get; }
     public Guid Id { get; set; }
 
-    private readonly List<GlobalBehavior> _behaviors;
     private readonly BlazorCanvasInterop _canvas;
 
     #endregion

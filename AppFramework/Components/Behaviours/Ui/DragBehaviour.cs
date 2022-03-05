@@ -1,12 +1,11 @@
 ﻿using System.Numerics;
-using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Scene.Events;
 
-namespace Aptacode.AppFramework.Behaviours.Ui;
+namespace Aptacode.AppFramework.Components.Behaviours.Ui;
 
 public class DragBehaviour : UiBehaviour
 {
-    public DragBehaviour(Scene.Scene scene, Component component) : base(scene, component)
+    public DragBehaviour(AppFramework.Scene.Scene scene, Component component) : base(scene, component)
     {
     }
 

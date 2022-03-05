@@ -1,6 +1,7 @@
-﻿using Aptacode.Geometry.Primitives;
+﻿using Aptacode.AppFramework.Components.Primitives;
+using Aptacode.Geometry.Primitives;
 
-namespace Aptacode.AppFramework.Components.Primitives;
+namespace Aptacode.AppFramework.Components;
 
 public static class ComponentExtensions
 {

@@ -1,10 +1,8 @@
-﻿using Aptacode.AppFramework.Components;
-
-namespace Aptacode.AppFramework.Behaviours.Tick;
+﻿namespace Aptacode.AppFramework.Components.Behaviours.Tick;
 
 public abstract class TickBehaviour
 {
-    protected TickBehaviour(Scene.Scene scene, Component component)
+    protected TickBehaviour(AppFramework.Scene.Scene scene, Component component)
     {
         Scene = scene;
         Component = component;
@@ -14,7 +12,7 @@ public abstract class TickBehaviour
 
     #region Properties
 
-    public Scene.Scene Scene { get; init; }
+    public AppFramework.Scene.Scene Scene { get; init; }
     public Component Component { get; init; }
     public bool Enabled { get; set; } = true;
 

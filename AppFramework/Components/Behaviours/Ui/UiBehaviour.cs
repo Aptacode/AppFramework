@@ -1,11 +1,10 @@
-﻿using Aptacode.AppFramework.Components;
-using Aptacode.AppFramework.Scene.Events;
+﻿using Aptacode.AppFramework.Scene.Events;
 
-namespace Aptacode.AppFramework.Behaviours.Ui;
+namespace Aptacode.AppFramework.Components.Behaviours.Ui;
 
 public abstract class UiBehaviour
 {
-    protected UiBehaviour(Scene.Scene scene, Component component)
+    protected UiBehaviour(AppFramework.Scene.Scene scene, Component component)
     {
         Scene = scene;
         Component = component;
@@ -15,7 +14,7 @@ public abstract class UiBehaviour
 
     #region Properties
 
-    public Scene.Scene Scene { get; init; }
+    public AppFramework.Scene.Scene Scene { get; init; }
     public Component Component { get; init; }
     public bool Enabled { get; set; } = true;
 
