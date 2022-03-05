@@ -1,5 +1,4 @@
-﻿using Aptacode.AppFramework.Components;
-using Xunit;
+﻿using Xunit;
 
 namespace Tests.Component.Collision;
 
@@ -7,7 +6,8 @@ public class CollisionTests
 {
     [Theory]
     [ClassData(typeof(ComponentComponentCollisionTestDataGenerator))]
-    public void ComponentComponentCollision(Aptacode.AppFramework.Components.Component a, Aptacode.AppFramework.Components.Component b, bool shouldCollide)
+    public void ComponentComponentCollision(Aptacode.AppFramework.Components.Component a,
+        Aptacode.AppFramework.Components.Component b, bool shouldCollide)
     {
         //Arrange
         //Act

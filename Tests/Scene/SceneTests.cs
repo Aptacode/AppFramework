@@ -1,9 +1,6 @@
-﻿using System.Linq;
-using System.Numerics;
-using Aptacode.AppFramework.Components;
+﻿using System.Numerics;
 using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Scene;
-using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
 using Xunit;
 

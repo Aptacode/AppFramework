@@ -26,28 +26,31 @@ public class IndexBase : ComponentBase
             ShowGrid = true
         };
 
-        var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 20), new Vector2(35, 30)).ToComponent()
-            .AddPhysics(Scene);
-        Scene.Add(rectangle);
+        //var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 20), new Vector2(35, 30)).ToComponent()
+        //    .AddPhysics(Scene);
+        //Scene.Add(rectangle);
 
-        var ball = Ellipse.Circle.Create(new Vector2(50, 50), 5).ToComponent().AddPhysics(Scene);
+        var ball = Ellipse.Create(new Vector2(50, 50), 5).ToComponent().AddPhysics(Scene).AddDragToMove(Scene);
         Scene.Add(ball);
 
-        // var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 70), new Vector2(35, 60)).ToComponent()
-        //     .AddDragToMove(Scene).AddPhysics(Scene);
-        //Scene.Add(rectangle2);
+        var ball2 = Ellipse.Create(new Vector2(60, 50), 5).ToComponent().AddPhysics(Scene).AddDragToMove(Scene);
+        Scene.Add(ball2);
+
+        var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 70), new Vector2(35, 60)).ToComponent()
+            .AddDragToMove(Scene).AddPhysics(Scene);
+        Scene.Add(rectangle2);
 
 
-        // var rectangle3 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 30), new Vector2(35, 40)).ToComponent()
-        //     .AddDragToMove(Scene).AddPhysics(Scene);
-        // Scene.Add(rectangle3);
+        var rectangle3 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 30), new Vector2(35, 40)).ToComponent()
+            .AddDragToMove(Scene).AddPhysics(Scene);
+        Scene.Add(rectangle3);
 
-        var top = PolyLine.Create(10, 10, 90, 10).ToComponent();
-        var right = PolyLine.Create(90, 10, 90, 90).ToComponent();
-        var bottom = PolyLine.Create(90, 90, 10, 90).ToComponent();
-        var left = PolyLine.Create(10, 90, 10, 10).ToComponent();
+        var bottom = Polygon.Create(10, 10, 90, 10, 100, 0, 0, 0).ToComponent();
+        var right = Polygon.Create(90, 10, 90, 90, 100, 100, 100, 0).ToComponent();
+        var top = Polygon.Create(90, 90, 10, 90, 0, 100, 100, 100).ToComponent();
+        var left = Polygon.Create(10, 90, 10, 10, 0, 0, 0, 100).ToComponent();
         Scene.Add(top).Add(right).Add(bottom).Add(left);
 
-    await base.OnInitializedAsync();
+        await base.OnInitializedAsync();
     }
 }

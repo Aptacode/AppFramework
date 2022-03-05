@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Numerics;
-using Aptacode.AppFramework.Components;
 using Aptacode.Geometry.Collision.Rectangles;
 using Xunit;
 
@@ -24,7 +23,8 @@ public class ComponentTransformationTests
 
     [Theory]
     [ClassData(typeof(ComponentTransformationTestDataGenerator))]
-    public void ComponentTranslateChildBoundingRectangleTest(Aptacode.AppFramework.Components.Component a, Vector2 delta)
+    public void ComponentTranslateChildBoundingRectangleTest(Aptacode.AppFramework.Components.Component a,
+        Vector2 delta)
     {
         //Arrange
         var expectedBoundingRectangles = a.Children.Select(c => c.Primitive.BoundingRectangle.Translate(delta));

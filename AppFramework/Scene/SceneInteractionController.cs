@@ -7,11 +7,12 @@ namespace Aptacode.AppFramework.Scene;
 
 public class SceneInteractionController
 {
-    #region Events
+    private readonly Scene _scene;
 
-    public event EventHandler<UiEvent> OnUiEvent;
-
-    #endregion
+    public SceneInteractionController(Scene scene)
+    {
+        _scene = scene;
+    }
 
     #region State
 
@@ -27,6 +28,11 @@ public class SceneInteractionController
 
     #region Mouse
 
+    private Vector2 Transform(Vector2 p)
+    {
+        return new(p.X, _scene.Size.Y - p.Y);
+    }
+
     public void MouseClickDown()
     {
         if (DateTime.Now - FirstMouseDownTime > TimeSpan.FromMilliseconds(300))
@@ -37,28 +43,33 @@ public class SceneInteractionController
 
     public void MouseClickRelease(Vector2 position)
     {
+        position = Transform(position);
+
         if (DateTime.Now - SecondMouseDownTime < TimeSpan.FromMilliseconds(150))
-            OnUiEvent?.Invoke(this, new MouseDoubleClickEvent(position));
+            _scene.Handle(new MouseDoubleClickEvent(position));
         else if (DateTime.Now - FirstMouseDownTime < TimeSpan.FromMilliseconds(150))
-            OnUiEvent?.Invoke(this, new MouseClickEvent(position));
+            _scene.Handle(new MouseClickEvent(position));
     }
 
     public void MouseDown(Vector2 position)
     {
         if (IsMouseDown) return;
+        position = Transform(position);
 
         IsMouseDown = true;
 
         MouseDownPosition = position;
         MouseClickDown();
-        OnUiEvent?.Invoke(this, new MouseDownEvent(position));
+        _scene.Handle(new MouseDownEvent(position));
         LastMousePosition = position;
     }
 
     public void MouseUp(Vector2 position)
     {
+        position = Transform(position);
+
         IsMouseDown = false;
-        OnUiEvent?.Invoke(this, new MouseUpEvent(position));
+        _scene.Handle(new MouseUpEvent(position));
         LastMousePosition = position;
 
         MouseClickRelease(position);
@@ -66,11 +77,13 @@ public class SceneInteractionController
 
     public void MouseMove(Vector2 position)
     {
+        position = Transform(position);
+
         if (Math.Abs(LastMousePosition.X - position.X) <= Constants.Tolerance &&
             Math.Abs(LastMousePosition.Y - position.Y) <= Constants.Tolerance)
             return;
 
-        OnUiEvent?.Invoke(this, new MouseMoveEvent(position));
+        _scene.Handle(new MouseMoveEvent(position));
         LastMousePosition = position;
     }
 
@@ -91,7 +104,7 @@ public class SceneInteractionController
     public void KeyDown(string key)
     {
         CurrentKey = key;
-        OnUiEvent?.Invoke(this, new KeyDownEvent(key));
+        _scene.Handle(new KeyDownEvent(key));
     }
 
     public void KeyUp(string key)
@@ -99,7 +112,7 @@ public class SceneInteractionController
         if (ControlPressed) CurrentKey = null;
 
         CurrentKey = null;
-        OnUiEvent?.Invoke(this, new KeyUpEvent(key));
+        _scene.Handle(new KeyUpEvent(key));
     }
 
     #endregion

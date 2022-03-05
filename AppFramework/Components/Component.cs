@@ -272,7 +272,7 @@ public abstract class Component : IDisposable
 
         //Invalidate the component
         Invalidated = true;
-        
+
         //Handle the transformation event
         HandleTransformationEvent(new TranslateEvent(delta));
     }
@@ -391,12 +391,12 @@ public abstract class Component : IDisposable
     public event EventHandler<UiEvent> OnUiEventTunneled;
     public event EventHandler<TransformationEvent> OnTransformationEvent;
 
-    public bool Handle(Scene.Scene scene, UiEvent uiEvent)
+    public bool Handle(UiEvent uiEvent)
     {
         //Firstly try and handle the event with the most nested child component
         var isBubbleHandled = false;
         foreach (var child in Children)
-            if (child.Handle(scene, uiEvent))
+            if (child.Handle(uiEvent))
                 isBubbleHandled = true; //The child handles the event
 
         //Try and handle the event with this component
