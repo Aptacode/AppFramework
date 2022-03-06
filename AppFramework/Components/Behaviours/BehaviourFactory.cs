@@ -12,9 +12,10 @@ public static class BehaviourFactory
         return component;
     }
 
-    public static AppFramework.Scene.Scene AddPhysics(this AppFramework.Scene.Scene scene)
+    public static ScenePhysicsBehaviour AddPhysics(this AppFramework.Scene.Scene scene)
     {
-        scene.Add(new ScenePhysicsBehaviour(scene));
-        return scene;
+        var behaviour = new ScenePhysicsBehaviour(scene);
+        scene.Add(behaviour);
+        return behaviour;
     }
 }

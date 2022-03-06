@@ -5,6 +5,8 @@ namespace Aptacode.AppFramework.Components.Behaviours.Scene;
 
 public class ScenePhysicsBehaviour : SceneBehavior
 {
+    public bool Gravity { get; set; } = true;
+    public bool Friction { get; set; } = true;
     public ScenePhysicsBehaviour(AppFramework.Scene.Scene scene) : base(scene)
     {
     }
@@ -22,7 +24,15 @@ public class ScenePhysicsBehaviour : SceneBehavior
             }
 
             //Apply forces
-            a.ApplyGravity().ApplyFriction();
+            if (Gravity)
+            {
+                a.ApplyGravity();
+            }
+
+            if (Friction)
+            {
+                a.ApplyFriction();
+            }
 
             //Calculate Distance
             var distanceMoved = a.Distance(deltaT);
