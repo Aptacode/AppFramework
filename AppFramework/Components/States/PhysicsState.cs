@@ -13,12 +13,21 @@ public class PhysicsState : ComponentState
     public static readonly Vector2 Gravity = new(0.0f, -0.01f);
     #endregion
 
-    #region Properties
+    #region Linear Momentum
     public float Mass { get; set; } = 0.1f;
     public Vector2 Velocity { get; set; } = Vector2.Zero;
     public Vector2 Acceleration { get; set; } = Vector2.Zero;
 
     public bool IsFixed = false;
+    #endregion
+
+    #region Angular Momentum
+
+    public float Angle { get; set; }
+    public float AngularVelocity { get; set; }
+
+    public float Inertia { get; set; }
+
     #endregion
 
     #region Forces

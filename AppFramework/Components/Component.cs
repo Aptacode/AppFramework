@@ -56,8 +56,8 @@ public abstract class Component : IDisposable
         ctx.TextAlign("center");
         ctx.FillStyle("black");
         ctx.Font("10pt Calibri");
-        ctx.WrapText(Text, BoundingPrimitive.BoundingRectangle.TopLeft.X * SceneScale.Value,
-            BoundingPrimitive.BoundingRectangle.TopLeft.Y * SceneScale.Value,
+        ctx.WrapText(Text, BoundingPrimitive.BoundingRectangle.BottomLeft.X * SceneScale.Value,
+            BoundingPrimitive.BoundingRectangle.BottomLeft.Y * SceneScale.Value,
             BoundingPrimitive.BoundingRectangle.Size.X * SceneScale.Value,
             BoundingPrimitive.BoundingRectangle.Size.Y * SceneScale.Value, 16);
     }
@@ -316,14 +316,14 @@ public abstract class Component : IDisposable
 
     public virtual void ScaleAboutTopLeft(Vector2 delta)
     {
-        Primitive.Scale(delta, BoundingPrimitive.BoundingRectangle.TopLeft);
+        Primitive.Scale(delta, BoundingPrimitive.BoundingRectangle.BottomLeft);
 
-        foreach (var child in Children) child.Scale(BoundingPrimitive.BoundingRectangle.TopLeft, delta);
+        foreach (var child in Children) child.Scale(BoundingPrimitive.BoundingRectangle.BottomLeft, delta);
 
         UpdateBounds();
 
         Invalidated = true;
-        HandleTransformationEvent(new ScaleEvent(BoundingPrimitive.BoundingRectangle.TopLeft, delta));
+        HandleTransformationEvent(new ScaleEvent(BoundingPrimitive.BoundingRectangle.BottomLeft, delta));
     }
 
     public virtual void Scale(Vector2 scaleCenter, Vector2 delta)
@@ -354,7 +354,7 @@ public abstract class Component : IDisposable
     {
         Primitive.SetPosition(position);
 
-        var delta = position - BoundingPrimitive.BoundingRectangle.TopLeft;
+        var delta = position - BoundingPrimitive.BoundingRectangle.BottomLeft;
         foreach (var child in Children) child.Translate(delta);
 
         UpdateBounds();
@@ -368,13 +368,13 @@ public abstract class Component : IDisposable
         Primitive.SetSize(size);
 
         var scaleFactor = size / BoundingPrimitive.BoundingRectangle.Size;
-        foreach (var child in Children) child.Scale(BoundingPrimitive.BoundingRectangle.TopLeft, scaleFactor);
+        foreach (var child in Children) child.Scale(BoundingPrimitive.BoundingRectangle.BottomLeft, scaleFactor);
 
         UpdateBounds();
 
         Invalidated = true;
 
-        HandleTransformationEvent(new ScaleEvent(BoundingPrimitive.BoundingRectangle.TopLeft, scaleFactor));
+        HandleTransformationEvent(new ScaleEvent(BoundingPrimitive.BoundingRectangle.BottomLeft, scaleFactor));
     }
 
     private void HandleTransformationEvent(TransformationEvent transformationEvent)
