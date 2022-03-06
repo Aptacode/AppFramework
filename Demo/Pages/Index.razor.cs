@@ -31,28 +31,28 @@ public class IndexBase : ComponentBase
         var ball = Ellipse.Create(new Vector2(50, 50), 5).ToComponent().AddDragToMove(Scene);
         ball.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
         ball.FillColor = Color.LightSlateGray;
-        ball.BorderColor = Color.SlateGray;
+        ball.BorderColor = Color.DarkSlateGray;
 
         Scene.Add(ball);
 
         var ball2 = Ellipse.Create(new Vector2(65, 45), 5).ToComponent().AddDragToMove(Scene);
         ball2.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
         ball2.FillColor = Color.SlateGray;
-        ball2.BorderColor = Color.SlateGray;
+        ball2.BorderColor = Color.DarkSlateGray;
 
         Scene.Add(ball2);
 
         var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 20), new Vector2(35, 30)).ToComponent().AddDragToMove(Scene);
         rectangle.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
         rectangle.FillColor = Color.SlateGray;
-        rectangle.BorderColor = Color.SlateGray;
+        rectangle.BorderColor = Color.DarkSlateGray;
 
         Scene.Add(rectangle);
 
         var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 70), new Vector2(35, 60)).ToComponent().AddDragToMove(Scene);
         rectangle2.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
         rectangle2.FillColor = Color.SlateGray;
-        rectangle2.BorderColor = Color.SlateGray;
+        rectangle2.BorderColor = Color.DarkSlateGray;
 
         Scene.Add(rectangle2);
 
