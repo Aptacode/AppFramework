@@ -14,7 +14,7 @@
 
         @if (ViewModel.ShowGrid)
         {
-            <svg width="@(ViewModel.Size.X * SceneScale.Value)" height="@(ViewModel.Size.Y * SceneScale.Value)" style="position: absolute">
+            <svg width="@(ViewModel.Size.X)" height="@(ViewModel.Size.Y)" style="position: absolute">
                 <defs>
                     <pattern id="tenthGrid" width="10" height="10" patternUnits="userSpaceOnUse">
                         <path d="M 10 0 L 0 0 0 10" fill="none" stroke="silver" stroke-width="1"/>
@@ -28,7 +28,7 @@
             </svg>
         }
 
-        <canvas @ref="Canvas" width="@(ViewModel.Size.X * SceneScale.Value)" height="@(ViewModel.Size.Y * SceneScale.Value)"
+        <canvas @ref="Canvas" width="@(ViewModel.Size.X)" height="@(ViewModel.Size.Y)"
                 style="@(Style)"/>
     </div>
 }

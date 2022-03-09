@@ -47,15 +47,15 @@ public class SceneController : BindableBase
         _canvas.FillStyle(Component.DefaultFillColor);
         _canvas.StrokeStyle(Component.DefaultBorderColor);
         _canvas.LineWidth(Component.DefaultBorderThickness);
-        _canvas.ClearRect(0, 0, Scene.Size.X * SceneScale.Value, Scene.Size.Y * SceneScale.Value);
-        _canvas.Transform(1, 0, 0, -1, 0, Scene.Size.Y * SceneScale.Value);
+        _canvas.ClearRect(0, 0, Scene.Size.X, Scene.Size.Y);
+        _canvas.Transform(1, 0, 0, -1, 0, Scene.Size.Y);
 
         //Draw each element
         for (var i = 0; i < Scene.Components.Count(); i++)
             Scene.Components[i].Draw(Scene, _canvas);
 
         //Flip canvas
-        _canvas.Transform(1, 0, 0, -1, 0, Scene.Size.Y * SceneScale.Value);
+        _canvas.Transform(1, 0, 0, -1, 0, Scene.Size.Y);
     }
 
     #endregion

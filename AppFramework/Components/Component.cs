@@ -56,10 +56,10 @@ public abstract class Component : IDisposable
         ctx.TextAlign("center");
         ctx.FillStyle("black");
         ctx.Font("10pt Calibri");
-        ctx.WrapText(Text, BoundingPrimitive.BoundingRectangle.BottomLeft.X * SceneScale.Value,
-            BoundingPrimitive.BoundingRectangle.BottomLeft.Y * SceneScale.Value,
-            BoundingPrimitive.BoundingRectangle.Size.X * SceneScale.Value,
-            BoundingPrimitive.BoundingRectangle.Size.Y * SceneScale.Value, 16);
+        ctx.WrapText(Text, BoundingPrimitive.BoundingRectangle.BottomLeft.X,
+            BoundingPrimitive.BoundingRectangle.BottomLeft.Y,
+            BoundingPrimitive.BoundingRectangle.Size.X,
+            BoundingPrimitive.BoundingRectangle.Size.Y, 16);
     }
 
     public virtual void Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
@@ -73,7 +73,7 @@ public abstract class Component : IDisposable
 
         ctx.StrokeStyle(BorderColorName);
 
-        ctx.LineWidth(BorderThickness * SceneScale.Value);
+        ctx.LineWidth(BorderThickness);
 
         CustomDraw(ctx);
 

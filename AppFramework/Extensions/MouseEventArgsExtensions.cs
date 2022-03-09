@@ -9,7 +9,6 @@ public static class MouseEventArgsExtensions
 {
     public static Vector2 FromScale(this MouseEventArgs args)
     {
-        return new Vector2(
-            (int)Math.Round(args.OffsetX / SceneScale.Value), (int)Math.Round(args.OffsetY / SceneScale.Value));
+        return new Vector2((float)args.OffsetX, (float)args.OffsetY);
     }
 }

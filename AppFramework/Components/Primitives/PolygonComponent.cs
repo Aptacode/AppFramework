@@ -22,7 +22,7 @@ public class PolygonComponent : Component
     public override void CustomDraw(BlazorCanvasInterop ctx)
     {
         var vertices = new Vector2[Polygon.Vertices.Length];
-        for (var i = 0; i < Polygon.Vertices.Length; i++) vertices[i] = Polygon.Vertices[i] * SceneScale.Value;
+        for (var i = 0; i < Polygon.Vertices.Length; i++) vertices[i] = Polygon.Vertices[i];
 
         ctx.Polygon(vertices);
 

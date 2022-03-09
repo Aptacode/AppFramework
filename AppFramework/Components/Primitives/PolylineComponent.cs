@@ -22,7 +22,7 @@ public class PolylineComponent : Component
     public override void CustomDraw(BlazorCanvasInterop ctx)
     {
         var vertices = new Vector2[PolyLine.Vertices.Length];
-        for (var i = 0; i < PolyLine.Vertices.Length; i++) vertices[i] = PolyLine.Vertices[i] * SceneScale.Value;
+        for (var i = 0; i < PolyLine.Vertices.Length; i++) vertices[i] = PolyLine.Vertices[i];
 
         ctx.PolyLine(vertices);
         ctx.Stroke();

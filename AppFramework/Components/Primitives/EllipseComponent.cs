@@ -23,9 +23,9 @@ public class EllipseComponent : Component
     {
         ctx.BeginPath();
 
-        ctx.Ellipse((int)Ellipse.Position.X * SceneScale.Value, (int)Ellipse.Position.Y * SceneScale.Value,
-            (int)Ellipse.Radii.X * SceneScale.Value,
-            (int)Ellipse.Radii.Y * SceneScale.Value, Ellipse.Rotation, 0, 2.0f * (float)Math.PI);
+        ctx.Ellipse((int)Ellipse.Position.X, (int)Ellipse.Position.Y,
+            (int)Ellipse.Radii.X,
+            (int)Ellipse.Radii.Y, Ellipse.Rotation, 0, 2.0f * (float)Math.PI);
         ctx.Fill();
         ctx.Stroke();
     }

@@ -43,8 +43,6 @@ public class PhysicsState : ComponentState
         if (IsFixed)
             return 0.0f;
 
-        deltaT /= 5; //Slow down time
-
         AngularVelocity += AngularAcceleration * deltaT;
         AngularAcceleration = 0.0f;
 
