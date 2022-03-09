@@ -23,10 +23,48 @@ public class PhysicsState : ComponentState
 
     #region Angular Momentum
 
-    public float Angle { get; set; }
+    public float AngularAcceleration { get; set; }
     public float AngularVelocity { get; set; }
+    public float Angle { get; set; }
+    public float MomentOfInertia { get; set; } = 0.01f;
 
-    public float Inertia { get; set; }
+    #endregion
+
+    #region Angular Forces
+
+    public PhysicsState ApplyForce(float torque)
+    {
+        AngularAcceleration += torque / MomentOfInertia;
+        return this;
+    }
+
+    public float CalculateRotation(float deltaT)
+    {
+        if (IsFixed)
+            return 0.0f;
+
+        deltaT /= 5; //Slow down time
+
+        AngularVelocity += AngularAcceleration * deltaT;
+        AngularAcceleration = 0.0f;
+
+        return AngularVelocity * deltaT;
+    }
+
+    public PhysicsState ApplyDamping()
+    {
+        //If there is no movement there is no friction
+        if (AngularVelocity < Constants.Tolerance)
+        {
+            return this;
+        }
+
+        var c = 0.001f;
+        var normal = 1;
+        var frictionMag = c * normal;
+        AngularAcceleration += -AngularVelocity * frictionMag;
+        return this;
+    }
 
     #endregion
 
@@ -34,8 +72,7 @@ public class PhysicsState : ComponentState
 
     public PhysicsState ApplyForce(Vector2 force)
     {
-        force /= Mass;
-        Acceleration += force;
+        Acceleration += force / Mass;
         return this;
     }
 
@@ -47,8 +84,13 @@ public class PhysicsState : ComponentState
 
     public PhysicsState ApplyFriction()
     {
-        var absoulte = Vector2.Abs(Velocity);
-        if (absoulte.X + absoulte.Y < Constants.Tolerance) return this;
+        var absolute = Vector2.Abs(Velocity);
+        
+        //If there is no movement there is no friction
+        if (absolute.X + absolute.Y < Constants.Tolerance)
+        {
+            return this;
+        }
 
         var c = 0.001f;
         var normal = 1;
@@ -60,7 +102,7 @@ public class PhysicsState : ComponentState
     #endregion
 
     #region Distance
-    public Vector2 Distance(float deltaT)
+    public Vector2 CalculateDistance(float deltaT)
     {
         if (IsFixed)
             return Vector2.Zero;

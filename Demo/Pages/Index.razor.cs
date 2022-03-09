@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Components.Behaviours;
+using Aptacode.AppFramework.Components.Behaviours.Ui;
 using Aptacode.AppFramework.Components.States;
 using Aptacode.AppFramework.Scene;
 using Aptacode.AppFramework.Utilities;
@@ -44,6 +45,8 @@ public class IndexBase : ComponentBase
 
         var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(45, 20), new Vector2(35, 30)).ToComponent().AddDragToMove(Scene);
         rectangle.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
+        rectangle.AddUiBehaviour(new ArrowKeyBehaviour(Scene, rectangle));
+
         rectangle.FillColor = Color.SlateGray;
         rectangle.BorderColor = Color.DarkSlateGray;
 

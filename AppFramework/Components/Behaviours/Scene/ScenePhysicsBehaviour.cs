@@ -34,9 +34,13 @@ public class ScenePhysicsBehaviour : SceneBehavior
                 a.ApplyFriction();
             }
 
-            //Calculate Distance
-            var distanceMoved = a.Distance(deltaT);
+            a.ApplyDamping();
 
+            //Calculate Distance
+            var distanceMoved = a.CalculateDistance(deltaT);
+            var rotation = a.CalculateRotation(deltaT);
+
+            a.Component.Rotate(rotation);
             //Translate component
             a.Component.Translate(distanceMoved);
 
