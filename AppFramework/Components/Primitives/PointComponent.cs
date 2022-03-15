@@ -29,4 +29,12 @@ public class PointComponent : Component
     }
 
     #endregion
+
+    #region Methods
+    public void Update(Point primitive)
+    {
+        Primitive = primitive;
+    }
+
+    #endregion
 }

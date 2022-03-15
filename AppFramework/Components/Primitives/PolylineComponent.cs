@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Primitives;
 
@@ -26,6 +25,14 @@ public class PolylineComponent : Component
 
         ctx.PolyLine(vertices);
         ctx.Stroke();
+    }
+
+    #endregion
+
+    #region Methods
+    public void Update(PolyLine primitive)
+    {
+        Primitive = primitive;
     }
 
     #endregion

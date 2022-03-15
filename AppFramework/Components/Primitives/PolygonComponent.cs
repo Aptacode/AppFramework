@@ -31,4 +31,12 @@ public class PolygonComponent : Component
     }
 
     #endregion
+
+    #region Methods
+    public void Update(Polygon primitive)
+    {
+        Primitive = primitive;
+    }
+
+    #endregion
 }

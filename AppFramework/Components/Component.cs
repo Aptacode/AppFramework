@@ -9,10 +9,8 @@ using Aptacode.AppFramework.Components.Behaviours.Ui;
 using Aptacode.AppFramework.Components.States;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.BlazorCanvas;
-using Aptacode.Geometry;
 using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
-using Aptacode.Geometry.Vertices;
 
 namespace Aptacode.AppFramework.Components;
 
