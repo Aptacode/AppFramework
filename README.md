@@ -1,12 +1,12 @@
 <p align="center">
    <div style="width:640;height:320">
-       <img style="width: inherit" src="https://raw.githubusercontent.com/Aptacode/AppFramework/Production/Resources/Images/Banner.png">
+       <img style="width: inherit" src="https://raw.githubusercontent.com/Aptacode/AppFramework/main/Resources/Images/Banner.png">
 </div>
 </p>
 
-[Live Demo](https://aptacode.github.io/AppFramework/)
-
-[![Tests](https://github.com/Aptacode/AppFramework/actions/workflows/test.yml/badge.svg)](https://github.com/Aptacode/AppFramework/actions/workflows/test.yml)
-[![Demo Deployment](https://github.com/Aptacode/AppFramework/actions/workflows/demo.yml/badge.svg)](https://github.com/Aptacode/AppFramework/actions/workflows/demo.yml)
-[![NuGet](https://img.shields.io/nuget/v/Aptacode.AppFramework.svg?style=flat)](https://www.nuget.org/packages/Aptacode.AppFramework/)
-![Last Commit](https://img.shields.io/github/last-commit/Aptacode/AppFramework?style=flat-square&cacheSeconds=86000)
+[![tests](https://github.com/Aptacode/AppFramework/actions/workflows/test.yml/badge.svg)](https://github.com/Aptacode/AppFramework/actions/workflows/test.yml)
+[![demo](https://github.com/Aptacode/AppFramework/actions/workflows/demo.yml/badge.svg)](https://aptacode.github.io/AppFramework/)
+[![code metrics](https://github.com/Aptacode/Geometry/actions/workflows/metrics.yml/badge.svg)](https://github.com/Aptacode/AppFramework/blob/main/CODE_METRICS.md)
+[![nuget](https://img.shields.io/nuget/v/Aptacode.AppFramework.svg?style=flat&color=brightgreen)](https://www.nuget.org/packages/Aptacode.AppFramework/)
+![last commit](https://img.shields.io/github/last-commit/Aptacode/AppFramework?style=flat&cacheSeconds=86000&color=brightgreen)
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
