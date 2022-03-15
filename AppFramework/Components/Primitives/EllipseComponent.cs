@@ -31,4 +31,10 @@ public class EllipseComponent : Component
     }
 
     #endregion
+
+    public void Update(Ellipse ellipse)
+    {
+        Primitive = ellipse;
+
+    }
 }

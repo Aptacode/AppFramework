@@ -105,7 +105,7 @@ public class PhysicsState : ComponentState
         if (IsFixed)
             return Vector2.Zero;
 
-        deltaT /= 5; //Slow down time
+        deltaT /= 2; //Slow down time
 
         Velocity += Acceleration * deltaT;
         Acceleration = Vector2.Zero;

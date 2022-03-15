@@ -8,7 +8,6 @@ using Aptacode.AppFramework.Components.Behaviours.Transformation;
 using Aptacode.AppFramework.Components.Behaviours.Ui;
 using Aptacode.AppFramework.Components.States;
 using Aptacode.AppFramework.Scene.Events;
-using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry;
 using Aptacode.Geometry.Collision.Rectangles;
@@ -24,15 +23,13 @@ public abstract class Component : IDisposable
     protected Component(Primitive primitive)
     {
         Primitive = primitive;
+        OldBoundingRectangle = Primitive.BoundingRectangle;
 
         Id = Guid.NewGuid();
-        Margin = DefaultMargin;
         IsShown = true;
         BorderThickness = DefaultBorderThickness;
         BorderColor = Color.Black;
         FillColor = Color.White;
-        UpdateBounds();
-        OldBoundingRectangle = BoundingPrimitive.BoundingRectangle;
         Invalidated = true;
     }
 
@@ -56,15 +53,15 @@ public abstract class Component : IDisposable
         ctx.TextAlign("center");
         ctx.FillStyle("black");
         ctx.Font("10pt Calibri");
-        ctx.WrapText(Text, BoundingPrimitive.BoundingRectangle.BottomLeft.X,
-            BoundingPrimitive.BoundingRectangle.BottomLeft.Y,
-            BoundingPrimitive.BoundingRectangle.Size.X,
-            BoundingPrimitive.BoundingRectangle.Size.Y, 16);
+        ctx.WrapText(Text, Primitive.BoundingRectangle.BottomLeft.X,
+            Primitive.BoundingRectangle.BottomLeft.Y,
+            Primitive.BoundingRectangle.Size.X,
+            Primitive.BoundingRectangle.Size.Y, 16);
     }
 
     public virtual void Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
     {
-        OldBoundingRectangle = BoundingPrimitive.BoundingRectangle;
+        OldBoundingRectangle = Primitive.BoundingRectangle;
         Invalidated = false;
 
         if (!IsShown) return;
@@ -88,29 +85,12 @@ public abstract class Component : IDisposable
 
     public IEnumerable<Component> Children => _children;
 
-    protected void UpdateBounds()
-    {
-        var vertices = AllVertices().ToArray();
-
-        if (Margin > Constants.Tolerance) vertices = new VertexArray(vertices).ToConvexHull(Margin).Vertices;
-
-        BoundingPrimitive = Polygon.Create(vertices);
-    }
-
-    protected IEnumerable<Vector2> AllVertices()
-    {
-        var vertexArrays = Primitive.Vertices.Vertices.ToList();
-        vertexArrays.AddRange(_children.SelectMany(v => v.AllVertices()));
-        return vertexArrays;
-    }
-
     public virtual void Add(Component child)
     {
         if (!Children.Contains(child))
         {
             child.Parent = this;
             _children.Add(child);
-            UpdateBounds();
             Invalidated = true;
         }
     }
@@ -125,7 +105,6 @@ public abstract class Component : IDisposable
         if (_children.Remove(child))
         {
             child.Parent = null;
-            UpdateBounds();
             Invalidated = true;
         }
     }
@@ -137,8 +116,7 @@ public abstract class Component : IDisposable
     public static readonly string DefaultBorderColor = Color.Black.ToKnownColor().ToString();
     public static readonly string DefaultFillColor = Color.Black.ToKnownColor().ToString();
     public static readonly float DefaultBorderThickness = 0.1f;
-    public static readonly float DefaultMargin = 0.0f;
-    public Primitive Primitive { get; }
+    public Primitive Primitive { get; protected set; }
 
     #endregion
 
@@ -148,26 +126,12 @@ public abstract class Component : IDisposable
     protected readonly List<Component> _children = new();
     public bool Invalidated { get; set; }
     public BoundingRectangle OldBoundingRectangle { get; protected set; }
-    public Primitive BoundingPrimitive { get; set; }
 
     #region Parent
 
     public Component Parent { get; set; }
 
     #endregion
-
-    private float _margin;
-
-    public float Margin
-    {
-        get => _margin;
-        set
-        {
-            _margin = value;
-            UpdateBounds();
-            Invalidated = true;
-        }
-    }
 
     private bool _isShown;
 
@@ -268,9 +232,6 @@ public abstract class Component : IDisposable
         foreach (var child in Children)
             child.Translate(delta);
 
-        //Update the components bounds
-        UpdateBounds();
-
         //Invalidate the component
         Invalidated = true;
 
@@ -284,8 +245,6 @@ public abstract class Component : IDisposable
 
         foreach (var child in Children) child.Rotate(theta);
 
-        UpdateBounds();
-
         Invalidated = true;
         HandleTransformationEvent(new RotateEvent(Primitive.BoundingRectangle.Center, theta));
     }
@@ -296,8 +255,6 @@ public abstract class Component : IDisposable
 
         foreach (var child in Children) child.Rotate(rotationCenter, theta);
 
-        UpdateBounds();
-
         Invalidated = true;
         HandleTransformationEvent(new RotateEvent(rotationCenter, theta));
     }
@@ -306,24 +263,20 @@ public abstract class Component : IDisposable
     {
         Primitive.ScaleAboutCenter(delta);
 
-        foreach (var child in Children) child.Scale(BoundingPrimitive.BoundingRectangle.Center, delta);
-
-        UpdateBounds();
+        foreach (var child in Children) child.Scale(Primitive.BoundingRectangle.Center, delta);
 
         Invalidated = true;
-        HandleTransformationEvent(new ScaleEvent(BoundingPrimitive.BoundingRectangle.Center, delta));
+        HandleTransformationEvent(new ScaleEvent(Primitive.BoundingRectangle.Center, delta));
     }
 
     public virtual void ScaleAboutTopLeft(Vector2 delta)
     {
-        Primitive.Scale(delta, BoundingPrimitive.BoundingRectangle.BottomLeft);
+        Primitive.Scale(delta, Primitive.BoundingRectangle.BottomLeft);
 
-        foreach (var child in Children) child.Scale(BoundingPrimitive.BoundingRectangle.BottomLeft, delta);
-
-        UpdateBounds();
+        foreach (var child in Children) child.Scale(Primitive.BoundingRectangle.BottomLeft, delta);
 
         Invalidated = true;
-        HandleTransformationEvent(new ScaleEvent(BoundingPrimitive.BoundingRectangle.BottomLeft, delta));
+        HandleTransformationEvent(new ScaleEvent(Primitive.BoundingRectangle.BottomLeft, delta));
     }
 
     public virtual void Scale(Vector2 scaleCenter, Vector2 delta)
@@ -331,8 +284,6 @@ public abstract class Component : IDisposable
         Primitive.Scale(scaleCenter, delta);
 
         foreach (var child in Children) child.Scale(scaleCenter, delta);
-
-        UpdateBounds();
 
         Invalidated = true;
         HandleTransformationEvent(new ScaleEvent(scaleCenter, delta));
@@ -344,8 +295,6 @@ public abstract class Component : IDisposable
 
         foreach (var child in Children) child.Skew(delta);
 
-        UpdateBounds();
-
         Invalidated = true;
         HandleTransformationEvent(new SkewEvent(delta));
     }
@@ -354,10 +303,8 @@ public abstract class Component : IDisposable
     {
         Primitive.SetPosition(position);
 
-        var delta = position - BoundingPrimitive.BoundingRectangle.BottomLeft;
+        var delta = position - Primitive.BoundingRectangle.BottomLeft;
         foreach (var child in Children) child.Translate(delta);
-
-        UpdateBounds();
 
         Invalidated = true;
         HandleTransformationEvent(new TranslateEvent(delta));
@@ -367,14 +314,12 @@ public abstract class Component : IDisposable
     {
         Primitive.SetSize(size);
 
-        var scaleFactor = size / BoundingPrimitive.BoundingRectangle.Size;
-        foreach (var child in Children) child.Scale(BoundingPrimitive.BoundingRectangle.BottomLeft, scaleFactor);
-
-        UpdateBounds();
+        var scaleFactor = size / Primitive.BoundingRectangle.Size;
+        foreach (var child in Children) child.Scale(Primitive.BoundingRectangle.BottomLeft, scaleFactor);
 
         Invalidated = true;
 
-        HandleTransformationEvent(new ScaleEvent(BoundingPrimitive.BoundingRectangle.BottomLeft, scaleFactor));
+        HandleTransformationEvent(new ScaleEvent(Primitive.BoundingRectangle.BottomLeft, scaleFactor));
     }
 
     private void HandleTransformationEvent(TransformationEvent transformationEvent)

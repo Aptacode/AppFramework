@@ -12,13 +12,13 @@ public class ComponentTransformationTests
     public void ComponentTranslateBoundsTest(Aptacode.AppFramework.Components.Component a, Vector2 delta)
     {
         //Arrange
-        var expectedBoundingRectangle = a.BoundingPrimitive.BoundingRectangle.Translate(delta);
+        var expectedBoundingRectangle = a.Primitive.BoundingRectangle.Translate(delta);
 
         //Act
         a.Translate(delta);
 
         //Assert
-        Assert.Equal(expectedBoundingRectangle, a.BoundingPrimitive.BoundingRectangle);
+        Assert.Equal(expectedBoundingRectangle, a.Primitive.BoundingRectangle);
     }
 
     [Theory]

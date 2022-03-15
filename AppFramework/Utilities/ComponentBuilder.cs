@@ -30,12 +30,6 @@ public class ComponentBuilder
         return this;
     }
 
-    public ComponentBuilder SetMargin(float margin)
-    {
-        _margin = margin;
-        return this;
-    }
-
     public ComponentBuilder SetBase(Component component)
     {
         _baseComponent = component;
@@ -55,7 +49,6 @@ public class ComponentBuilder
         component.FillColor = _fillColor;
         component.BorderThickness = _borderThickness;
         component.Text = _text;
-        component.Margin = _margin;
 
         component.AddRange(_children);
 
@@ -70,7 +63,6 @@ public class ComponentBuilder
         _borderColor = Color.Black;
         _fillColor = Color.White;
         _borderThickness = Component.DefaultBorderThickness;
-        _margin = Component.DefaultMargin;
         _text = "";
     }
 
@@ -83,7 +75,6 @@ public class ComponentBuilder
     private Color _fillColor = Color.White;
     private Color _borderColor = Color.Black;
     private float _borderThickness = Component.DefaultBorderThickness;
-    private float _margin = Component.DefaultMargin;
     private string _text = "";
     private readonly List<Component> _children = new();
     private Component _baseComponent;
