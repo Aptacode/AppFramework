@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <title>Aptacode.Geometry.Blazor</title>
+    <title>Aptacode.AppFramework</title>
     <base href="/"/>
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     <link href="css/app.css" rel="stylesheet"/>
@@ -38,6 +38,9 @@
     window.initGame = (instance) => {
         window.theInstance = instance;
         window.requestAnimationFrame(gameLoop);
+    };
+    window.onkeydown = function(e) {
+        return !(e.keyCode == 32);
     };
 </script>
 <!-- Start Single Page Apps for GitHub Pages -->

@@ -1,52 +1,60 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
-using Aptacode.AppFramework.Components.ViewModels;
-using Aptacode.AppFramework.Components.ViewModels.Components;
+using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Components.Behaviours.Scene;
 
-namespace Aptacode.AppFramework.Utilities
+namespace Aptacode.AppFramework.Utilities;
+
+public class SceneBuilder
 {
-    public class SceneBuilder
+    private readonly List<Component> _components = new();
+    private bool _addPhysics = false;
+
+    private float _height;
+    private float _width;
+
+    public SceneBuilder SetWidth(float width)
     {
-        private readonly List<ComponentViewModel> _components = new();
-        private float _height;
-        private float _width;
+        _width = width;
+        return this;
+    }
 
-        public SceneBuilder SetWidth(float width)
+    public SceneBuilder SetHeight(float height)
+    {
+        _height = height;
+        return this;
+    }
+
+    public SceneBuilder AddComponent(Component component)
+    {
+        _components.Add(component);
+        return this;
+    }
+
+    public SceneBuilder AddPhysics()
+    {
+        _addPhysics = true;
+        return this;
+    }
+
+    public Scene.Scene Build()
+    {
+        var scene = new Scene.Scene(new Vector2(_width, _height));
+        if (_addPhysics)
         {
-            _width = width;
-            return this;
+            scene.Add(new ScenePhysicsBehaviour(scene));
         }
 
-        public SceneBuilder SetHeight(float height)
-        {
-            _height = height;
-            return this;
-        }
+        foreach (var componentViewModel in _components) scene.Add(componentViewModel);
 
-        public SceneBuilder AddComponent(ComponentViewModel component)
-        {
-            _components.Add(component);
-            return this;
-        }
+        Reset();
+        return scene;
+    }
 
-        public Scene Build()
-        {
-            var scene = new Scene(new Vector2(_width, _height));
-
-            foreach (var componentViewModel in _components)
-            {
-                scene.Add(componentViewModel);
-            }
-
-            Reset();
-            return scene;
-        }
-
-        public void Reset()
-        {
-            _width = 0.0f;
-            _height = 0.0f;
-            _components.Clear();
-        }
+    public void Reset()
+    {
+        _width = 0.0f;
+        _height = 0.0f;
+        _components.Clear();
     }
 }
