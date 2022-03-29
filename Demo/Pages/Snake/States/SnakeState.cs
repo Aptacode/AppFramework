@@ -27,8 +27,10 @@ public sealed class SnakeState : SceneState
     public bool Running { get; set; } = true;
 
     public EventHandler<int> GameOver { get; set; }
+    public EventHandler<int> ScoreChanged { get; set; }
     public TimeSpan TickSpeed { get; set; } = InitialTickSpeed;
 
+    public int Score => SnakeBody.Count;
     public void EndGame()
     {
         Running = false;
@@ -47,6 +49,7 @@ public sealed class SnakeState : SceneState
         }
 
         SnakeBody.Clear();
+        ScoreChanged?.Invoke(this, SnakeBody.Count);
 
         SnakeFood.SetPosition(SnakeGameConfig.RandomCell(), true);
         while (SnakeHead.CollidesWith(SnakeFood))
@@ -57,6 +60,8 @@ public sealed class SnakeState : SceneState
 
     public void Grow()
     {
+        ScoreChanged?.Invoke(this, SnakeBody.Count);
+
         TickSpeed = TimeSpan.FromMilliseconds(Math.Clamp(InitialTickSpeed.Milliseconds - 20 * SnakeBody.Count, 10,
             InitialTickSpeed.Milliseconds));
 
