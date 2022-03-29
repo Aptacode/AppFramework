@@ -1,5 +1,4 @@
 ﻿using System;
-using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Primitives;
 
@@ -31,6 +30,7 @@ public class PointComponent : Component
     #endregion
 
     #region Methods
+
     public void Update(Point primitive)
     {
         Primitive = primitive;

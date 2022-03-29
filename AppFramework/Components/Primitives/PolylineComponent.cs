@@ -21,7 +21,10 @@ public class PolylineComponent : Component
     public override void CustomDraw(BlazorCanvasInterop ctx)
     {
         var vertices = new Vector2[PolyLine.Vertices.Length];
-        for (var i = 0; i < PolyLine.Vertices.Length; i++) vertices[i] = PolyLine.Vertices[i];
+        for (var i = 0; i < PolyLine.Vertices.Length; i++)
+        {
+            vertices[i] = PolyLine.Vertices[i];
+        }
 
         ctx.PolyLine(vertices);
         ctx.Stroke();
@@ -30,6 +33,7 @@ public class PolylineComponent : Component
     #endregion
 
     #region Methods
+
     public void Update(PolyLine primitive)
     {
         Primitive = primitive;

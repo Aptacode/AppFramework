@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using Aptacode.AppFramework.Components.States;
+using Aptacode.AppFramework.Components.States.Component;
 using Aptacode.AppFramework.Scene.Events;
 
 namespace Aptacode.AppFramework.Components.Behaviours.Ui;
@@ -12,10 +12,16 @@ public class ArrowKeyBehaviour : UiBehaviour
 
     public override bool HandleEvent(UiEvent uiEvent)
     {
-        if (uiEvent is not KeyDownEvent keyEvent) return false;
+        if (uiEvent is not KeyDownEvent keyEvent)
+        {
+            return false;
+        }
 
         var physicsState = Component.GetState<PhysicsState>();
-        if(physicsState == null) return false;
+        if (physicsState == null)
+        {
+            return false;
+        }
 
         switch (keyEvent.Key)
         {
@@ -24,10 +30,10 @@ public class ArrowKeyBehaviour : UiBehaviour
                 break;
             case "ArrowDown":
                 physicsState.ApplyForce(-0.01f);
-                break; 
+                break;
             case "ArrowLeft":
                 physicsState.ApplyForce(new Vector2(-0.01f, 0));
-                break;   
+                break;
             case "ArrowRight":
                 physicsState.ApplyForce(new Vector2(0.01f, 0));
                 break;

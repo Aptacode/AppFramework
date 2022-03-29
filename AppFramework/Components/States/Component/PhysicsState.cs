@@ -1,24 +1,48 @@
 ﻿using System.Numerics;
 using Aptacode.Geometry;
 
-namespace Aptacode.AppFramework.Components.States;
+namespace Aptacode.AppFramework.Components.States.Component;
 
 public class PhysicsState : ComponentState
 {
-    public PhysicsState(Component component) : base(component)
+    #region Constants
+
+    public static readonly Vector2 Gravity = new(0.0f, -0.01f);
+
+    #endregion
+
+    public PhysicsState(Components.Component component) : base(component)
     {
     }
 
-    #region Constants
-    public static readonly Vector2 Gravity = new(0.0f, -0.01f);
+    #region Distance
+
+    public Vector2 CalculateDistance(float deltaT)
+    {
+        if (IsFixed)
+        {
+            return Vector2.Zero;
+        }
+
+        deltaT /= 2; //Slow down time
+
+        Velocity += Acceleration * deltaT;
+        Acceleration = Vector2.Zero;
+
+        var distance = Velocity * deltaT;
+        return distance;
+    }
+
     #endregion
 
     #region Linear Momentum
+
     public float Mass { get; set; } = 0.1f;
     public Vector2 Velocity { get; set; } = Vector2.Zero;
     public Vector2 Acceleration { get; set; } = Vector2.Zero;
 
     public bool IsFixed = false;
+
     #endregion
 
     #region Angular Momentum
@@ -41,7 +65,9 @@ public class PhysicsState : ComponentState
     public float CalculateRotation(float deltaT)
     {
         if (IsFixed)
+        {
             return 0.0f;
+        }
 
         AngularVelocity += AngularAcceleration * deltaT;
         AngularAcceleration = 0.0f;
@@ -83,7 +109,7 @@ public class PhysicsState : ComponentState
     public PhysicsState ApplyFriction()
     {
         var absolute = Vector2.Abs(Velocity);
-        
+
         //If there is no movement there is no friction
         if (absolute.X + absolute.Y < Constants.Tolerance)
         {
@@ -95,23 +121,6 @@ public class PhysicsState : ComponentState
         var frictionMag = c * normal;
         Acceleration += Vector2.Normalize(Velocity * -1) * frictionMag;
         return this;
-    }
-
-    #endregion
-
-    #region Distance
-    public Vector2 CalculateDistance(float deltaT)
-    {
-        if (IsFixed)
-            return Vector2.Zero;
-
-        deltaT /= 2; //Slow down time
-
-        Velocity += Acceleration * deltaT;
-        Acceleration = Vector2.Zero;
-
-        var distance = Velocity * deltaT;
-        return distance;
     }
 
     #endregion

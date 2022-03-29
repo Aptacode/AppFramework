@@ -1,5 +1,4 @@
 ﻿using System;
-using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Primitives;
 
@@ -33,6 +32,7 @@ public class EllipseComponent : Component
     #endregion
 
     #region Methods
+
     public void Update(Ellipse ellipse)
     {
         Primitive = ellipse;

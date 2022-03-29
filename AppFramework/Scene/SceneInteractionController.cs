@@ -30,15 +30,19 @@ public class SceneInteractionController
 
     private Vector2 Transform(Vector2 p)
     {
-        return new(p.X, _scene.Size.Y - p.Y);
+        return new Vector2(p.X, _scene.Size.Y - p.Y);
     }
 
     public void MouseClickDown()
     {
         if (DateTime.Now - FirstMouseDownTime > TimeSpan.FromMilliseconds(300))
+        {
             FirstMouseDownTime = DateTime.Now;
+        }
         else
+        {
             SecondMouseDownTime = DateTime.Now;
+        }
     }
 
     public void MouseClickRelease(Vector2 position)
@@ -46,14 +50,22 @@ public class SceneInteractionController
         position = Transform(position);
 
         if (DateTime.Now - SecondMouseDownTime < TimeSpan.FromMilliseconds(150))
+        {
             _scene.Handle(new MouseDoubleClickEvent(position));
+        }
         else if (DateTime.Now - FirstMouseDownTime < TimeSpan.FromMilliseconds(150))
+        {
             _scene.Handle(new MouseClickEvent(position));
+        }
     }
 
     public void MouseDown(Vector2 position)
     {
-        if (IsMouseDown) return;
+        if (IsMouseDown)
+        {
+            return;
+        }
+
         position = Transform(position);
 
         IsMouseDown = true;
@@ -81,7 +93,9 @@ public class SceneInteractionController
 
         if (Math.Abs(LastMousePosition.X - position.X) <= Constants.Tolerance &&
             Math.Abs(LastMousePosition.Y - position.Y) <= Constants.Tolerance)
+        {
             return;
+        }
 
         _scene.Handle(new MouseMoveEvent(position));
         LastMousePosition = position;
@@ -109,7 +123,10 @@ public class SceneInteractionController
 
     public void KeyUp(string key)
     {
-        if (ControlPressed) CurrentKey = null;
+        if (ControlPressed)
+        {
+            CurrentKey = null;
+        }
 
         CurrentKey = null;
         _scene.Handle(new KeyUpEvent(key));

@@ -8,7 +8,7 @@ namespace Aptacode.AppFramework.Utilities;
 public class SceneBuilder
 {
     private readonly List<Component> _components = new();
-    private bool _addPhysics = false;
+    private bool _addPhysics;
 
     private float _height;
     private float _width;
@@ -45,7 +45,10 @@ public class SceneBuilder
             scene.Add(new ScenePhysicsBehaviour(scene));
         }
 
-        foreach (var componentViewModel in _components) scene.Add(componentViewModel);
+        foreach (var componentViewModel in _components)
+        {
+            scene.Add(componentViewModel);
+        }
 
         Reset();
         return scene;

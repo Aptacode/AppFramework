@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Components.Behaviours;
 using Aptacode.AppFramework.Components.Behaviours.Ui;
-using Aptacode.AppFramework.Components.States;
+using Aptacode.AppFramework.Components.States.Component;
 using Aptacode.AppFramework.Scene;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Aptacode.AppFramework.Demo.Pages;
 
-public class IndexBase : ComponentBase
+public class PhysicsBase : ComponentBase
 {
     [Inject] public BlazorCanvasInterop BlazorCanvas { get; set; }
     public Scene.Scene Scene { get; set; }
@@ -43,7 +43,8 @@ public class IndexBase : ComponentBase
 
         Scene.Add(ball2);
 
-        var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(450, 200), new Vector2(350, 300)).ToComponent().AddDragToMove(Scene);
+        var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(450, 200), new Vector2(350, 300)).ToComponent()
+            .AddDragToMove(Scene);
         rectangle.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
         rectangle.AddUiBehaviour(new ArrowKeyBehaviour(Scene, rectangle));
 
@@ -52,7 +53,8 @@ public class IndexBase : ComponentBase
 
         Scene.Add(rectangle);
 
-        var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(450, 700), new Vector2(350, 600)).ToComponent().AddDragToMove(Scene);
+        var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(450, 700), new Vector2(350, 600)).ToComponent()
+            .AddDragToMove(Scene);
         rectangle2.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
         rectangle2.FillColor = Color.SlateGray;
         rectangle2.BorderColor = Color.DarkSlateGray;

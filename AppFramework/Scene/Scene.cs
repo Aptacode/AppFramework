@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Components.Behaviours.Scene;
-using Aptacode.AppFramework.Components.Behaviours.Tick;
+using Aptacode.AppFramework.Components.States.Scene;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 
@@ -20,32 +20,53 @@ public class Scene : BindableBase
 
     #endregion
 
-    #region Behaviours
+    #region TickBehaviours
 
-    private readonly List<SceneBehavior> _behaviors = new();
+    private readonly List<SceneTickBehaviour> _tickBehaviours = new();
 
-    public Scene Add(SceneBehavior behavior)
+    public Scene Add(SceneTickBehaviour tickBehaviour)
     {
-        _behaviors.Add(behavior);
+        _tickBehaviours.Add(tickBehaviour);
         return this;
     }
 
-    public Scene Remove(SceneBehavior behavior)
+    public Scene Remove(SceneTickBehaviour tickBehaviour)
     {
-        _behaviors.Remove(behavior);
+        _tickBehaviours.Remove(tickBehaviour);
         return this;
     }
 
     public void Handle(float deltaT)
     {
         //Execute scene behaviours
-        foreach (var sceneBehavior in _behaviors)
+        foreach (var sceneBehavior in _tickBehaviours)
         {
             sceneBehavior.Handle(deltaT);
         }
 
         //Execute tick behaviours
-        foreach (var component in Components) {component.HandleTick(deltaT);}
+        foreach (var component in Components)
+        {
+            component.HandleTick(deltaT);
+        }
+    }
+
+    #endregion
+
+    #region Behaviours
+
+    private readonly List<SceneUiBehaviour> _uiBehaviours = new();
+
+    public Scene Add(SceneUiBehaviour uiBehaviour)
+    {
+        _uiBehaviours.Add(uiBehaviour);
+        return this;
+    }
+
+    public Scene Remove(SceneUiBehaviour uiBehaviour)
+    {
+        _uiBehaviours.Remove(uiBehaviour);
+        return this;
     }
 
     #endregion
@@ -72,16 +93,30 @@ public class Scene : BindableBase
 
     public void Handle(UiEvent e)
     {
+        //Execute scene behaviours
+        foreach (var sceneBehavior in _uiBehaviours)
+        {
+            sceneBehavior.Handle(e);
+        }
+
+        //Execute tick behaviours
         foreach (var component in Components)
+        {
             if (component.Handle(e))
+            {
                 return;
+            }
+        }
     }
 
     #endregion
 
     public void AddRange(IEnumerable<Component> components)
     {
-        foreach (var component in components) Add(component);
+        foreach (var component in components)
+        {
+            Add(component);
+        }
     }
 
     public bool Remove(Component component)
@@ -106,14 +141,20 @@ public class Scene : BindableBase
 
     public void BringToFront(Component componentViewModel)
     {
-        if (!_components.Remove(componentViewModel)) return;
+        if (!_components.Remove(componentViewModel))
+        {
+            return;
+        }
 
         _components.Add(componentViewModel);
     }
 
     public void SendToBack(Component componentViewModel)
     {
-        if (!_components.Remove(componentViewModel)) return;
+        if (!_components.Remove(componentViewModel))
+        {
+            return;
+        }
 
         _components.Insert(0, componentViewModel);
     }
@@ -121,7 +162,10 @@ public class Scene : BindableBase
     public void BringForward(Component componentViewModel)
     {
         var index = _components.IndexOf(componentViewModel);
-        if (index == _components.Count - 1) return;
+        if (index == _components.Count - 1)
+        {
+            return;
+        }
 
         _components.RemoveAt(index);
         _components.Insert(index + 1, componentViewModel);
@@ -130,11 +174,35 @@ public class Scene : BindableBase
     public void SendBackward(Component componentViewModel)
     {
         var index = _components.IndexOf(componentViewModel);
-        if (index == 0) return;
+        if (index == 0)
+        {
+            return;
+        }
 
         _components.RemoveAt(index);
         _components.Insert(index - 1, componentViewModel);
     }
+
+    #endregion
+
+    #region States
+
+    public void AddState<T>(T state) where T : SceneState
+    {
+        _states[typeof(T).Name] = state;
+    }
+
+    public bool HasState<T>() where T : SceneState
+    {
+        return _states.ContainsKey(typeof(T).Name);
+    }
+
+    public T? GetState<T>() where T : SceneState
+    {
+        return _states.TryGetValue(typeof(T).Name, out var value) ? value as T : null;
+    }
+
+    private readonly Dictionary<string, SceneState> _states = new();
 
     #endregion
 }

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Numerics;
 using Aptacode.AppFramework.Components;
-using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 
@@ -52,7 +51,9 @@ public class SceneController : BindableBase
 
         //Draw each element
         for (var i = 0; i < Scene.Components.Count(); i++)
+        {
             Scene.Components[i].Draw(Scene, _canvas);
+        }
 
         //Flip canvas
         _canvas.Transform(1, 0, 0, -1, 0, Scene.Size.Y);

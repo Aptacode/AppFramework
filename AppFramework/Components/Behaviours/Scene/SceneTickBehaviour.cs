@@ -1,8 +1,8 @@
 ﻿namespace Aptacode.AppFramework.Components.Behaviours.Scene;
 
-public abstract class SceneBehavior
+public abstract class SceneTickBehaviour
 {
-    protected SceneBehavior(AppFramework.Scene.Scene scene)
+    protected SceneTickBehaviour(AppFramework.Scene.Scene scene)
     {
         Scene = scene;
     }

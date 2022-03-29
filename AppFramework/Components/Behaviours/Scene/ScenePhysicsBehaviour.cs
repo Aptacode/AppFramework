@@ -1,15 +1,16 @@
 ﻿using System.Linq;
-using Aptacode.AppFramework.Components.States;
+using Aptacode.AppFramework.Components.States.Component;
 
 namespace Aptacode.AppFramework.Components.Behaviours.Scene;
 
-public class ScenePhysicsBehaviour : SceneBehavior
+public class ScenePhysicsBehaviour : SceneTickBehaviour
 {
-    public bool Gravity { get; set; } = true;
-    public bool Friction { get; set; } = true;
     public ScenePhysicsBehaviour(AppFramework.Scene.Scene scene) : base(scene)
     {
     }
+
+    public bool Gravity { get; set; } = true;
+    public bool Friction { get; set; } = true;
 
     public override void Handle(float deltaT)
     {
@@ -51,8 +52,10 @@ public class ScenePhysicsBehaviour : SceneBehavior
                 var b = physicsState[j];
 
                 //Check if a and b collide
-                if (b == null || !a.Component.CollidesWith(b.Component)) 
+                if (b == null || !a.Component.CollidesWith(b.Component))
+                {
                     continue;
+                }
 
                 hasCollison = true;
 

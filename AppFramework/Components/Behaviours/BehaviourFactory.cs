@@ -1,5 +1,4 @@
 ﻿using Aptacode.AppFramework.Components.Behaviours.Scene;
-using Aptacode.AppFramework.Components.Behaviours.Tick;
 using Aptacode.AppFramework.Components.Behaviours.Ui;
 
 namespace Aptacode.AppFramework.Components.Behaviours;

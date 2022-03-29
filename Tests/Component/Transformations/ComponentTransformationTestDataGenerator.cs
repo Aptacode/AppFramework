@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Aptacode.AppFramework.Components;
-using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.Geometry.Primitives;
 
 namespace Tests.Component.Transformations;

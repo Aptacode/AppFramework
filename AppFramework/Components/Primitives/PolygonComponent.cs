@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Primitives;
 
@@ -22,7 +21,10 @@ public class PolygonComponent : Component
     public override void CustomDraw(BlazorCanvasInterop ctx)
     {
         var vertices = new Vector2[Polygon.Vertices.Length];
-        for (var i = 0; i < Polygon.Vertices.Length; i++) vertices[i] = Polygon.Vertices[i];
+        for (var i = 0; i < Polygon.Vertices.Length; i++)
+        {
+            vertices[i] = Polygon.Vertices[i];
+        }
 
         ctx.Polygon(vertices);
 
@@ -33,6 +35,7 @@ public class PolygonComponent : Component
     #endregion
 
     #region Methods
+
     public void Update(Polygon primitive)
     {
         Primitive = primitive;

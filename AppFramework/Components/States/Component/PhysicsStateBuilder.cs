@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Aptacode.AppFramework.Components.States;
+namespace Aptacode.AppFramework.Components.States.Component;
 
 public class PhysicsStateBuilder
 {
-    public PhysicsState State { get; }
     private readonly Random r = Random.Shared;
+
     public PhysicsStateBuilder(PhysicsState state)
     {
-        this.State = state;
+        State = state;
     }
+
+    public PhysicsState State { get; }
 
     public PhysicsStateBuilder SetVelocity(float x, float y)
     {
@@ -26,7 +28,7 @@ public class PhysicsStateBuilder
 
     public PhysicsStateBuilder SetHorizontalVelocity(int minX, int maxX)
     {
-        State.Velocity = new Vector2(r.Next(minX * 10, maxX * 10)/10.0f, State.Velocity.Y);
+        State.Velocity = new Vector2(r.Next(minX * 10, maxX * 10) / 10.0f, State.Velocity.Y);
         return this;
     }
 

@@ -11,7 +11,10 @@ public class DragBehaviour : UiBehaviour
 
     public override bool HandleEvent(UiEvent uiEvent)
     {
-        if (uiEvent is not MouseEvent mouseEvent) return false;
+        if (uiEvent is not MouseEvent mouseEvent)
+        {
+            return false;
+        }
 
         switch (mouseEvent)
         {

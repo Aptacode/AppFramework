@@ -6,7 +6,7 @@ using System.Numerics;
 using Aptacode.AppFramework.Components.Behaviours.Tick;
 using Aptacode.AppFramework.Components.Behaviours.Transformation;
 using Aptacode.AppFramework.Components.Behaviours.Ui;
-using Aptacode.AppFramework.Components.States;
+using Aptacode.AppFramework.Components.States.Component;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Collision.Rectangles;
@@ -46,7 +46,9 @@ public abstract class Component : IDisposable
     public virtual void DrawText(BlazorCanvasInterop ctx)
     {
         if (string.IsNullOrEmpty(Text))
+        {
             return;
+        }
 
         ctx.TextAlign("center");
         ctx.FillStyle("black");
@@ -62,7 +64,10 @@ public abstract class Component : IDisposable
         OldBoundingRectangle = Primitive.BoundingRectangle;
         Invalidated = false;
 
-        if (!IsShown) return;
+        if (!IsShown)
+        {
+            return;
+        }
 
         ctx.FillStyle(FillColorName);
 
@@ -72,7 +77,10 @@ public abstract class Component : IDisposable
 
         CustomDraw(ctx);
 
-        foreach (var child in _children) child.Draw(scene, ctx);
+        foreach (var child in _children)
+        {
+            child.Draw(scene, ctx);
+        }
 
         DrawText(ctx);
     }
@@ -95,7 +103,10 @@ public abstract class Component : IDisposable
 
     public virtual void AddRange(IEnumerable<Component> children)
     {
-        foreach (var child in children) Add(child);
+        foreach (var child in children)
+        {
+            Add(child);
+        }
     }
 
     public virtual void Remove(Component child)
@@ -228,7 +239,9 @@ public abstract class Component : IDisposable
 
         //Translate each child component
         foreach (var child in Children)
+        {
             child.Translate(delta);
+        }
 
         //Invalidate the component
         Invalidated = true;
@@ -241,7 +254,10 @@ public abstract class Component : IDisposable
     {
         Primitive.Rotate(theta);
 
-        foreach (var child in Children) child.Rotate(theta);
+        foreach (var child in Children)
+        {
+            child.Rotate(theta);
+        }
 
         Invalidated = true;
         HandleTransformationEvent(new RotateEvent(Primitive.BoundingRectangle.Center, theta));
@@ -251,7 +267,10 @@ public abstract class Component : IDisposable
     {
         Primitive.Rotate(rotationCenter, theta);
 
-        foreach (var child in Children) child.Rotate(rotationCenter, theta);
+        foreach (var child in Children)
+        {
+            child.Rotate(rotationCenter, theta);
+        }
 
         Invalidated = true;
         HandleTransformationEvent(new RotateEvent(rotationCenter, theta));
@@ -261,7 +280,10 @@ public abstract class Component : IDisposable
     {
         Primitive.ScaleAboutCenter(delta);
 
-        foreach (var child in Children) child.Scale(Primitive.BoundingRectangle.Center, delta);
+        foreach (var child in Children)
+        {
+            child.Scale(Primitive.BoundingRectangle.Center, delta);
+        }
 
         Invalidated = true;
         HandleTransformationEvent(new ScaleEvent(Primitive.BoundingRectangle.Center, delta));
@@ -271,7 +293,10 @@ public abstract class Component : IDisposable
     {
         Primitive.Scale(delta, Primitive.BoundingRectangle.BottomLeft);
 
-        foreach (var child in Children) child.Scale(Primitive.BoundingRectangle.BottomLeft, delta);
+        foreach (var child in Children)
+        {
+            child.Scale(Primitive.BoundingRectangle.BottomLeft, delta);
+        }
 
         Invalidated = true;
         HandleTransformationEvent(new ScaleEvent(Primitive.BoundingRectangle.BottomLeft, delta));
@@ -281,7 +306,10 @@ public abstract class Component : IDisposable
     {
         Primitive.Scale(scaleCenter, delta);
 
-        foreach (var child in Children) child.Scale(scaleCenter, delta);
+        foreach (var child in Children)
+        {
+            child.Scale(scaleCenter, delta);
+        }
 
         Invalidated = true;
         HandleTransformationEvent(new ScaleEvent(scaleCenter, delta));
@@ -291,7 +319,10 @@ public abstract class Component : IDisposable
     {
         Primitive.Skew(delta);
 
-        foreach (var child in Children) child.Skew(delta);
+        foreach (var child in Children)
+        {
+            child.Skew(delta);
+        }
 
         Invalidated = true;
         HandleTransformationEvent(new SkewEvent(delta));
@@ -302,7 +333,10 @@ public abstract class Component : IDisposable
         Primitive.SetPosition(position);
 
         var delta = position - Primitive.BoundingRectangle.BottomLeft;
-        foreach (var child in Children) child.Translate(delta);
+        foreach (var child in Children)
+        {
+            child.Translate(delta);
+        }
 
         Invalidated = true;
         HandleTransformationEvent(new TranslateEvent(delta));
@@ -313,7 +347,10 @@ public abstract class Component : IDisposable
         Primitive.SetSize(size);
 
         var scaleFactor = size / Primitive.BoundingRectangle.Size;
-        foreach (var child in Children) child.Scale(Primitive.BoundingRectangle.BottomLeft, scaleFactor);
+        foreach (var child in Children)
+        {
+            child.Scale(Primitive.BoundingRectangle.BottomLeft, scaleFactor);
+        }
 
         Invalidated = true;
 
@@ -340,22 +377,35 @@ public abstract class Component : IDisposable
         //Firstly try and handle the event with the most nested child component
         var isBubbleHandled = false;
         foreach (var child in Children)
+        {
             if (child.Handle(uiEvent))
+            {
                 isBubbleHandled = true; //The child handles the event
+            }
+        }
 
         //Try and handle the event with this component
         var eventHandled = false;
         foreach (var behaviour in _uiBehaviours.Values)
+        {
             if (behaviour.HandleEvent(uiEvent))
+            {
                 eventHandled = true;
+            }
+        }
 
         if (!eventHandled)
+        {
             return false;
+        }
 
         OnUiEventTunneled?.Invoke(this, uiEvent);
 
         //If the event 
-        if (!isBubbleHandled) OnUiEvent?.Invoke(this, uiEvent);
+        if (!isBubbleHandled)
+        {
+            OnUiEvent?.Invoke(this, uiEvent);
+        }
 
         return true;
     }
@@ -418,7 +468,10 @@ public abstract class Component : IDisposable
 
     public void HandleTick(float timestamp)
     {
-        foreach (var tickBehaviour in _tickBehaviours.Values) tickBehaviour.HandleEvent(timestamp);
+        foreach (var tickBehaviour in _tickBehaviours.Values)
+        {
+            tickBehaviour.HandleEvent(timestamp);
+        }
     }
 
     #endregion
