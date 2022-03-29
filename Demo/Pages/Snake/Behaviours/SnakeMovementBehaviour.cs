@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using Aptacode.AppFramework.Demo.Pages.Snake.States;
 using Aptacode.AppFramework.Plugins.Behaviours;
@@ -9,7 +10,6 @@ public class SnakeMovementBehaviour : BehaviourPlugin<float>
 {
     public static string BehaviourName = "SnakeMovement";
     private readonly Random _random = new();
-    private readonly TimeSpan _tickSpeed = TimeSpan.FromMilliseconds(250);
 
     private DateTimeOffset _lastTick = DateTimeOffset.Now;
 
@@ -19,61 +19,52 @@ public class SnakeMovementBehaviour : BehaviourPlugin<float>
 
     public override bool Handle(float deltaT)
     {
-        if (DateTimeOffset.Now - _lastTick < _tickSpeed)
+        var snakeState = Scene.Plugins.State.Get<SnakeState>(SnakeState.StateName);
+
+        if (DateTimeOffset.Now - _lastTick < snakeState.TickSpeed)
         {
             return false;
         }
 
         _lastTick = DateTimeOffset.Now;
 
-        var snakeState = Scene.Plugins.State.Get<SnakeState>(SnakeState.StateName);
         var snakeHead = snakeState.SnakeHead;
         var snakeFood = snakeState.SnakeFood;
 
-        switch (snakeHead.Direction)
-        {
-            case Direction.Up:
-                snakeHead.Translate(new Vector2(0, 50));
-                break;
-            case Direction.Down:
-                snakeHead.Translate(new Vector2(0, -50));
-                break;
-            case Direction.Left:
-                snakeHead.Translate(new Vector2(-50, 0));
-                break;
-            case Direction.Right:
-                snakeHead.Translate(new Vector2(50, 0));
-                break;
-        }
+        snakeHead.Translate(SnakeGameConfig.GetMovement(snakeHead.Direction));
 
         var lastDirection = snakeHead.Direction;
         for (var i = 0; i < snakeState.SnakeBody.Count; i++)
         {
             var bodyComponent = snakeState.SnakeBody[i];
-
-            switch (bodyComponent.Direction)
-            {
-                case Direction.Up:
-                    bodyComponent.Translate(new Vector2(0, 50));
-                    break;
-                case Direction.Down:
-                    bodyComponent.Translate(new Vector2(0, -50));
-                    break;
-                case Direction.Left:
-                    bodyComponent.Translate(new Vector2(-50, 0));
-                    break;
-                case Direction.Right:
-                    bodyComponent.Translate(new Vector2(50, 0));
-                    break;
-            }
+            bodyComponent.Translate(SnakeGameConfig.GetMovement(bodyComponent.Direction));
 
             (lastDirection, bodyComponent.Direction) = (bodyComponent.Direction, lastDirection);
+        }
+
+        if (snakeState.SnakeBody.Any(b => b.CollidesWith(snakeHead)))
+        {
+            snakeState.EndGame();
+            return true;
+        }
+
+        if (snakeState.Walls.Any(b => b.CollidesWith(snakeHead)))
+        {
+            snakeState.EndGame();
+            return true;
         }
 
         if (snakeHead.CollidesWith(snakeFood))
         {
             snakeState.Grow();
-            snakeFood.SetPosition(new Vector2(_random.Next(0, 10) * 50, _random.Next(0, 10) * 50), true);
+            var foodPosition = SnakeGameConfig.RandomCell() + new Vector2(2, 2);
+            snakeFood.Primitive.SetPosition(foodPosition);
+            snakeFood.SetPosition(SnakeGameConfig.RandomCell(), true);
+            while (snakeHead.CollidesWith(snakeFood) || snakeState.SnakeBody.Any(b => b.CollidesWith(snakeFood)))
+            {
+                foodPosition = SnakeGameConfig.RandomCell() + new Vector2(2, 2);
+                snakeFood.Primitive.SetPosition(foodPosition);
+            }
         }
 
         return true;

@@ -41,8 +41,4 @@ public class SnakeControlBehaviour : BehaviourPlugin<UiEvent>
     {
         return BehaviourName;
     }
-
-    #region Properties
-
-    #endregion
 }

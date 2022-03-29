@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Numerics;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Components.Primitives;
-using Aptacode.AppFramework.Demo.Pages.Physics;
 using Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 using Aptacode.AppFramework.Demo.Pages.Physics.States;
 using Aptacode.Geometry;
