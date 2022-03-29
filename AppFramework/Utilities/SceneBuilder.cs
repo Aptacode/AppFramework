@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using Aptacode.AppFramework.Components;
-using Aptacode.AppFramework.Components.Behaviours.Scene;
 
 namespace Aptacode.AppFramework.Utilities;
 
 public class SceneBuilder
 {
     private readonly List<Component> _components = new();
-    private bool _addPhysics;
 
     private float _height;
     private float _width;
@@ -31,19 +29,9 @@ public class SceneBuilder
         return this;
     }
 
-    public SceneBuilder AddPhysics()
-    {
-        _addPhysics = true;
-        return this;
-    }
-
     public Scene.Scene Build()
     {
         var scene = new Scene.Scene(new Vector2(_width, _height));
-        if (_addPhysics)
-        {
-            scene.Add(new ScenePhysicsBehaviour(scene));
-        }
 
         foreach (var componentViewModel in _components)
         {

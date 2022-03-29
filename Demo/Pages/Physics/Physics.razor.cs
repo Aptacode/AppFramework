@@ -2,16 +2,15 @@
 using System.Numerics;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Components;
-using Aptacode.AppFramework.Components.Behaviours;
-using Aptacode.AppFramework.Components.Behaviours.Ui;
-using Aptacode.AppFramework.Components.States.Component;
+using Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
+using Aptacode.AppFramework.Demo.Pages.Physics.States;
 using Aptacode.AppFramework.Scene;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Primitives;
 using Microsoft.AspNetCore.Components;
 
-namespace Aptacode.AppFramework.Demo.Pages;
+namespace Aptacode.AppFramework.Demo.Pages.Physics;
 
 public class PhysicsBase : ComponentBase
 {
@@ -22,7 +21,8 @@ public class PhysicsBase : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         //Scene
-        Scene = new SceneBuilder().SetWidth(1000).SetHeight(1000).AddPhysics().Build();
+        Scene = new SceneBuilder().SetWidth(1000).SetHeight(1000).Build();
+        Scene.Plugins.Tick.Add(new ScenePhysicsBehaviour(Scene));
 
         SceneController = new SceneController(BlazorCanvas, Scene)
         {
@@ -46,7 +46,7 @@ public class PhysicsBase : ComponentBase
         var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(450, 200), new Vector2(350, 300)).ToComponent()
             .AddDragToMove(Scene);
         rectangle.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
-        rectangle.AddUiBehaviour(new ArrowKeyBehaviour(Scene, rectangle));
+        rectangle.Plugins.Ui.Add(new ArrowKeyBehaviour(Scene, rectangle));
 
         rectangle.FillColor = Color.SlateGray;
         rectangle.BorderColor = Color.DarkSlateGray;

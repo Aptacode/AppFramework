@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Numerics;
-using Aptacode.AppFramework.Components.Behaviours.Scene;
+using Aptacode.AppFramework.Demo.Pages.Snake.States;
+using Aptacode.AppFramework.Plugins.Behaviours;
 
-namespace Aptacode.AppFramework.Demo.Pages.Snake;
+namespace Aptacode.AppFramework.Demo.Pages.Snake.Behaviours;
 
-public class SnakeMovementBehaviour : SceneTickBehaviour
+public class SnakeMovementBehaviour : BehaviourPlugin<float>
 {
+    public static string BehaviourName = "SnakeMovement";
     private readonly Random _random = new();
     private readonly TimeSpan _tickSpeed = TimeSpan.FromMilliseconds(250);
 
@@ -15,16 +17,16 @@ public class SnakeMovementBehaviour : SceneTickBehaviour
     {
     }
 
-    public override void Handle(float deltaT)
+    public override bool Handle(float deltaT)
     {
         if (DateTimeOffset.Now - _lastTick < _tickSpeed)
         {
-            return;
+            return false;
         }
 
         _lastTick = DateTimeOffset.Now;
 
-        var snakeState = Scene.GetState<SnakeState>();
+        var snakeState = Scene.Plugins.State.Get<SnakeState>(SnakeState.StateName);
         var snakeHead = snakeState.SnakeHead;
         var snakeFood = snakeState.SnakeFood;
 
@@ -73,5 +75,12 @@ public class SnakeMovementBehaviour : SceneTickBehaviour
             snakeState.Grow();
             snakeFood.SetPosition(new Vector2(_random.Next(0, 10) * 50, _random.Next(0, 10) * 50), true);
         }
+
+        return true;
+    }
+
+    public override string Name()
+    {
+        return BehaviourName;
     }
 }

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Aptacode.AppFramework.Components;
-using Aptacode.AppFramework.Components.Behaviours.Scene;
-using Aptacode.AppFramework.Components.States.Scene;
+using Aptacode.AppFramework.Plugins;
+using Aptacode.AppFramework.Plugins.Behaviours;
+using Aptacode.AppFramework.Plugins.States;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 
@@ -20,26 +21,21 @@ public class Scene : BindableBase
 
     #endregion
 
-    #region TickBehaviours
+    #region Plugins
 
-    private readonly List<SceneTickBehaviour> _tickBehaviours = new();
+    public ScenePlugins Plugins { get; set; } = new();
 
-    public Scene Add(SceneTickBehaviour tickBehaviour)
+    public class ScenePlugins
     {
-        _tickBehaviours.Add(tickBehaviour);
-        return this;
-    }
-
-    public Scene Remove(SceneTickBehaviour tickBehaviour)
-    {
-        _tickBehaviours.Remove(tickBehaviour);
-        return this;
+        public PluginCollection<SceneState> State { get; } = new();
+        public PluginCollection<BehaviourPlugin<UiEvent>> Ui { get; } = new();
+        public PluginCollection<BehaviourPlugin<float>> Tick { get; } = new();
     }
 
     public void Handle(float deltaT)
     {
         //Execute scene behaviours
-        foreach (var sceneBehavior in _tickBehaviours)
+        foreach (var sceneBehavior in Plugins.Tick.All)
         {
             sceneBehavior.Handle(deltaT);
         }
@@ -47,26 +43,8 @@ public class Scene : BindableBase
         //Execute tick behaviours
         foreach (var component in Components)
         {
-            component.HandleTick(deltaT);
+            component.Handle(deltaT);
         }
-    }
-
-    #endregion
-
-    #region Behaviours
-
-    private readonly List<SceneUiBehaviour> _uiBehaviours = new();
-
-    public Scene Add(SceneUiBehaviour uiBehaviour)
-    {
-        _uiBehaviours.Add(uiBehaviour);
-        return this;
-    }
-
-    public Scene Remove(SceneUiBehaviour uiBehaviour)
-    {
-        _uiBehaviours.Remove(uiBehaviour);
-        return this;
     }
 
     #endregion
@@ -94,7 +72,7 @@ public class Scene : BindableBase
     public void Handle(UiEvent e)
     {
         //Execute scene behaviours
-        foreach (var sceneBehavior in _uiBehaviours)
+        foreach (var sceneBehavior in Plugins.Ui.All)
         {
             sceneBehavior.Handle(e);
         }
@@ -182,27 +160,6 @@ public class Scene : BindableBase
         _components.RemoveAt(index);
         _components.Insert(index - 1, componentViewModel);
     }
-
-    #endregion
-
-    #region States
-
-    public void AddState<T>(T state) where T : SceneState
-    {
-        _states[typeof(T).Name] = state;
-    }
-
-    public bool HasState<T>() where T : SceneState
-    {
-        return _states.ContainsKey(typeof(T).Name);
-    }
-
-    public T? GetState<T>() where T : SceneState
-    {
-        return _states.TryGetValue(typeof(T).Name, out var value) ? value as T : null;
-    }
-
-    private readonly Dictionary<string, SceneState> _states = new();
 
     #endregion
 }

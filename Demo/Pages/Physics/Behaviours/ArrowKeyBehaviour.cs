@@ -1,23 +1,27 @@
 ﻿using System.Numerics;
-using Aptacode.AppFramework.Components.States.Component;
+using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Demo.Pages.Physics.States;
+using Aptacode.AppFramework.Plugins.Behaviours;
 using Aptacode.AppFramework.Scene.Events;
 
-namespace Aptacode.AppFramework.Components.Behaviours.Ui;
+namespace Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 
-public class ArrowKeyBehaviour : UiBehaviour
+public class ArrowKeyBehaviour : ComponentBehaviour<UiEvent>
 {
-    public ArrowKeyBehaviour(AppFramework.Scene.Scene scene, Component component) : base(scene, component)
+    public static string BehaviourName = "ArrowForce";
+
+    public ArrowKeyBehaviour(Scene.Scene scene, Component component) : base(scene, component)
     {
     }
 
-    public override bool HandleEvent(UiEvent uiEvent)
+    public override bool Handle(UiEvent uiEvent)
     {
         if (uiEvent is not KeyDownEvent keyEvent)
         {
             return false;
         }
 
-        var physicsState = Component.GetState<PhysicsState>();
+        var physicsState = Component.Plugins.State.Get<PhysicsState>(PhysicsState.StateName);
         if (physicsState == null)
         {
             return false;
@@ -40,6 +44,11 @@ public class ArrowKeyBehaviour : UiBehaviour
         }
 
         return false;
+    }
+
+    public override string Name()
+    {
+        return BehaviourName;
     }
 
     #region Properties

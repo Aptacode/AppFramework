@@ -1,15 +1,19 @@
 ﻿using System.Numerics;
+using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Plugins.Behaviours;
 using Aptacode.AppFramework.Scene.Events;
 
-namespace Aptacode.AppFramework.Components.Behaviours.Ui;
+namespace Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 
-public class DragBehaviour : UiBehaviour
+public class DragBehaviour : ComponentBehaviour<UiEvent>
 {
-    public DragBehaviour(AppFramework.Scene.Scene scene, Component component) : base(scene, component)
+    public static string BehaviourName = "DragForce";
+
+    public DragBehaviour(Scene.Scene scene, Component component) : base(scene, component)
     {
     }
 
-    public override bool HandleEvent(UiEvent uiEvent)
+    public override bool Handle(UiEvent uiEvent)
     {
         if (uiEvent is not MouseEvent mouseEvent)
         {
@@ -50,6 +54,11 @@ public class DragBehaviour : UiBehaviour
         }
 
         return false;
+    }
+
+    public override string Name()
+    {
+        return BehaviourName;
     }
 
     #region Properties

@@ -1,20 +1,24 @@
 ﻿using System.Linq;
-using Aptacode.AppFramework.Components.States.Component;
+using Aptacode.AppFramework.Demo.Pages.Physics.States;
+using Aptacode.AppFramework.Plugins.Behaviours;
 
-namespace Aptacode.AppFramework.Components.Behaviours.Scene;
+namespace Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 
-public class ScenePhysicsBehaviour : SceneTickBehaviour
+public class ScenePhysicsBehaviour : BehaviourPlugin<float>
 {
-    public ScenePhysicsBehaviour(AppFramework.Scene.Scene scene) : base(scene)
+    public static string BehaviourName = "ScenePhysics";
+
+    public ScenePhysicsBehaviour(Scene.Scene scene) : base(scene)
     {
     }
 
     public bool Gravity { get; set; } = true;
     public bool Friction { get; set; } = true;
 
-    public override void Handle(float deltaT)
+    public override bool Handle(float deltaT)
     {
-        var physicsState = Scene.Components.Select(c => c.GetState<PhysicsState>()).ToList();
+        var physicsState = Scene.Components.Select(c => c.Plugins.State.Get<PhysicsState>(PhysicsState.StateName))
+            .ToList();
 
         for (var i = 0; i < physicsState.Count(); i++)
         {
@@ -76,5 +80,12 @@ public class ScenePhysicsBehaviour : SceneTickBehaviour
                 a.Component.Translate(-distanceMoved);
             }
         }
+
+        return true;
+    }
+
+    public override string Name()
+    {
+        return BehaviourName;
     }
 }

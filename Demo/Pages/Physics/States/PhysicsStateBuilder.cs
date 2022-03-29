@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Aptacode.AppFramework.Components.States.Component;
+namespace Aptacode.AppFramework.Demo.Pages.Physics.States;
 
 public class PhysicsStateBuilder
 {

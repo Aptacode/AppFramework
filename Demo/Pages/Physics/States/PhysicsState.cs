@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
+using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Plugins.States;
 using Aptacode.Geometry;
 
-namespace Aptacode.AppFramework.Components.States.Component;
+namespace Aptacode.AppFramework.Demo.Pages.Physics.States;
 
 public class PhysicsState : ComponentState
 {
@@ -11,7 +13,9 @@ public class PhysicsState : ComponentState
 
     #endregion
 
-    public PhysicsState(Components.Component component) : base(component)
+    public static string StateName = "PhysicsState";
+
+    public PhysicsState(Component component) : base(component)
     {
     }
 
@@ -34,6 +38,11 @@ public class PhysicsState : ComponentState
     }
 
     #endregion
+
+    public override string Name()
+    {
+        return StateName;
+    }
 
     #region Linear Momentum
 

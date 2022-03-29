@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
-using Aptacode.AppFramework.Components.Primitives;
-using Aptacode.AppFramework.Components.States.Scene;
+using Aptacode.AppFramework.Demo.Pages.Snake.Behaviours;
+using Aptacode.AppFramework.Demo.Pages.Snake.Components;
+using Aptacode.AppFramework.Demo.Pages.Snake.States;
 using Aptacode.AppFramework.Scene;
 using Aptacode.AppFramework.Utilities;
 using Aptacode.BlazorCanvas;
@@ -12,69 +11,6 @@ using Aptacode.Geometry.Primitives;
 using Microsoft.AspNetCore.Components;
 
 namespace Aptacode.AppFramework.Demo.Pages.Snake;
-
-public enum Direction
-{
-    Up,
-    Down,
-    Left,
-    Right
-}
-
-public sealed class SnakeState : SceneState
-{
-    public SnakeState(Scene.Scene scene) : base(scene)
-    {
-    }
-
-    public SnakeBodyComponent SnakeHead { get; set; }
-    public SnakeFoodComponent SnakeFood { get; set; }
-    public List<SnakeBodyComponent> SnakeBody { get; set; } = new();
-
-    public void Grow()
-    {
-        var lastSnakeComponent = SnakeBody.Count > 0 ? SnakeBody.Last() : SnakeHead;
-
-        var snakeBodyComponent =
-            new SnakeBodyComponent(Polygon.Create(lastSnakeComponent.Polygon.Vertices.Vertices.ToArray()));
-        snakeBodyComponent.FillColor = Color.LightSlateGray;
-        snakeBodyComponent.BorderColor = Color.DarkSlateGray;
-        switch (snakeBodyComponent.Direction)
-        {
-            case Direction.Up:
-                snakeBodyComponent.Translate(new Vector2(0, -50));
-                break;
-            case Direction.Down:
-                snakeBodyComponent.Translate(new Vector2(0, 50));
-                break;
-            case Direction.Left:
-                snakeBodyComponent.Translate(new Vector2(50, 0));
-                break;
-            case Direction.Right:
-                snakeBodyComponent.Translate(new Vector2(-50, 0));
-                break;
-        }
-
-        SnakeBody.Add(snakeBodyComponent);
-        Scene.Add(snakeBodyComponent);
-    }
-}
-
-public sealed class SnakeBodyComponent : PolygonComponent
-{
-    public SnakeBodyComponent(Polygon primitive) : base(primitive)
-    {
-    }
-
-    public Direction Direction { get; set; }
-}
-
-public sealed class SnakeFoodComponent : PolygonComponent
-{
-    public SnakeFoodComponent(Polygon primitive) : base(primitive)
-    {
-    }
-}
 
 public class SnakeBase : ComponentBase
 {
@@ -106,15 +42,15 @@ public class SnakeBase : ComponentBase
         Scene.Add(snakeFood);
 
         var snakeDirection = new SnakeControlBehaviour(Scene);
-        Scene.Add(snakeDirection);
+        Scene.Plugins.Ui.Add(snakeDirection);
 
         var snakeState = new SnakeState(Scene);
         snakeState.SnakeHead = snakeHead;
         snakeState.SnakeFood = snakeFood;
-        Scene.AddState(snakeState);
+        Scene.Plugins.State.Add(snakeState);
 
         var snakeBehavioru = new SnakeMovementBehaviour(Scene);
-        Scene.Add(snakeBehavioru);
+        Scene.Plugins.Tick.Add(snakeBehavioru);
 
         await base.OnInitializedAsync();
     }

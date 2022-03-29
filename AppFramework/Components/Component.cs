@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
-using Aptacode.AppFramework.Components.Behaviours.Tick;
-using Aptacode.AppFramework.Components.Behaviours.Transformation;
-using Aptacode.AppFramework.Components.Behaviours.Ui;
-using Aptacode.AppFramework.Components.States.Component;
+using Aptacode.AppFramework.Plugins;
+using Aptacode.AppFramework.Plugins.Behaviours;
+using Aptacode.AppFramework.Plugins.States;
 using Aptacode.AppFramework.Scene.Events;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Collision.Rectangles;
@@ -33,8 +32,23 @@ public abstract class Component : IDisposable
 
     #endregion
 
+    public ComponentPlugins Plugins { get; set; } = new();
+
     public virtual void Dispose()
     {
+    }
+
+    public void Handle(float delta)
+    {
+        Plugins.Tick.All.All(p => p.Handle(delta));
+    }
+
+    public class ComponentPlugins
+    {
+        public PluginCollection<ComponentBehaviour<UiEvent>> Ui { get; } = new();
+        public PluginCollection<ComponentBehaviour<TransformationEvent>> Transformation { get; } = new();
+        public PluginCollection<ComponentBehaviour<float>> Tick { get; } = new();
+        public PluginCollection<ComponentState> State { get; } = new();
     }
 
     #region Canvas
@@ -247,7 +261,7 @@ public abstract class Component : IDisposable
         Invalidated = true;
 
         //Handle the transformation event
-        HandleTransformationEvent(new TranslateEvent(delta));
+        Handle(new TranslateEvent(delta));
     }
 
     public virtual void Rotate(float theta)
@@ -260,7 +274,7 @@ public abstract class Component : IDisposable
         }
 
         Invalidated = true;
-        HandleTransformationEvent(new RotateEvent(Primitive.BoundingRectangle.Center, theta));
+        Handle(new RotateEvent(Primitive.BoundingRectangle.Center, theta));
     }
 
     public virtual void Rotate(Vector2 rotationCenter, float theta)
@@ -273,7 +287,7 @@ public abstract class Component : IDisposable
         }
 
         Invalidated = true;
-        HandleTransformationEvent(new RotateEvent(rotationCenter, theta));
+        Handle(new RotateEvent(rotationCenter, theta));
     }
 
     public virtual void ScaleAboutCenter(Vector2 delta)
@@ -286,7 +300,7 @@ public abstract class Component : IDisposable
         }
 
         Invalidated = true;
-        HandleTransformationEvent(new ScaleEvent(Primitive.BoundingRectangle.Center, delta));
+        Handle(new ScaleEvent(Primitive.BoundingRectangle.Center, delta));
     }
 
     public virtual void ScaleAboutTopLeft(Vector2 delta)
@@ -299,7 +313,7 @@ public abstract class Component : IDisposable
         }
 
         Invalidated = true;
-        HandleTransformationEvent(new ScaleEvent(Primitive.BoundingRectangle.BottomLeft, delta));
+        Handle(new ScaleEvent(Primitive.BoundingRectangle.BottomLeft, delta));
     }
 
     public virtual void Scale(Vector2 scaleCenter, Vector2 delta)
@@ -312,7 +326,7 @@ public abstract class Component : IDisposable
         }
 
         Invalidated = true;
-        HandleTransformationEvent(new ScaleEvent(scaleCenter, delta));
+        Handle(new ScaleEvent(scaleCenter, delta));
     }
 
     public virtual void Skew(Vector2 delta)
@@ -325,7 +339,7 @@ public abstract class Component : IDisposable
         }
 
         Invalidated = true;
-        HandleTransformationEvent(new SkewEvent(delta));
+        Handle(new SkewEvent(delta));
     }
 
     public virtual void SetPosition(Vector2 position, bool source)
@@ -339,7 +353,7 @@ public abstract class Component : IDisposable
         }
 
         Invalidated = true;
-        HandleTransformationEvent(new TranslateEvent(delta));
+        Handle(new TranslateEvent(delta));
     }
 
     public virtual void SetSize(Vector2 size)
@@ -354,13 +368,13 @@ public abstract class Component : IDisposable
 
         Invalidated = true;
 
-        HandleTransformationEvent(new ScaleEvent(Primitive.BoundingRectangle.BottomLeft, scaleFactor));
+        Handle(new ScaleEvent(Primitive.BoundingRectangle.BottomLeft, scaleFactor));
     }
 
-    private void HandleTransformationEvent(TransformationEvent transformationEvent)
+    private void Handle(TransformationEvent e)
     {
-        _transformationBehaviours.Values.All(t => t.HandleEvent(transformationEvent));
-        OnTransformationEvent?.Invoke(this, transformationEvent);
+        Plugins.Transformation.All.All(t => t.Handle(e));
+        OnTransformationEvent?.Invoke(this, e);
     }
 
     #endregion
@@ -386,9 +400,9 @@ public abstract class Component : IDisposable
 
         //Try and handle the event with this component
         var eventHandled = false;
-        foreach (var behaviour in _uiBehaviours.Values)
+        foreach (var behaviour in Plugins.Ui.All)
         {
-            if (behaviour.HandleEvent(uiEvent))
+            if (behaviour.Handle(uiEvent))
             {
                 eventHandled = true;
             }
@@ -409,93 +423,6 @@ public abstract class Component : IDisposable
 
         return true;
     }
-
-    #region Ui
-
-    public void AddUiBehaviour<T>(T behaviour) where T : UiBehaviour
-    {
-        _uiBehaviours[typeof(T).Name] = behaviour;
-    }
-
-    public bool HasUiBehaviour<T>() where T : UiBehaviour
-    {
-        return _uiBehaviours.ContainsKey(typeof(T).Name);
-    }
-
-    private readonly Dictionary<string, UiBehaviour> _uiBehaviours = new();
-
-    #endregion
-
-    #region Transformations
-
-    public void AddTransformationBehaviour<T>(T behaviour) where T : TransformationBehaviour
-    {
-        _transformationBehaviours[typeof(T).Name] = behaviour;
-    }
-
-    public bool HasTransformationBehaviour<T>() where T : TransformationBehaviour
-    {
-        return _transformationBehaviours.ContainsKey(typeof(T).Name);
-    }
-
-    public T? GetTransformationBehaviour<T>() where T : TransformationBehaviour
-    {
-        return _transformationBehaviours.TryGetValue(typeof(T).Name, out var value) ? value as T : null;
-    }
-
-    private readonly Dictionary<string, TransformationBehaviour> _transformationBehaviours = new();
-
-    #endregion
-
-    #region Tick
-
-    public void AddTickBehaviour<T>(T behaviour) where T : TickBehaviour
-    {
-        _tickBehaviours[typeof(T).Name] = behaviour;
-    }
-
-    public bool HasTickBehaviour<T>() where T : TickBehaviour
-    {
-        return _tickBehaviours.ContainsKey(typeof(T).Name);
-    }
-
-    public T? GetTickBehaviour<T>() where T : TickBehaviour
-    {
-        return _tickBehaviours.TryGetValue(typeof(T).Name, out var value) ? value as T : null;
-    }
-
-    private readonly Dictionary<string, TickBehaviour> _tickBehaviours = new();
-
-    public void HandleTick(float timestamp)
-    {
-        foreach (var tickBehaviour in _tickBehaviours.Values)
-        {
-            tickBehaviour.HandleEvent(timestamp);
-        }
-    }
-
-    #endregion
-
-    #region States
-
-    public void AddState<T>(T behaviour) where T : ComponentState
-    {
-        _states[typeof(T).Name] = behaviour;
-    }
-
-    public bool HasState<T>() where T : ComponentState
-    {
-        return _states.ContainsKey(typeof(T).Name);
-    }
-
-    public T? GetState<T>() where T : ComponentState
-    {
-        return _states.TryGetValue(typeof(T).Name, out var value) ? value as T : null;
-    }
-
-    private readonly Dictionary<string, ComponentState> _states = new();
-
-    #endregion
 
     #endregion
 }
