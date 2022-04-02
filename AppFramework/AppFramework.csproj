@@ -17,11 +17,7 @@
     <ApplicationIcon>Logo.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="C:\Users\tjone\.nuget\packages\aptacode.blazorcanvas\1.0.14\contentFiles\any\net6.0\wwwroot\BlazorCanvasInterop.js" />
-  </ItemGroup>
-
-  <ItemGroup>
+	<ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
