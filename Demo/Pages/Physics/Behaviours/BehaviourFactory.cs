@@ -4,16 +4,16 @@ namespace Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 
 public static class BehaviourFactory
 {
-    public static Component AddDragToMove(this Component component, Scene.Scene scene)
+    public static Component AddDragToMove(this Component component, Scene scene)
     {
-        component.Plugins.Ui.Add(new DragBehaviour(scene, component));
+        component.Plugins.Add(new DragBehaviour(scene, component));
         return component;
     }
 
-    public static ScenePhysicsBehaviour AddPhysics(this Scene.Scene scene)
+    public static ScenePhysicsBehaviour AddPhysics(this Scene scene)
     {
         var behaviour = new ScenePhysicsBehaviour(scene);
-        scene.Plugins.Tick.Add(behaviour);
+        scene.Plugins.Add(behaviour);
         return behaviour;
     }
 }

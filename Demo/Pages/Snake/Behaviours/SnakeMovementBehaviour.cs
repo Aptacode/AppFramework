@@ -2,24 +2,24 @@
 using System.Linq;
 using System.Numerics;
 using Aptacode.AppFramework.Demo.Pages.Snake.States;
-using Aptacode.AppFramework.Plugins.Behaviours;
+using Aptacode.AppFramework.Plugins;
 
 namespace Aptacode.AppFramework.Demo.Pages.Snake.Behaviours;
 
-public class SnakeMovementBehaviour : BehaviourPlugin<float>
+public class SnakeMovementBehaviour : Plugin
 {
     public static string BehaviourName = "SnakeMovement";
     private readonly Random _random = new();
 
     private DateTimeOffset _lastTick = DateTimeOffset.Now;
 
-    public SnakeMovementBehaviour(Scene.Scene scene) : base(scene)
+    public SnakeMovementBehaviour(Scene scene) : base(scene)
     {
     }
 
     public override bool Handle(float deltaT)
     {
-        var snakeState = Scene.Plugins.State.Get<SnakeState>(SnakeState.StateName);
+        var snakeState = Scene.Plugins.Get<SnakeState>(SnakeState.StateName);
 
         if (DateTimeOffset.Now - _lastTick < snakeState.TickSpeed)
         {

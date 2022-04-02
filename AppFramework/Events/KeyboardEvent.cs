@@ -1,4 +1,4 @@
-﻿namespace Aptacode.AppFramework.Scene.Events;
+﻿namespace Aptacode.AppFramework.Events;
 
 public abstract record KeyboardEvent(string Key) : UiEvent;
 

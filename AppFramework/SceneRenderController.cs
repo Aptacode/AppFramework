@@ -1,23 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
+﻿using System.Linq;
 using Aptacode.AppFramework.Components;
 using Aptacode.BlazorCanvas;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 
-namespace Aptacode.AppFramework.Scene;
+namespace Aptacode.AppFramework;
 
-public class SceneController : BindableBase
+public class SceneRenderController : BindableBase
 {
     #region Ctor
 
-    public SceneController(BlazorCanvasInterop canvas, Scene scene)
+    public SceneRenderController(BlazorCanvasInterop canvas)
     {
         _canvas = canvas;
-        Id = Guid.NewGuid();
-        Size = scene.Size;
-        Scene = scene;
-        UserInteractionController = new SceneInteractionController(scene);
     }
 
     #endregion
@@ -63,13 +57,9 @@ public class SceneController : BindableBase
 
     #region Properties
 
-    public SceneInteractionController UserInteractionController { get; }
     public Scene Scene { get; set; }
-
     public string Cursor { get; set; }
     public bool ShowGrid { get; set; }
-    public Vector2 Size { get; }
-    public Guid Id { get; set; }
 
     private readonly BlazorCanvasInterop _canvas;
 

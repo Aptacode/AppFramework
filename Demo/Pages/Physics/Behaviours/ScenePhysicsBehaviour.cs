@@ -1,14 +1,14 @@
 ﻿using System.Linq;
 using Aptacode.AppFramework.Demo.Pages.Physics.States;
-using Aptacode.AppFramework.Plugins.Behaviours;
+using Aptacode.AppFramework.Plugins;
 
 namespace Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 
-public class ScenePhysicsBehaviour : BehaviourPlugin<float>
+public class ScenePhysicsBehaviour : Plugin
 {
     public static string BehaviourName = "ScenePhysics";
 
-    public ScenePhysicsBehaviour(Scene.Scene scene) : base(scene)
+    public ScenePhysicsBehaviour(Scene scene) : base(scene)
     {
     }
 
@@ -17,7 +17,7 @@ public class ScenePhysicsBehaviour : BehaviourPlugin<float>
 
     public override bool Handle(float deltaT)
     {
-        var physicsState = Scene.Components.Select(c => c.Plugins.State.Get<PhysicsState>(PhysicsState.StateName))
+        var physicsState = Scene.Components.Select(c => c.Plugins.Get<PhysicsState>(PhysicsState.StateName))
             .ToList();
 
         for (var i = 0; i < physicsState.Count(); i++)

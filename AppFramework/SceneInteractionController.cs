@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Numerics;
-using Aptacode.AppFramework.Scene.Events;
+using Aptacode.AppFramework.Events;
 using Aptacode.Geometry;
 
-namespace Aptacode.AppFramework.Scene;
+namespace Aptacode.AppFramework;
 
 public class SceneInteractionController
 {
-    private readonly Scene _scene;
-
-    public SceneInteractionController(Scene scene)
-    {
-        _scene = scene;
-    }
-
     #region State
-
+    public Scene Scene { get; set; }
     public Vector2 LastMousePosition { get; set; }
     public Vector2 MouseDownPosition { get; set; }
     public DateTime FirstMouseDownTime { get; set; }
@@ -30,7 +23,7 @@ public class SceneInteractionController
 
     private Vector2 Transform(Vector2 p)
     {
-        return new Vector2(p.X, _scene.Size.Y - p.Y);
+        return new Vector2(p.X, Scene.Size.Y - p.Y);
     }
 
     public void MouseClickDown()
@@ -51,11 +44,11 @@ public class SceneInteractionController
 
         if (DateTime.Now - SecondMouseDownTime < TimeSpan.FromMilliseconds(150))
         {
-            _scene.Handle(new MouseDoubleClickEvent(position));
+            Scene.Handle(new MouseDoubleClickEvent(position));
         }
         else if (DateTime.Now - FirstMouseDownTime < TimeSpan.FromMilliseconds(150))
         {
-            _scene.Handle(new MouseClickEvent(position));
+            Scene.Handle(new MouseClickEvent(position));
         }
     }
 
@@ -72,7 +65,7 @@ public class SceneInteractionController
 
         MouseDownPosition = position;
         MouseClickDown();
-        _scene.Handle(new MouseDownEvent(position));
+        Scene.Handle(new MouseDownEvent(position));
         LastMousePosition = position;
     }
 
@@ -81,7 +74,7 @@ public class SceneInteractionController
         position = Transform(position);
 
         IsMouseDown = false;
-        _scene.Handle(new MouseUpEvent(position));
+        Scene.Handle(new MouseUpEvent(position));
         LastMousePosition = position;
 
         MouseClickRelease(position);
@@ -97,7 +90,7 @@ public class SceneInteractionController
             return;
         }
 
-        _scene.Handle(new MouseMoveEvent(position));
+        Scene.Handle(new MouseMoveEvent(position));
         LastMousePosition = position;
     }
 
@@ -118,7 +111,7 @@ public class SceneInteractionController
     public void KeyDown(string key)
     {
         CurrentKey = key;
-        _scene.Handle(new KeyDownEvent(key));
+        Scene.Handle(new KeyDownEvent(key));
     }
 
     public void KeyUp(string key)
@@ -129,7 +122,7 @@ public class SceneInteractionController
         }
 
         CurrentKey = null;
-        _scene.Handle(new KeyUpEvent(key));
+        Scene.Handle(new KeyUpEvent(key));
     }
 
     #endregion

@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Aptacode.AppFramework.Scene.Events;
+namespace Aptacode.AppFramework.Events;
 
 public abstract record MouseEvent(Vector2 Position) : UiEvent
 {

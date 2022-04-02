@@ -4,9 +4,6 @@ using System.Threading.Tasks;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 using Aptacode.AppFramework.Demo.Pages.Physics.States;
-using Aptacode.AppFramework.Scene;
-using Aptacode.AppFramework.Utilities;
-using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Primitives;
 using Microsoft.AspNetCore.Components;
 
@@ -14,30 +11,26 @@ namespace Aptacode.AppFramework.Demo.Pages.Physics;
 
 public class PhysicsBase : ComponentBase
 {
-    [Inject] public BlazorCanvasInterop BlazorCanvas { get; set; }
-    public Scene.Scene Scene { get; set; }
-    public SceneController SceneController { get; set; }
+    public Scene Scene { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         //Scene
-        Scene = new SceneBuilder().SetWidth(1000).SetHeight(1000).Build();
-        Scene.Plugins.Tick.Add(new ScenePhysicsBehaviour(Scene));
-
-        SceneController = new SceneController(BlazorCanvas, Scene)
+        Scene = new Scene
         {
-            ShowGrid = true
+            Size = new Vector2(1000)
         };
+        Scene.Plugins.Add(new ScenePhysicsBehaviour(Scene));
 
         var ball = Ellipse.Create(new Vector2(500, 500), 50).ToComponent().AddDragToMove(Scene);
-        ball.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
+        ball.AddPhysics(Scene).SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
         ball.FillColor = Color.LightSlateGray;
         ball.BorderColor = Color.DarkSlateGray;
 
         Scene.Add(ball);
 
         var ball2 = Ellipse.Create(new Vector2(650, 450), 50).ToComponent().AddDragToMove(Scene);
-        ball2.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
+        ball2.AddPhysics(Scene).SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
         ball2.FillColor = Color.SlateGray;
         ball2.BorderColor = Color.DarkSlateGray;
 
@@ -45,8 +38,8 @@ public class PhysicsBase : ComponentBase
 
         var rectangle = Polygon.Rectangle.FromTwoPoints(new Vector2(450, 200), new Vector2(350, 300)).ToComponent()
             .AddDragToMove(Scene);
-        rectangle.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
-        rectangle.Plugins.Ui.Add(new ArrowKeyBehaviour(Scene, rectangle));
+        rectangle.AddPhysics(Scene).SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
+        rectangle.Plugins.Add(new ArrowKeyBehaviour(Scene, rectangle));
 
         rectangle.FillColor = Color.SlateGray;
         rectangle.BorderColor = Color.DarkSlateGray;
@@ -55,7 +48,7 @@ public class PhysicsBase : ComponentBase
 
         var rectangle2 = Polygon.Rectangle.FromTwoPoints(new Vector2(450, 700), new Vector2(350, 600)).ToComponent()
             .AddDragToMove(Scene);
-        rectangle2.AddPhysics().SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
+        rectangle2.AddPhysics(Scene).SetHorizontalVelocity(-1, 1).SetVerticalVelocity(-1, 1);
         rectangle2.FillColor = Color.SlateGray;
         rectangle2.BorderColor = Color.DarkSlateGray;
 
@@ -77,10 +70,10 @@ public class PhysicsBase : ComponentBase
         left.FillColor = Color.SlateGray;
         left.BorderColor = Color.SlateGray;
 
-        top.AddPhysics().IsFixed();
-        bottom.AddPhysics().IsFixed();
-        left.AddPhysics().IsFixed();
-        right.AddPhysics().IsFixed();
+        top.AddPhysics(Scene).IsFixed();
+        bottom.AddPhysics(Scene).IsFixed();
+        left.AddPhysics(Scene).IsFixed();
+        right.AddPhysics(Scene).IsFixed();
 
         Scene.Add(top).Add(right).Add(bottom).Add(left);
 

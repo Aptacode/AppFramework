@@ -5,9 +5,9 @@
     <LangVersion>10.0</LangVersion>
     <Authors>Aptacode</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.38</Version>
-    <AssemblyVersion>1.0.38</AssemblyVersion>
-    <FileVersion>1.0.38</FileVersion>
+    <Version>1.0.39</Version>
+    <AssemblyVersion>1.0.39</AssemblyVersion>
+    <FileVersion>1.0.39</FileVersion>
     <RepositoryUrl>https://github.com/Aptacode/AppFramework</RepositoryUrl>
     <Description>High performance .NET 6 application development framework library for Blazor</Description>
     <PackageProjectUrl>https://github.com/Aptacode/AppFramework</PackageProjectUrl>
@@ -18,11 +18,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\tjone\.nuget\packages\aptacode.blazorcanvas\1.0.14\contentFiles\any\net6.0\wwwroot\BlazorCanvasInterop.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aptacode.BlazorCanvas" Version="1.0.13" />
+    <PackageReference Include="Aptacode.BlazorCanvas" Version="1.0.14" />
     <PackageReference Include="Aptacode.Geometry" Version="1.0.51" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.3" />
     <PackageReference Include="Aptacode.CSharp.Common.Utilities" Version="1.0.0.30" />

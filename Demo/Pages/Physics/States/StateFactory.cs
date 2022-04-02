@@ -4,10 +4,10 @@ namespace Aptacode.AppFramework.Demo.Pages.Physics.States;
 
 public static class StateFactory
 {
-    public static PhysicsStateBuilder AddPhysics(this Component component)
+    public static PhysicsStateBuilder AddPhysics(this Component component, Scene scene)
     {
-        var state = new PhysicsState(component);
-        component.Plugins.State.Add(state);
+        var state = new PhysicsState(scene, component);
+        component.Plugins.Add(state);
         return new PhysicsStateBuilder(state);
     }
 }

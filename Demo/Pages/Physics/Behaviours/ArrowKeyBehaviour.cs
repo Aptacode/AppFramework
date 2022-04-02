@@ -1,16 +1,16 @@
 ﻿using System.Numerics;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Demo.Pages.Physics.States;
+using Aptacode.AppFramework.Events;
 using Aptacode.AppFramework.Plugins.Behaviours;
-using Aptacode.AppFramework.Scene.Events;
 
 namespace Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 
-public class ArrowKeyBehaviour : ComponentBehaviour<UiEvent>
+public class ArrowKeyBehaviour : ComponentPlugin
 {
     public static string BehaviourName = "ArrowForce";
 
-    public ArrowKeyBehaviour(Scene.Scene scene, Component component) : base(scene, component)
+    public ArrowKeyBehaviour(Scene scene, Component component) : base(scene, component)
     {
     }
 
@@ -21,7 +21,7 @@ public class ArrowKeyBehaviour : ComponentBehaviour<UiEvent>
             return false;
         }
 
-        var physicsState = Component.Plugins.State.Get<PhysicsState>(PhysicsState.StateName);
+        var physicsState = Component.Plugins.Get<PhysicsState>(PhysicsState.StateName);
         if (physicsState == null)
         {
             return false;

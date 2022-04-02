@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
+using Aptacode.AppFramework.Events;
 using Aptacode.AppFramework.Plugins;
-using Aptacode.AppFramework.Plugins.Behaviours;
-using Aptacode.AppFramework.Plugins.States;
-using Aptacode.AppFramework.Scene.Events;
 using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Collision.Rectangles;
 using Aptacode.Geometry.Primitives;
@@ -32,7 +30,7 @@ public abstract class Component : IDisposable
 
     #endregion
 
-    public ComponentPlugins Plugins { get; set; } = new();
+    public PluginCollection Plugins { get; } = new();
 
     public virtual void Dispose()
     {
@@ -40,16 +38,9 @@ public abstract class Component : IDisposable
 
     public void Handle(float delta)
     {
-        Plugins.Tick.All.All(p => p.Handle(delta));
+        Plugins.All.All(p => p.Handle(delta));
     }
 
-    public class ComponentPlugins
-    {
-        public PluginCollection<ComponentBehaviour<UiEvent>> Ui { get; } = new();
-        public PluginCollection<ComponentBehaviour<TransformationEvent>> Transformation { get; } = new();
-        public PluginCollection<ComponentBehaviour<float>> Tick { get; } = new();
-        public PluginCollection<ComponentState> State { get; } = new();
-    }
 
     #region Canvas
 
@@ -73,7 +64,7 @@ public abstract class Component : IDisposable
             Primitive.BoundingRectangle.Size.Y, 16);
     }
 
-    public virtual void Draw(Scene.Scene scene, BlazorCanvasInterop ctx)
+    public virtual void Draw(Scene scene, BlazorCanvasInterop ctx)
     {
         OldBoundingRectangle = Primitive.BoundingRectangle;
         Invalidated = false;
@@ -373,7 +364,7 @@ public abstract class Component : IDisposable
 
     private void Handle(TransformationEvent e)
     {
-        Plugins.Transformation.All.All(t => t.Handle(e));
+        Plugins.All.All(t => t.Handle(e));
         OnTransformationEvent?.Invoke(this, e);
     }
 
@@ -400,7 +391,7 @@ public abstract class Component : IDisposable
 
         //Try and handle the event with this component
         var eventHandled = false;
-        foreach (var behaviour in Plugins.Ui.All)
+        foreach (var behaviour in Plugins.All)
         {
             if (behaviour.Handle(uiEvent))
             {

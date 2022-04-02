@@ -2,40 +2,22 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Events;
 using Aptacode.AppFramework.Plugins;
-using Aptacode.AppFramework.Plugins.Behaviours;
-using Aptacode.AppFramework.Plugins.States;
-using Aptacode.AppFramework.Scene.Events;
 using Aptacode.CSharp.Common.Utilities.Mvvm;
 
-namespace Aptacode.AppFramework.Scene;
+namespace Aptacode.AppFramework;
 
 public class Scene : BindableBase
 {
-    #region Ctor
-
-    public Scene(Vector2 size)
-    {
-        Size = size;
-    }
-
-    #endregion
-
     #region Plugins
 
-    public ScenePlugins Plugins { get; set; } = new();
-
-    public class ScenePlugins
-    {
-        public PluginCollection<SceneState> State { get; } = new();
-        public PluginCollection<BehaviourPlugin<UiEvent>> Ui { get; } = new();
-        public PluginCollection<BehaviourPlugin<float>> Tick { get; } = new();
-    }
+    public PluginCollection Plugins { get; set; } = new();
 
     public void Handle(float deltaT)
     {
         //Execute scene behaviours
-        foreach (var sceneBehavior in Plugins.Tick.All)
+        foreach (var sceneBehavior in Plugins.All)
         {
             sceneBehavior.Handle(deltaT);
         }
@@ -53,7 +35,7 @@ public class Scene : BindableBase
 
     private readonly List<Component> _components = new();
 
-    public Vector2 Size { get; init; }
+    public Vector2 Size { get; set; }
     public Guid Id { get; init; } = Guid.NewGuid();
 
     #endregion
@@ -72,7 +54,7 @@ public class Scene : BindableBase
     public void Handle(UiEvent e)
     {
         //Execute scene behaviours
-        foreach (var sceneBehavior in Plugins.Ui.All)
+        foreach (var sceneBehavior in Plugins.All)
         {
             sceneBehavior.Handle(e);
         }

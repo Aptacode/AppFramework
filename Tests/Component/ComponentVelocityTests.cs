@@ -15,18 +15,21 @@ public class ComponentVelocityTests
 {
     private readonly EllipseComponent _component;
     private readonly PhysicsState _componentPhysics;
-    private readonly Aptacode.AppFramework.Scene.Scene _scene;
+    private readonly Aptacode.AppFramework.Scene _scene;
     private readonly ScenePhysicsBehaviour _scenePhysics;
 
     public ComponentVelocityTests()
     {
-        _scene = new Aptacode.AppFramework.Scene.Scene(new Vector2(100));
+        _scene = new Aptacode.AppFramework.Scene
+        {
+            Size = new Vector2(100)
+        };
         _scenePhysics = _scene.AddPhysics();
         _scenePhysics.Gravity = false;
         _scenePhysics.Friction = false;
 
         _component = Ellipse.Create(new Vector2(50, 50), 10).ToComponent();
-        var physicsBuilder = _component.AddPhysics();
+        var physicsBuilder = _component.AddPhysics(_scene);
         _componentPhysics = physicsBuilder.State;
 
         _scene.Add(_component);

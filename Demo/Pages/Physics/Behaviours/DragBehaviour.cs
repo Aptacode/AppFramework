@@ -1,15 +1,15 @@
 ﻿using System.Numerics;
 using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Events;
 using Aptacode.AppFramework.Plugins.Behaviours;
-using Aptacode.AppFramework.Scene.Events;
 
 namespace Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 
-public class DragBehaviour : ComponentBehaviour<UiEvent>
+public class DragBehaviour : ComponentPlugin
 {
     public static string BehaviourName = "DragForce";
 
-    public DragBehaviour(Scene.Scene scene, Component component) : base(scene, component)
+    public DragBehaviour(Scene scene, Component component) : base(scene, component)
     {
     }
 

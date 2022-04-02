@@ -1,14 +1,14 @@
 ﻿using Aptacode.AppFramework.Demo.Pages.Snake.States;
-using Aptacode.AppFramework.Plugins.Behaviours;
-using Aptacode.AppFramework.Scene.Events;
+using Aptacode.AppFramework.Events;
+using Aptacode.AppFramework.Plugins;
 
 namespace Aptacode.AppFramework.Demo.Pages.Snake.Behaviours;
 
-public class SnakeControlBehaviour : BehaviourPlugin<UiEvent>
+public class SnakeControlBehaviour : Plugin
 {
     public static string BehaviourName = "SnakeControl";
 
-    public SnakeControlBehaviour(Scene.Scene scene) : base(scene)
+    public SnakeControlBehaviour(Scene scene) : base(scene)
     {
     }
 
@@ -19,7 +19,7 @@ public class SnakeControlBehaviour : BehaviourPlugin<UiEvent>
             return false;
         }
 
-        var state = Scene.Plugins.State.Get<SnakeState>(SnakeState.StateName);
+        var state = Scene.Plugins.Get<SnakeState>(SnakeState.StateName);
         if (state == null)
         {
             return false;

@@ -4,17 +4,17 @@ using System.Drawing;
 using System.Linq;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Demo.Pages.Snake.Components;
-using Aptacode.AppFramework.Plugins.States;
+using Aptacode.AppFramework.Plugins;
 using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Demo.Pages.Snake.States;
 
-public sealed class SnakeState : SceneState
+public sealed class SnakeState : Plugin
 {
     public static string StateName = "SnakeState";
     private static readonly TimeSpan InitialTickSpeed = TimeSpan.FromMilliseconds(250);
 
-    public SnakeState(Scene.Scene scene) : base(scene)
+    public SnakeState(Scene scene) : base(scene)
     {
     }
 
@@ -31,6 +31,7 @@ public sealed class SnakeState : SceneState
     public TimeSpan TickSpeed { get; set; } = InitialTickSpeed;
 
     public int Score => SnakeBody.Count;
+
     public void EndGame()
     {
         Running = false;

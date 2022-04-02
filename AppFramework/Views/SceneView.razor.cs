@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
-using Aptacode.AppFramework.Scene;
 using Aptacode.BlazorCanvas;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -9,22 +8,39 @@ using Microsoft.JSInterop;
 
 namespace Aptacode.AppFramework.Views;
 
-public class SceneControllerViewBase : ComponentBase
+public class SceneViewBase : ComponentBase
 {
+    private Scene _scene;
+
+    [Parameter]
+    public Scene Scene
+    {
+        get => _scene;
+        set
+        {
+            _scene = value;
+            SceneRenderController.Scene = _scene;
+            SceneInteractionController.Scene = _scene;
+        }
+    }
+
     #region Lifecycle
 
     [JSInvokable]
     public void GameLoop(float timeStamp)
     {
-        ViewModel.Tick(timeStamp);
+        SceneRenderController.Tick(timeStamp);
     }
+
+    private bool _isSetup;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (!_isSetup && Scene != null)
         {
-            Console.WriteLine($"Register canvas for scene: {ViewModel.Scene.Id}");
-            await BlazorCanvas.Register(ViewModel.Scene.Id.ToString(), Canvas);
+            _isSetup = true;
+            Console.WriteLine($"Register canvas for scene: {Scene.Id}");
+            await BlazorCanvas.Register(Scene.Id.ToString(), Canvas);
             await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
             await JsRuntime.InvokeVoidAsync("SetFocusToElement", Container);
         }
@@ -38,12 +54,12 @@ public class SceneControllerViewBase : ComponentBase
 
     public void MouseDown(MouseEventArgs e)
     {
-        ViewModel?.UserInteractionController.MouseDown(e.FromScale());
+        SceneInteractionController.MouseDown(e.FromScale());
     }
 
     public void MouseUp(MouseEventArgs e)
     {
-        ViewModel?.UserInteractionController.MouseUp(e.FromScale());
+        SceneInteractionController.MouseUp(e.FromScale());
     }
 
     public void MouseOut(MouseEventArgs e)
@@ -52,17 +68,17 @@ public class SceneControllerViewBase : ComponentBase
 
     public void MouseMove(MouseEventArgs e)
     {
-        ViewModel?.UserInteractionController.MouseMove(e.FromScale());
+        SceneInteractionController.MouseMove(e.FromScale());
     }
 
     public void KeyDown(KeyboardEventArgs e)
     {
-        ViewModel?.UserInteractionController.KeyDown(e.Key);
+        SceneInteractionController.KeyDown(e.Key);
     }
 
     public void KeyUp(KeyboardEventArgs e)
     {
-        ViewModel?.UserInteractionController.KeyUp(e.Key);
+        SceneInteractionController.KeyUp(e.Key);
     }
 
     #endregion
@@ -71,30 +87,18 @@ public class SceneControllerViewBase : ComponentBase
 
     [Inject] private IJSRuntime JsRuntime { get; set; }
     [Inject] public BlazorCanvasInterop BlazorCanvas { get; set; }
+    [Inject] public SceneRenderController SceneRenderController { get; set; }
+    [Inject] public SceneInteractionController SceneInteractionController { get; set; }
 
     #endregion
 
     #region Properties
 
-    private SceneController _viewModel;
-
-    [Parameter]
-    public SceneController ViewModel
-    {
-        get => _viewModel;
-        set
-        {
-            _viewModel = value;
-            StateHasChanged();
-        }
-    }
-
     protected ElementReference Container;
 
     public ElementReference Canvas { get; set; }
 
-    public string Style { get; set; } =
-        "position: absolute; "; //-moz-transform: scale({SceneScale.Value}); -moz-transform-origin: 0 0; zoom: {SceneScale.Value};";
+    public string Style { get; set; } = "position: absolute; ";
 
     #endregion
 }

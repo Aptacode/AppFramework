@@ -1,19 +1,19 @@
-﻿@inherits SceneControllerViewBase
-@if (ViewModel != null)
+﻿@inherits SceneViewBase
+@if (SceneRenderController != null)
 {
     <div @ref="Container"
          tabindex="0"
          @onkeydown="KeyDown"
          @onkeyup="KeyUp"
-         style="cursor: @(ViewModel.Cursor);"
+         style="cursor: @(SceneRenderController.Cursor);"
          @onmousemove="MouseMove"
          @onmousedown="MouseDown"
          @onmouseup="MouseUp"
          @onmouseout="MouseOut">
 
-        @if (ViewModel.ShowGrid)
+        @if (SceneRenderController.ShowGrid)
         {
-            <svg width="@(ViewModel.Size.X)" height="@(ViewModel.Size.Y)" style="position: absolute">
+            <svg width="@(Scene.Size.X)" height="@(Scene.Size.Y)" style="position: absolute">
                 <defs>
                     <pattern id="tenthGrid" width="10" height="10" patternUnits="userSpaceOnUse">
                         <path d="M 10 0 L 0 0 0 10" fill="none" stroke="silver" stroke-width="1"/>
@@ -27,7 +27,7 @@
             </svg>
         }
 
-        <canvas @ref="Canvas" width="@(ViewModel.Size.X)" height="@(ViewModel.Size.Y)"
+        <canvas @ref="Canvas" width="@(Scene.Size.X)" height="@(Scene.Size.Y)"
                 style="@(Style)"/>
     </div>
 }

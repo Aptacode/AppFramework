@@ -5,9 +5,6 @@ using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Demo.Pages.Snake.Behaviours;
 using Aptacode.AppFramework.Demo.Pages.Snake.Components;
 using Aptacode.AppFramework.Demo.Pages.Snake.States;
-using Aptacode.AppFramework.Scene;
-using Aptacode.AppFramework.Utilities;
-using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Primitives;
 using Microsoft.AspNetCore.Components;
 
@@ -15,20 +12,15 @@ namespace Aptacode.AppFramework.Demo.Pages.Snake;
 
 public class SnakeBase : ComponentBase
 {
-    [Inject] public BlazorCanvasInterop BlazorCanvas { get; set; }
-    public Scene.Scene Scene { get; set; }
-    public SceneController SceneController { get; set; }
+    public Scene Scene { get; set; }
     public SnakeState SnakeState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         //Scene
-        Scene = new SceneBuilder().SetWidth(SnakeGameConfig.BoardSize.X)
-            .SetHeight(SnakeGameConfig.BoardSize.Y).Build();
-
-        SceneController = new SceneController(BlazorCanvas, Scene)
+        Scene = new Scene
         {
-            ShowGrid = true
+            Size = SnakeGameConfig.BoardSize
         };
 
         var snakeHead =
@@ -48,17 +40,17 @@ public class SnakeBase : ComponentBase
         Scene.Add(snakeFood);
 
         var snakeDirection = new SnakeControlBehaviour(Scene);
-        Scene.Plugins.Ui.Add(snakeDirection);
+        Scene.Plugins.Add(snakeDirection);
 
         SnakeState = new SnakeState(Scene)
         {
             SnakeHead = snakeHead,
             SnakeFood = snakeFood
         };
-        Scene.Plugins.State.Add(SnakeState);
+        Scene.Plugins.Add(SnakeState);
 
         var snakeBehavioru = new SnakeMovementBehaviour(Scene);
-        Scene.Plugins.Tick.Add(snakeBehavioru);
+        Scene.Plugins.Add(snakeBehavioru);
 
         var thickness = 10.0f;
         var bottom = Polygon.Create(thickness, thickness, SnakeGameConfig.BoardSize.X - thickness, thickness,
