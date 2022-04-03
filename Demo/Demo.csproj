@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aptacode.BlazorCanvas" Version="1.0.14" />
+    <PackageReference Include="Aptacode.BlazorCanvas" Version="1.0.15" />
     <PackageReference Include="Aptacode.Geometry" Version="1.0.51" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.3" PrivateAssets="all" />
