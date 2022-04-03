@@ -4,11 +4,10 @@ using System.Numerics;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Events;
 using Aptacode.AppFramework.Plugins;
-using Aptacode.CSharp.Common.Utilities.Mvvm;
 
 namespace Aptacode.AppFramework;
 
-public class Scene : BindableBase
+public class Scene 
 {
     #region Plugins
 

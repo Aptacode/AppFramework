@@ -1,11 +1,10 @@
 ﻿using System.Linq;
 using Aptacode.AppFramework.Components;
 using Aptacode.BlazorCanvas;
-using Aptacode.CSharp.Common.Utilities.Mvvm;
 
 namespace Aptacode.AppFramework;
 
-public class SceneRenderController : BindableBase
+public class SceneRenderController
 {
     #region Ctor
 
