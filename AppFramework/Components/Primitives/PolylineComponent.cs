@@ -18,7 +18,7 @@ public class PolylineComponent : Component
 
     #region Canvas
 
-    public override void CustomDraw(BlazorCanvasInterop ctx)
+    public override void CustomDraw(BlazorCanvas.BlazorCanvas ctx)
     {
         var vertices = new Vector2[PolyLine.Vertices.Length];
         for (var i = 0; i < PolyLine.Vertices.Length; i++)

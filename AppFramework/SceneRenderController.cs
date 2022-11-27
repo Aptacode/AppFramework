@@ -6,14 +6,6 @@ namespace Aptacode.AppFramework;
 
 public class SceneRenderController
 {
-    #region Ctor
-
-    public SceneRenderController(BlazorCanvasInterop canvas)
-    {
-        _canvas = canvas;
-    }
-
-    #endregion
 
     #region Events
 
@@ -21,6 +13,11 @@ public class SceneRenderController
 
     public virtual void Tick(float timestamp)
     {
+        if (Scene == null || _canvas == null)
+        {
+            return;
+        }
+
         if (_lastTimeStamp == -1)
         {
             _lastTimeStamp = timestamp;
@@ -35,7 +32,6 @@ public class SceneRenderController
         Scene.Handle(delta);
 
         //Reset canvas
-        _canvas.SelectCanvas(Scene.Id.ToString());
         _canvas.FillStyle(Component.DefaultFillColor);
         _canvas.StrokeStyle(Component.DefaultBorderColor);
         _canvas.LineWidth(Component.DefaultBorderThickness);
@@ -56,11 +52,17 @@ public class SceneRenderController
 
     #region Properties
 
-    public Scene Scene { get; set; }
+    public Scene Scene { get; set; } = null;
     public string Cursor { get; set; }
     public bool ShowGrid { get; set; }
 
-    private readonly BlazorCanvasInterop _canvas;
+    private BlazorCanvas.BlazorCanvas _canvas = null;
 
+
+    public void Setup(Scene scene, BlazorCanvas.BlazorCanvas canvas)
+    {
+        Scene = scene;
+        _canvas = canvas;
+    }
     #endregion
 }

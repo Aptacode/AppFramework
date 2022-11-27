@@ -18,7 +18,7 @@ public class PointComponent : Component
 
     #region Canvas
 
-    public override void CustomDraw(BlazorCanvasInterop ctx)
+    public override void CustomDraw(BlazorCanvas.BlazorCanvas ctx)
     {
         ctx.BeginPath();
         ctx.Ellipse((int)Point.Position.X, (int)Point.Position.Y,

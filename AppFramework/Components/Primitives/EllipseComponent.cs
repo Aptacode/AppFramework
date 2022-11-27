@@ -18,7 +18,7 @@ public class EllipseComponent : Component
 
     #region Canvase
 
-    public override void CustomDraw(BlazorCanvasInterop ctx)
+    public override void CustomDraw(BlazorCanvas.BlazorCanvas ctx)
     {
         ctx.BeginPath();
 

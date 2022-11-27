@@ -44,11 +44,11 @@ public abstract class Component : IDisposable
 
     #region Canvas
 
-    public virtual void CustomDraw(BlazorCanvasInterop ctx)
+    public virtual void CustomDraw(BlazorCanvas.BlazorCanvas ctx)
     {
     }
 
-    public virtual void DrawText(BlazorCanvasInterop ctx)
+    public virtual void DrawText(BlazorCanvas.BlazorCanvas ctx)
     {
         if (string.IsNullOrEmpty(Text))
         {
@@ -64,7 +64,7 @@ public abstract class Component : IDisposable
             Primitive.BoundingRectangle.Size.Y, 16);
     }
 
-    public virtual void Draw(Scene scene, BlazorCanvasInterop ctx)
+    public virtual void Draw(Scene scene, BlazorCanvas.BlazorCanvas ctx)
     {
         OldBoundingRectangle = Primitive.BoundingRectangle;
         Invalidated = false;

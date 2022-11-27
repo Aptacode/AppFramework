@@ -22,25 +22,25 @@ public class PhysicsStateBuilder
 
     public PhysicsStateBuilder SetHorizontalVelocity(float x)
     {
-        State.Velocity = new Vector2(x, State.Velocity.Y);
+        State.Velocity = State.Velocity with { X = x };
         return this;
     }
 
     public PhysicsStateBuilder SetHorizontalVelocity(int minX, int maxX)
     {
-        State.Velocity = new Vector2(r.Next(minX * 10, maxX * 10) / 10.0f, State.Velocity.Y);
+        State.Velocity = State.Velocity with { X = r.Next(minX * 10, maxX * 10) / 10.0f };
         return this;
     }
 
     public PhysicsStateBuilder SetVerticalVelocity(float y)
     {
-        State.Velocity = new Vector2(State.Velocity.X, y);
+        State.Velocity = State.Velocity with { Y = y };
         return this;
     }
 
     public PhysicsStateBuilder SetVerticalVelocity(int minY, int maxY)
     {
-        State.Velocity = new Vector2(State.Velocity.X, r.Next(minY * 10, maxY * 10) / 10.0f);
+        State.Velocity = State.Velocity with { Y = r.Next(minY * 10, maxY * 10) / 10.0f };
         return this;
     }
 

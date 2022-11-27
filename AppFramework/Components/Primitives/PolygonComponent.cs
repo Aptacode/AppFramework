@@ -18,7 +18,7 @@ public class PolygonComponent : Component
 
     #region Ctor
 
-    public override void CustomDraw(BlazorCanvasInterop ctx)
+    public override void CustomDraw(BlazorCanvas.BlazorCanvas ctx)
     {
         var vertices = new Vector2[Polygon.Vertices.Length];
         for (var i = 0; i < Polygon.Vertices.Length; i++)

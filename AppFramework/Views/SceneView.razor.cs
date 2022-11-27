@@ -10,19 +10,8 @@ namespace Aptacode.AppFramework.Views;
 
 public class SceneViewBase : ComponentBase
 {
-    private Scene _scene;
-
-    [Parameter]
-    public Scene Scene
-    {
-        get => _scene;
-        set
-        {
-            _scene = value;
-            SceneRenderController.Scene = _scene;
-            SceneInteractionController.Scene = _scene;
-        }
-    }
+    [Parameter, EditorRequired]
+    public Scene Scene { get; set; }
 
     #region Lifecycle
 
@@ -36,11 +25,12 @@ public class SceneViewBase : ComponentBase
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!_isSetup && Scene != null)
+        if (!_isSetup && Canvas != null)
         {
             _isSetup = true;
-            Console.WriteLine($"Register canvas for scene: {Scene.Id}");
-            await BlazorCanvas.Register(Scene.Id.ToString(), Canvas);
+
+            SceneInteractionController.Scene = Scene;
+            SceneRenderController.Setup(Scene, Canvas);
             await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
             await JsRuntime.InvokeVoidAsync("SetFocusToElement", Container);
         }
@@ -86,8 +76,6 @@ public class SceneViewBase : ComponentBase
     #region Dependencies
 
     [Inject] private IJSRuntime JsRuntime { get; set; }
-    [Inject] public BlazorCanvasInterop BlazorCanvas { get; set; }
-    [Inject] public SceneRenderController SceneRenderController { get; set; }
     [Inject] public SceneInteractionController SceneInteractionController { get; set; }
 
     #endregion
@@ -95,8 +83,8 @@ public class SceneViewBase : ComponentBase
     #region Properties
 
     protected ElementReference Container;
-
-    public ElementReference Canvas { get; set; }
+    protected BlazorCanvas.BlazorCanvas Canvas { get; set; }
+    protected SceneRenderController SceneRenderController { get; set; } = new SceneRenderController();
 
     public string Style { get; set; } = "position: absolute; ";
 
