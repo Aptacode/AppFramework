@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-using Aptacode.BlazorCanvas;
-using Aptacode.Geometry.Primitives;
+﻿using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Primitives;
 
@@ -20,10 +18,13 @@ public class PolygonComponent : Component
 
     public override void CustomDraw(BlazorCanvas.BlazorCanvas ctx)
     {
-        var vertices = new Vector2[Polygon.Vertices.Length];
+        var vertices = new double[Polygon.Vertices.Length * 2];
+        var vIndex = 0;
         for (var i = 0; i < Polygon.Vertices.Length; i++)
         {
-            vertices[i] = Polygon.Vertices[i];
+            var v = Polygon.Vertices[i];
+            vertices[vIndex++] = v.X;
+            vertices[vIndex++] = v.Y;
         }
 
         ctx.Polygon(vertices);

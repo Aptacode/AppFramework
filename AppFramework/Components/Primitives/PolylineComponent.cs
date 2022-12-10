@@ -20,10 +20,13 @@ public class PolylineComponent : Component
 
     public override void CustomDraw(BlazorCanvas.BlazorCanvas ctx)
     {
-        var vertices = new Vector2[PolyLine.Vertices.Length];
+        var vertices = new double[PolyLine.Vertices.Length * 2];
+        var vIndex = 0;
         for (var i = 0; i < PolyLine.Vertices.Length; i++)
         {
-            vertices[i] = PolyLine.Vertices[i];
+            var v = PolyLine.Vertices[i];
+            vertices[vIndex++] = v.X;
+            vertices[vIndex++] = v.Y;
         }
 
         ctx.PolyLine(vertices);
