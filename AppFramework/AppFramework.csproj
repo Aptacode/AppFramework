@@ -22,7 +22,7 @@
 	<ItemGroup>
     <PackageReference Include="Aptacode.BlazorCanvas" Version="1.1.7" />
     <PackageReference Include="Aptacode.Geometry" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
