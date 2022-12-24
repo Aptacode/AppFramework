@@ -15,28 +15,6 @@
 <div id="app">Loading...</div>
 
 <script src="_framework/blazor.webassembly.js"></script>
-<script>
-    window.SetFocusToElement = (element) => {
-        element.focus();
-    };
-
-    window.SetFocusToElement = (element) => {
-        element.focus();
-    };
-
-    function gameLoop(timeStamp) {
-        window.requestAnimationFrame(gameLoop);
-        theInstance.invokeMethodAsync("GameLoop", timeStamp);
-    }
-
-    window.initGame = (instance) => {
-        window.theInstance = instance;
-        window.requestAnimationFrame(gameLoop);
-    };
-    window.onkeydown = function(e) {
-        return !(e.keyCode == 32);
-    };
-</script>
 <!-- Start Single Page Apps for GitHub Pages -->
 <script type="text/javascript">
     // Single Page Apps for GitHub Pages

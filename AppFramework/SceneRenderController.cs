@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Aptacode.AppFramework.Components;
-using Aptacode.BlazorCanvas;
+﻿using Aptacode.AppFramework.Components;
 
 namespace Aptacode.AppFramework;
 
@@ -13,7 +11,7 @@ public class SceneRenderController
 
     public virtual void Tick(float timestamp)
     {
-        if (Scene == null || _canvas == null)
+        if (Scene == null || _canvas?.Ready != true)
         {
             return;
         }
@@ -39,7 +37,7 @@ public class SceneRenderController
         _canvas.Transform(1, 0, 0, -1, 0, Scene.Size.Y);
 
         //Draw each element
-        for (var i = 0; i < Scene.Components.Count(); i++)
+        for (var i = 0; i < Scene.Components.Count; i++)
         {
             Scene.Components[i].Draw(Scene, _canvas);
         }
@@ -57,7 +55,6 @@ public class SceneRenderController
     public bool ShowGrid { get; set; }
 
     private BlazorCanvas.BlazorCanvas _canvas = null;
-
 
     public void Setup(Scene scene, BlazorCanvas.BlazorCanvas canvas)
     {

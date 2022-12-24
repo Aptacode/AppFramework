@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Aptacode.AppFramework.Extensions;
 using Aptacode.BlazorCanvas;
@@ -8,35 +10,50 @@ using Microsoft.JSInterop;
 
 namespace Aptacode.AppFramework.Views;
 
-public class SceneViewBase : ComponentBase
+public class SceneViewBase : ComponentBase, IDisposable
 {
     [Parameter, EditorRequired]
     public Scene Scene { get; set; }
 
     #region Lifecycle
 
-    [JSInvokable]
-    public void GameLoop(float timeStamp)
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
+    protected override async Task OnInitializedAsync()
     {
-        SceneRenderController.Tick(timeStamp);
-    }
-
-    private bool _isSetup;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!_isSetup && Canvas != null)
+        while (Canvas is not { Ready: true })
         {
-            _isSetup = true;
-
-            SceneInteractionController.Scene = Scene;
-            SceneRenderController.Setup(Scene, Canvas);
-            await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
-            await JsRuntime.InvokeVoidAsync("SetFocusToElement", Container);
+            await Task.Delay(10);
         }
 
-        await base.OnAfterRenderAsync(firstRender);
+        SceneInteractionController.Scene = Scene;
+        SceneRenderController.Setup(Scene, Canvas);
+
+        try
+        {
+            using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(10));
+            var watch = new Stopwatch();
+            float timeStamp = 0.0f;
+            while (await timer.WaitForNextTickAsync(_cancellationTokenSource.Token))
+            {
+                watch.Restart();
+                timeStamp += 0.1f;
+                SceneRenderController.Tick(timeStamp);
+
+                watch.Stop();
+
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Ignored
+        }
+        finally
+        {
+
+        }
     }
+
 
     #endregion
 
@@ -71,11 +88,15 @@ public class SceneViewBase : ComponentBase
         SceneInteractionController.KeyUp(e.Key);
     }
 
+    public void Dispose()
+    {
+        _cancellationTokenSource?.Cancel();
+    }
+
     #endregion
 
     #region Dependencies
 
-    [Inject] private IJSRuntime JsRuntime { get; set; }
     [Inject] public SceneInteractionController SceneInteractionController { get; set; }
 
     #endregion
