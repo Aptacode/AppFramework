@@ -1,16 +1,15 @@
 ﻿@inherits SceneViewBase
-<div @ref="Container"
+<div
      tabindex="0"
      @onkeydown="KeyDown"
      @onkeyup="KeyUp"
-     style="cursor: @(SceneRenderController.Cursor);"
      @onmousemove="MouseMove"
      @onmousedown="MouseDown"
      @onmouseup="MouseUp"
      @onmouseout="MouseOut">
 
+     
     <BlazorCanvas @ref="Canvas">
-        <canvas width="@(Scene.Size.X)" height="@(Scene.Size.Y)"
-                style="@(Style)"/> 
+        @ChildContent
     </BlazorCanvas>
 </div>

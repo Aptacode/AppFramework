@@ -13,22 +13,22 @@ namespace Tests.Component;
 
 public class ComponentVelocityTests
 {
-    private readonly EllipseComponent _component;
+    private readonly CircleComponent _component;
     private readonly PhysicsState _componentPhysics;
     private readonly Aptacode.AppFramework.Scene _scene;
     private readonly ScenePhysicsBehaviour _scenePhysics;
 
     public ComponentVelocityTests()
     {
-        _scene = new Aptacode.AppFramework.Scene
-        {
-            Size = new Vector2(100)
-        };
+        //_scene = new Aptacode.AppFramework.Scene
+        //{
+        //    Size = new Vector2(100)
+        //};
         _scenePhysics = _scene.AddPhysics();
         _scenePhysics.Gravity = false;
         _scenePhysics.Friction = false;
 
-        _component = Ellipse.Create(new Vector2(50, 50), 10).ToComponent();
+        _component = new CircleComponent(new Vector2(50, 50), 10);
         var physicsBuilder = _component.AddPhysics(_scene);
         _componentPhysics = physicsBuilder.State;
 
@@ -55,11 +55,11 @@ public class ComponentVelocityTests
     public void ComponentMovesUnderForce(Vector2 force)
     {
         //Arrange
-        var start = _component.Ellipse.Position;
+        var start = _component.Circle.Position;
 
         //Act
         _componentPhysics.ApplyForce(force);
-        _scene.Handle(10);
+        _scene.Loop(10);
 
         //Assert
 
@@ -69,18 +69,18 @@ public class ComponentVelocityTests
             if (force.X > 0)
             {
                 //Assert c moved right
-                Assert.True(_component.Ellipse.Position.X > start.X);
+                Assert.True(_component.Circle.Position.X > start.X);
             }
             else
             {
                 //Assert c moved left
-                Assert.True(_component.Ellipse.Position.X < start.X);
+                Assert.True(_component.Circle.Position.X < start.X);
             }
         }
         else
         {
             //Assert c didnt move horizontally
-            Assert.True(_component.Ellipse.Position.X - start.X < Constants.Tolerance);
+            Assert.True(_component.Circle.Position.X - start.X < Constants.Tolerance);
         }
 
         //If force has an Y component
@@ -89,18 +89,18 @@ public class ComponentVelocityTests
             if (force.Y > 0)
             {
                 //Assert c moved up
-                Assert.True(_component.Ellipse.Position.Y > start.Y);
+                Assert.True(_component.Circle.Position.Y > start.Y);
             }
             else
             {
                 //Assert c moved down
-                Assert.True(_component.Ellipse.Position.Y < start.Y);
+                Assert.True(_component.Circle.Position.Y < start.Y);
             }
         }
         else
         {
             //Assert c didnt move vertically
-            Assert.True(_component.Ellipse.Position.Y - start.Y < Constants.Tolerance);
+            Assert.True(_component.Circle.Position.Y - start.Y < Constants.Tolerance);
         }
     }
 }

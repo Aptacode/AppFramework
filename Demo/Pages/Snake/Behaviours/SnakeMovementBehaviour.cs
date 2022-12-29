@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Numerics;
 using Aptacode.AppFramework.Demo.Pages.Snake.States;
 using Aptacode.AppFramework.Plugins;
 
@@ -9,7 +8,6 @@ namespace Aptacode.AppFramework.Demo.Pages.Snake.Behaviours;
 public class SnakeMovementBehaviour : Plugin
 {
     public static string BehaviourName = "SnakeMovement";
-    private readonly Random _random = new();
 
     private DateTimeOffset _lastTick = DateTimeOffset.Now;
 
@@ -31,13 +29,12 @@ public class SnakeMovementBehaviour : Plugin
         var snakeHead = snakeState.SnakeHead;
         var snakeFood = snakeState.SnakeFood;
 
-        snakeHead.Translate(SnakeGameConfig.GetMovement(snakeHead.Direction));
-
+        snakeHead.AddTranslation(SnakeGameConfig.GetMovement(snakeHead.Direction));
         var lastDirection = snakeHead.Direction;
         for (var i = 0; i < snakeState.SnakeBody.Count; i++)
         {
             var bodyComponent = snakeState.SnakeBody[i];
-            bodyComponent.Translate(SnakeGameConfig.GetMovement(bodyComponent.Direction));
+            bodyComponent.AddTranslation(SnakeGameConfig.GetMovement(bodyComponent.Direction));
 
             (lastDirection, bodyComponent.Direction) = (bodyComponent.Direction, lastDirection);
         }
@@ -57,13 +54,13 @@ public class SnakeMovementBehaviour : Plugin
         if (snakeHead.CollidesWith(snakeFood))
         {
             snakeState.Grow();
-            var foodPosition = SnakeGameConfig.RandomCell() + new Vector2(2, 2);
-            snakeFood.Primitive.SetPosition(foodPosition);
-            snakeFood.SetPosition(SnakeGameConfig.RandomCell(), true);
-            while (snakeHead.CollidesWith(snakeFood) || snakeState.SnakeBody.Any(b => b.CollidesWith(snakeFood)))
+
+            snakeFood.SetTranslation(SnakeGameConfig.RandomCell());
+            var foodPos = snakeFood.Polygon.Copy().Transform(snakeFood.TranslationMatrix);
+            while (snakeHead.CollidesWith(foodPos) || snakeState.SnakeBody.Any(b => b.CollidesWith(foodPos)))
             {
-                foodPosition = SnakeGameConfig.RandomCell() + new Vector2(2, 2);
-                snakeFood.Primitive.SetPosition(foodPosition);
+                snakeFood.SetTranslation(SnakeGameConfig.RandomCell());
+                foodPos = snakeFood.Polygon.Copy().Transform(snakeFood.TranslationMatrix);
             }
         }
 

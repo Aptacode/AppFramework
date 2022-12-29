@@ -9,6 +9,7 @@ public static class SnakeGameConfig
     public static readonly Random _rand = new();
     public static readonly Vector2 BoardSize = new(500, 500);
     public static readonly Vector2 CellSize = new(25, 25);
+    public static readonly Vector2 InnerCellSize = new(20, 20);
 
     public static readonly Vector2 CenterCell = new(CellSize.X * HorizontalCells / 2, CellSize.Y * VerticalCells / 2);
 
@@ -32,6 +33,7 @@ public static class SnakeGameConfig
             _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
         };
     }
+
 
     public static Direction Reverse(Direction direction)
     {

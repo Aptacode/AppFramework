@@ -1,16 +1,17 @@
 ﻿using System.Numerics;
 using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Demo.Pages.Physics.States;
 using Aptacode.AppFramework.Events;
 using Aptacode.AppFramework.Plugins.Behaviours;
 
 namespace Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 
-public class ArrowKeyBehaviour : ComponentPlugin
+public class ArrowKeyBehaviour : PrimitiveComponentPlugin
 {
     public static string BehaviourName = "ArrowForce";
 
-    public ArrowKeyBehaviour(Scene scene, Component component) : base(scene, component)
+    public ArrowKeyBehaviour(Scene scene, PrimitiveComponent component) : base(scene, component)
     {
     }
 

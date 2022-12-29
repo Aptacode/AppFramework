@@ -1,15 +1,16 @@
 ﻿using System.Numerics;
 using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Events;
 using Aptacode.AppFramework.Plugins.Behaviours;
 
 namespace Aptacode.AppFramework.Demo.Pages.Physics.Behaviours;
 
-public class DragBehaviour : ComponentPlugin
+public class DragBehaviour : PrimitiveComponentPlugin
 {
     public static string BehaviourName = "DragForce";
 
-    public DragBehaviour(Scene scene, Component component) : base(scene, component)
+    public DragBehaviour(Scene scene, PrimitiveComponent component) : base(scene, component)
     {
     }
 
@@ -36,7 +37,7 @@ public class DragBehaviour : ComponentPlugin
                 if (IsDragging)
                 {
                     var delta = mouseMoveEvent.Position - LastDragPosition;
-                    Component.Translate(delta);
+                    Component.AddTranslation(delta);
 
                     LastDragPosition = mouseMoveEvent.Position;
                     return true;

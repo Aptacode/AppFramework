@@ -1,4 +1,9 @@
 ﻿@page "/physics"
-@inherits PhysicsBase
 
-<SceneView Scene="Scene"/>
+<SceneView Width=1000 Height=1000 Scene=@Scene>
+    <canvas width="1000" height="1000"></canvas>
+</SceneView>
+
+@code {
+    public Scene Scene { get; set; } = new PhysicsScene();
+}

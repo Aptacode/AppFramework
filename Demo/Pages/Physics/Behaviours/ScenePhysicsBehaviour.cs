@@ -17,8 +17,8 @@ public class ScenePhysicsBehaviour : Plugin
 
     public override bool Handle(float deltaT)
     {
-        var physicsState = Scene.Components.Select(c => c.Plugins.Get<PhysicsState>(PhysicsState.StateName))
-            .ToList();
+        var physicsState = Scene.Components.Select(c => c.Plugins?.Get<PhysicsState>(PhysicsState.StateName))
+            .Where(c => c != null).ToList();
 
         for (var i = 0; i < physicsState.Count(); i++)
         {
@@ -45,9 +45,9 @@ public class ScenePhysicsBehaviour : Plugin
             var distanceMoved = a.CalculateDistance(deltaT);
             var rotation = a.CalculateRotation(deltaT);
 
-            a.Component.Rotate(rotation);
+           // a.Component.Rotate(rotation);
             //Translate component
-            a.Component.Translate(distanceMoved);
+            a.Component.AddTranslation(distanceMoved);
 
             //Check collisions with other components
             var hasCollison = false;
@@ -77,7 +77,7 @@ public class ScenePhysicsBehaviour : Plugin
             //If the component had a collision undo the translation
             if (hasCollison)
             {
-                a.Component.Translate(-distanceMoved);
+                a.Component.AddTranslation(-distanceMoved);
             }
         }
 

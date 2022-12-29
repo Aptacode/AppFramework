@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Aptacode.AppFramework.Components;
+using System.Numerics;
+using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Demo.Pages.Snake.Components;
 using Aptacode.AppFramework.Plugins;
-using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Demo.Pages.Snake.States;
 
 public sealed class SnakeState : Plugin
 {
     public static string StateName = "SnakeState";
-    private static readonly TimeSpan InitialTickSpeed = TimeSpan.FromMilliseconds(250);
+    private static readonly TimeSpan InitialTickSpeed = TimeSpan.FromMilliseconds(100);
 
     public SnakeState(Scene scene) : base(scene)
     {
@@ -22,7 +21,7 @@ public sealed class SnakeState : Plugin
     public SnakeFoodComponent SnakeFood { get; set; }
     public List<SnakeBodyComponent> SnakeBody { get; set; } = new();
 
-    public List<Component> Walls { get; set; } = new();
+    public List<PrimitiveComponent> Walls { get; set; } = new();
 
     public bool Running { get; set; } = true;
 
@@ -43,7 +42,7 @@ public sealed class SnakeState : Plugin
     public void Reset()
     {
         TickSpeed = InitialTickSpeed;
-        SnakeHead.SetPosition(SnakeGameConfig.RandomCell(), true);
+        SnakeHead.SetTranslation(SnakeGameConfig.RandomCell());
         foreach (var snakeBodyComponent in SnakeBody)
         {
             Scene.Remove(snakeBodyComponent);
@@ -52,10 +51,13 @@ public sealed class SnakeState : Plugin
         SnakeBody.Clear();
         ScoreChanged?.Invoke(this, SnakeBody.Count);
 
-        SnakeFood.SetPosition(SnakeGameConfig.RandomCell(), true);
-        while (SnakeHead.CollidesWith(SnakeFood))
+        SnakeFood.SetTranslation(SnakeGameConfig.RandomCell());
+        var foodPos = SnakeFood.Polygon.Copy().Transform(SnakeFood.TranslationMatrix);
+
+        while (SnakeHead.CollidesWith(foodPos) || SnakeBody.Any(b => b.CollidesWith(foodPos)))
         {
-            SnakeFood.SetPosition(SnakeGameConfig.RandomCell(), true);
+            SnakeFood.TranslationMatrix = Matrix3x2.CreateTranslation(SnakeGameConfig.RandomCell());
+            foodPos = SnakeFood.Polygon.Copy().Transform(SnakeFood.TranslationMatrix);
         }
     }
 
@@ -68,12 +70,10 @@ public sealed class SnakeState : Plugin
 
         var lastSnakeComponent = SnakeBody.Count > 0 ? SnakeBody.Last() : SnakeHead;
 
-        var snakeBodyComponent =
-            new SnakeBodyComponent(Polygon.Create(lastSnakeComponent.Polygon.Vertices.Vertices.ToArray()));
-        snakeBodyComponent.FillColor = Color.LightSlateGray;
-        snakeBodyComponent.BorderColor = Color.DarkSlateGray;
-        snakeBodyComponent.Translate(
-            SnakeGameConfig.GetMovement(SnakeGameConfig.Reverse(snakeBodyComponent.Direction)));
+        var snakeBodyComponent = new SnakeBodyComponent(lastSnakeComponent.Polygon.Copy());
+
+        var cell = SnakeGameConfig.GetMovement(SnakeGameConfig.Reverse(snakeBodyComponent.Direction));
+        snakeBodyComponent.TranslationMatrix = lastSnakeComponent.TranslationMatrix * Matrix3x2.CreateTranslation(cell);
 
         SnakeBody.Add(snakeBodyComponent);
         Scene.Add(snakeBodyComponent);

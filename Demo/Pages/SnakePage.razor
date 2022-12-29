@@ -1,0 +1,10 @@
+﻿@page "/snake"
+@using Aptacode.AppFramework.Demo.Pages.Snake;
+
+<SceneView Width=500 Height=500 Scene=@Scene>
+    <canvas width="500" height="500"></canvas>
+</SceneView>
+
+@code{
+    public Scene Scene { get; set; } = new SnakeScene();
+}

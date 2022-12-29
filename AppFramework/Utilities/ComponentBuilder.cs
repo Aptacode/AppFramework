@@ -6,12 +6,6 @@ namespace Aptacode.AppFramework.Utilities;
 
 public class ComponentBuilder
 {
-    public ComponentBuilder SetBorderThickness(float borderThickness)
-    {
-        _borderThickness = borderThickness;
-        return this;
-    }
-
     public ComponentBuilder SetBorderColor(Color borderColor)
     {
         _borderColor = borderColor;
@@ -45,12 +39,7 @@ public class ComponentBuilder
     public Component Build()
     {
         var component = _baseComponent;
-        component.BorderColor = _borderColor;
-        component.FillColor = _fillColor;
-        component.BorderThickness = _borderThickness;
-        component.Text = _text;
-
-        component.AddRange(_children);
+        component.Children.AddRange(_children);
 
         Reset();
         return component;
@@ -62,19 +51,13 @@ public class ComponentBuilder
         _children.Clear();
         _borderColor = Color.Black;
         _fillColor = Color.White;
-        _borderThickness = Component.DefaultBorderThickness;
         _text = "";
     }
-
-    #region Ctor
-
-    #endregion
 
     #region Properties
 
     private Color _fillColor = Color.White;
     private Color _borderColor = Color.Black;
-    private float _borderThickness = Component.DefaultBorderThickness;
     private string _text = "";
     private readonly List<Component> _children = new();
     private Component _baseComponent;

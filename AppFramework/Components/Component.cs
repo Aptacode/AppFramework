@@ -1,372 +1,180 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Numerics;
 using Aptacode.AppFramework.Events;
 using Aptacode.AppFramework.Plugins;
-using Aptacode.BlazorCanvas;
-using Aptacode.Geometry.Collision.Rectangles;
-using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components;
-
-public abstract class Component : IDisposable
+public abstract class Component
 {
-    #region Ctor
-
-    protected Component(Primitive primitive)
-    {
-        Primitive = primitive;
-        OldBoundingRectangle = Primitive.BoundingRectangle;
-
-        Id = Guid.NewGuid();
-        IsShown = true;
-        BorderThickness = DefaultBorderThickness;
-        BorderColor = Color.Black;
-        FillColor = Color.White;
-        Invalidated = true;
-    }
-
-    #endregion
-
-    public PluginCollection Plugins { get; } = new();
-
-    public virtual void Dispose()
-    {
-    }
-
-    public void Handle(float delta)
-    {
-        Plugins.All.All(p => p.Handle(delta));
-    }
-
-
-    #region Canvas
-
-    public virtual void CustomDraw(BlazorCanvas.BlazorCanvas ctx)
-    {
-    }
-
-    public virtual void DrawText(BlazorCanvas.BlazorCanvas ctx)
-    {
-        if (string.IsNullOrEmpty(Text))
-        {
-            return;
-        }
-
-        ctx.TextAlign("center");
-        ctx.FillStyle("black");
-        ctx.Font("10pt Calibri");
-        ctx.WrapText(Text, Primitive.BoundingRectangle.BottomLeft.X,
-            Primitive.BoundingRectangle.BottomLeft.Y,
-            Primitive.BoundingRectangle.Size.X,
-            Primitive.BoundingRectangle.Size.Y, 16);
-    }
-
-    public virtual void Draw(Scene scene, BlazorCanvas.BlazorCanvas ctx)
-    {
-        OldBoundingRectangle = Primitive.BoundingRectangle;
-        Invalidated = false;
-
-        if (!IsShown)
-        {
-            return;
-        }
-
-        ctx.FillStyle(FillColorName);
-
-        ctx.StrokeStyle(BorderColorName);
-
-        ctx.LineWidth(BorderThickness);
-
-        CustomDraw(ctx);
-
-        foreach (var child in _children)
-        {
-            child.Draw(scene, ctx);
-        }
-
-        DrawText(ctx);
-    }
-
-    #endregion
-
     #region Children
-
-    public IEnumerable<Component> Children => _children;
-
-    public virtual void Add(Component child)
+    public List<Component> Children { get; private set; }
+    public Component? Parent
     {
-        if (!Children.Contains(child))
+        get => parent; protected set
         {
-            child.Parent = this;
-            _children.Add(child);
-            Invalidated = true;
+            parent = value;
         }
     }
+    public bool ParentMatrixChanged { get; set; }
 
-    public virtual void AddRange(IEnumerable<Component> children)
+    public void AddChild(Component child)
     {
-        foreach (var child in children)
+        if (Children == null)
         {
-            Add(child);
+            Children = new List<Component>();
         }
+
+        child.Parent = this;
+        Children.Add(child);
     }
 
-    public virtual void Remove(Component child)
+    public void RemoveChild(Component child)
     {
-        if (_children.Remove(child))
+        if (Children == null)
         {
-            child.Parent = null;
-            Invalidated = true;
+            return;
         }
+
+        child.Parent = null;
+        Children.Remove(child);
     }
 
     #endregion
 
-    #region Defaults
+    #region Plugins
+    public PluginCollection Plugins { get; private set; }
 
-    public static readonly string DefaultBorderColor = Color.Black.ToKnownColor().ToString();
-    public static readonly string DefaultFillColor = Color.Black.ToKnownColor().ToString();
-    public static readonly float DefaultBorderThickness = 0.1f;
-    public Primitive Primitive { get; protected set; }
-
-    #endregion
-
-    #region Properties
-
-    public Guid Id { get; init; }
-    protected readonly List<Component> _children = new();
-    public bool Invalidated { get; set; }
-    public BoundingRectangle OldBoundingRectangle { get; protected set; }
-
-    #region Parent
-
-    public Component Parent { get; set; }
-
-    #endregion
-
-    private bool _isShown;
-
-    public bool IsShown
+    public void AddPlugin(Plugin plugin)
     {
-        get => _isShown;
-        set
+        if (Plugins == null)
         {
-            _isShown = value;
-            Invalidated = true;
+            Plugins = new PluginCollection();
         }
+
+        Plugins.Add(plugin);
     }
 
-    private string _text;
-
-    public string Text
+    public void RemovePlugin(Plugin plugin)
     {
-        get => _text;
-        set
+        if (Plugins == null)
         {
-            _text = value;
-            Invalidated = true;
+            return;
         }
-    }
 
-    private Color _borderColor;
-
-    public Color BorderColor
-    {
-        get => _borderColor;
-        set
-        {
-            _borderColor = value;
-            BorderColorName = $"rgba({value.R},{value.G},{value.B},{value.A})";
-            Invalidated = true;
-        }
-    }
-
-    public string? BorderColorName { get; private set; }
-
-    private Color _fillColor;
-
-    public Color FillColor
-    {
-        get => _fillColor;
-        set
-        {
-            _fillColor = value;
-            FillColorName = $"rgba({value.R},{value.G},{value.B},{value.A / 255.0})";
-            Invalidated = true;
-        }
-    }
-
-    public string FillColorName { get; private set; }
-
-    private float _borderThickness;
-
-    public float BorderThickness
-    {
-        get => _borderThickness;
-        set
-        {
-            _borderThickness = value;
-            Invalidated = true;
-        }
+        Plugins.Remove(plugin);
     }
 
     #endregion
 
-    #region CollisionDetection
-
-    public virtual bool CollidesWith(Vector2 point)
+    #region Transformations
+    private Matrix3x2 scaleMatrix = Matrix3x2.Identity;
+    private Matrix3x2 rotationMatrix = Matrix3x2.Identity;
+    private Matrix3x2 translationMatrix = Matrix3x2.Identity;
+    private Component parent;
+    private Matrix3x2 matrix = Matrix3x2.Identity;
+    private Matrix3x2 transformedMatrix = Matrix3x2.Identity;
+    private bool matrixChanged = true;
+    public bool HasMatrixChanged => matrixChanged || ParentMatrixChanged;
+    public Matrix3x2 TransformedMatrix
     {
-        return Primitive.CollidesWith(point) || Children.Any(child => child.CollidesWith(point));
+        get
+        {
+            if (!HasMatrixChanged)
+            {
+                return transformedMatrix;
+            }
+
+            if (matrixChanged)
+            {
+                matrixChanged = false;
+                matrix = TranslationMatrix * RotationMatrix * ScaleMatrix;
+            }
+
+            transformedMatrixChanged = true;
+            if(Parent == null)
+            {
+                transformedMatrix = matrix;
+            }
+            else
+            {
+                transformedMatrix = Parent.TransformedMatrix * matrix;
+            }
+
+            ParentMatrixChanged = false;
+            if (Children != null)
+            {
+                for (int i = 0; i < Children.Count; i++)
+                {
+                    Children[i].ParentMatrixChanged = true;
+                }
+            }
+
+            return transformedMatrix;
+        }
     }
 
-    public virtual bool CollidesWith(Primitive primitive)
+    protected bool transformedMatrixChanged = true;
+
+    public Matrix3x2 TranslationMatrix
     {
-        return Primitive.CollidesWithPrimitive(primitive) || Children.Any(child => child.CollidesWith(primitive));
+        get => translationMatrix; set
+        {
+            translationMatrix = value;
+            matrixChanged = true;
+        }
+    }
+    public Matrix3x2 RotationMatrix
+    {
+        get => rotationMatrix; set
+        {
+            rotationMatrix = value;
+            matrixChanged = true;
+        }
+    }
+    public Matrix3x2 ScaleMatrix
+    {
+        get => scaleMatrix; set
+        {
+            scaleMatrix = value;
+            matrixChanged = true;
+        }
     }
 
-    public virtual bool CollidesWith(Component component)
+    public void AddTranslation(Vector2 position)
     {
-        return Primitive.CollidesWithPrimitive(component.Primitive) ||
-               Children.Any(child => child.CollidesWith(component));
+        TranslationMatrix *= Matrix3x2.CreateTranslation(position);
+    }
+    public void SetTranslation(Vector2 position)
+    {
+        TranslationMatrix = Matrix3x2.CreateTranslation(position);
+    }
+    public void AddRotation(float radians)
+    {
+        RotationMatrix *= Matrix3x2.CreateRotation(radians);
+    }
+    public void SetRotation(float radians)
+    {
+        RotationMatrix = Matrix3x2.CreateRotation(radians);
     }
 
     #endregion
 
-    #region Transformation
-
-    public virtual void Translate(Vector2 delta)
+    #region Render
+    public virtual void Draw(BlazorCanvas.BlazorCanvas x)
     {
-        //Translate the components primitive
-        Primitive.Translate(delta);
+        Render(x);
 
-        //Translate each child component
-        foreach (var child in Children)
+        if (Children != null)
         {
-            child.Translate(delta);
+            for (var i = 0; i < Children.Count; i++)
+            {
+                Children[i].Draw(x);
+            }
         }
-
-        //Invalidate the component
-        Invalidated = true;
-
-        //Handle the transformation event
-        Handle(new TranslateEvent(delta));
     }
 
-    public virtual void Rotate(float theta)
-    {
-        Primitive.Rotate(theta);
-
-        foreach (var child in Children)
-        {
-            child.Rotate(theta);
-        }
-
-        Invalidated = true;
-        Handle(new RotateEvent(Primitive.BoundingRectangle.Center, theta));
-    }
-
-    public virtual void Rotate(Vector2 rotationCenter, float theta)
-    {
-        Primitive.Rotate(rotationCenter, theta);
-
-        foreach (var child in Children)
-        {
-            child.Rotate(rotationCenter, theta);
-        }
-
-        Invalidated = true;
-        Handle(new RotateEvent(rotationCenter, theta));
-    }
-
-    public virtual void ScaleAboutCenter(Vector2 delta)
-    {
-        Primitive.ScaleAboutCenter(delta);
-
-        foreach (var child in Children)
-        {
-            child.Scale(Primitive.BoundingRectangle.Center, delta);
-        }
-
-        Invalidated = true;
-        Handle(new ScaleEvent(Primitive.BoundingRectangle.Center, delta));
-    }
-
-    public virtual void ScaleAboutTopLeft(Vector2 delta)
-    {
-        Primitive.Scale(delta, Primitive.BoundingRectangle.BottomLeft);
-
-        foreach (var child in Children)
-        {
-            child.Scale(Primitive.BoundingRectangle.BottomLeft, delta);
-        }
-
-        Invalidated = true;
-        Handle(new ScaleEvent(Primitive.BoundingRectangle.BottomLeft, delta));
-    }
-
-    public virtual void Scale(Vector2 scaleCenter, Vector2 delta)
-    {
-        Primitive.Scale(scaleCenter, delta);
-
-        foreach (var child in Children)
-        {
-            child.Scale(scaleCenter, delta);
-        }
-
-        Invalidated = true;
-        Handle(new ScaleEvent(scaleCenter, delta));
-    }
-
-    public virtual void Skew(Vector2 delta)
-    {
-        Primitive.Skew(delta);
-
-        foreach (var child in Children)
-        {
-            child.Skew(delta);
-        }
-
-        Invalidated = true;
-        Handle(new SkewEvent(delta));
-    }
-
-    public virtual void SetPosition(Vector2 position, bool source)
-    {
-        Primitive.SetPosition(position);
-
-        var delta = position - Primitive.BoundingRectangle.BottomLeft;
-        foreach (var child in Children)
-        {
-            child.Translate(delta);
-        }
-
-        Invalidated = true;
-        Handle(new TranslateEvent(delta));
-    }
-
-    public virtual void SetSize(Vector2 size)
-    {
-        Primitive.SetSize(size);
-
-        var scaleFactor = size / Primitive.BoundingRectangle.Size;
-        foreach (var child in Children)
-        {
-            child.Scale(Primitive.BoundingRectangle.BottomLeft, scaleFactor);
-        }
-
-        Invalidated = true;
-
-        Handle(new ScaleEvent(Primitive.BoundingRectangle.BottomLeft, scaleFactor));
-    }
-
-    private void Handle(TransformationEvent e)
-    {
-        Plugins.All.All(t => t.Handle(e));
-        OnTransformationEvent?.Invoke(this, e);
-    }
+    public abstract void Render(BlazorCanvas.BlazorCanvas ctx);
 
     #endregion
 
@@ -377,36 +185,29 @@ public abstract class Component : IDisposable
     public event EventHandler<UiEvent> OnUiEventTunneled;
     public event EventHandler<TransformationEvent> OnTransformationEvent;
 
-    public bool Handle(UiEvent uiEvent)
+    public virtual bool Handle(UiEvent uiEvent)
     {
         //Firstly try and handle the event with the most nested child component
         var isBubbleHandled = false;
-        foreach (var child in Children)
+        if (Children != null)
         {
-            if (child.Handle(uiEvent))
+            foreach (var child in Children)
             {
-                isBubbleHandled = true; //The child handles the event
+                if (child.Handle(uiEvent))
+                {
+                    isBubbleHandled = true; //The child handles the event
+                }
             }
         }
 
         //Try and handle the event with this component
-        var eventHandled = false;
-        foreach (var behaviour in Plugins.All)
-        {
-            if (behaviour.Handle(uiEvent))
-            {
-                eventHandled = true;
-            }
-        }
-
-        if (!eventHandled)
+        if (Plugins?.Handle(uiEvent) != true)
         {
             return false;
         }
 
         OnUiEventTunneled?.Invoke(this, uiEvent);
 
-        //If the event 
         if (!isBubbleHandled)
         {
             OnUiEvent?.Invoke(this, uiEvent);

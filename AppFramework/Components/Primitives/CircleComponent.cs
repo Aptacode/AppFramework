@@ -4,18 +4,18 @@ using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Primitives;
 
-public class PointComponent : PrimitiveComponent
+public class CircleComponent : PrimitiveComponent
 {
-    public PointComponent(Vector2 position)
+    public CircleComponent(Vector2 position, float radius)
     {
-        Point = new Point(Vector2.Zero);
-        transformedPrimitive = Point.Copy();
+        Circle = new Circle(Vector2.Zero, radius);
+        transformedPrimitive = Circle.Copy();
         TranslationMatrix = Matrix3x2.CreateTranslation(position);
     }
 
-    public Point Point { get; init; }
-    private readonly Point transformedPrimitive;
-    public override Point TransformedPrimitive
+    public Circle Circle { get; init; }
+    private readonly Circle transformedPrimitive;
+    public override Circle TransformedPrimitive
     {
         get
         {
@@ -23,18 +23,22 @@ public class PointComponent : PrimitiveComponent
             if (transformedMatrixChanged)
             {
                 transformedMatrixChanged = false;
-                Point.CopyAndTransformTo(transformedPrimitive, t);
+                Circle.CopyAndTransformTo(transformedPrimitive, t);
             }
+
             return transformedPrimitive;
         }
     }
+
     public override void Render(BlazorCanvas.BlazorCanvas ctx)
     {
         var primitive = TransformedPrimitive;
 
         ctx.BeginPath();
+
         ctx.Ellipse((int)primitive.Position.X, (int)primitive.Position.Y,
-            1, 1, 0, 0, 2 * (float)Math.PI);
+            (int)primitive.Radius,
+            (int)primitive.Radius, 0, 0, 2.0f * (float)Math.PI);
         ctx.Fill();
         ctx.Stroke();
     }

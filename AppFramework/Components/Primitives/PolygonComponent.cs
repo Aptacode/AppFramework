@@ -2,27 +2,40 @@
 
 namespace Aptacode.AppFramework.Components.Primitives;
 
-public class PolygonComponent : Component
+public class PolygonComponent : PrimitiveComponent
 {
-    #region Canvas
-
-    public PolygonComponent(Polygon polygon) : base(polygon)
+    public PolygonComponent(Polygon polygon)
     {
+        Polygon = polygon;
+        transformedPrimitive = Polygon.Copy();
     }
 
-    #endregion
-
-    public Polygon Polygon => (Polygon)Primitive;
-
-    #region Ctor
-
-    public override void CustomDraw(BlazorCanvas.BlazorCanvas ctx)
+    public Polygon Polygon { get; init; }
+    private readonly Polygon transformedPrimitive;
+    public override Polygon TransformedPrimitive
     {
-        var vertices = new double[Polygon.Vertices.Length * 2];
-        var vIndex = 0;
-        for (var i = 0; i < Polygon.Vertices.Length; i++)
+        get
         {
-            var v = Polygon.Vertices[i];
+            var t = TransformedMatrix;
+            if (transformedMatrixChanged)
+            {
+                transformedMatrixChanged = false;
+                Polygon.CopyAndTransformTo(transformedPrimitive, t);
+            }
+            return transformedPrimitive;
+        }
+    }
+
+    public override void Render(BlazorCanvas.BlazorCanvas ctx)
+    {
+        var primitive = TransformedPrimitive;
+
+        ctx.FillStyle("green");
+        var vertices = new double[primitive.Vertices.Length * 2];
+        var vIndex = 0;
+        for (var i = 0; i < primitive.Vertices.Length; i++)
+        {
+            var v = primitive.Vertices[i];
             vertices[vIndex++] = v.X;
             vertices[vIndex++] = v.Y;
         }
@@ -32,15 +45,4 @@ public class PolygonComponent : Component
         ctx.Fill();
         ctx.Stroke();
     }
-
-    #endregion
-
-    #region Methods
-
-    public void Update(Polygon primitive)
-    {
-        Primitive = primitive;
-    }
-
-    #endregion
 }

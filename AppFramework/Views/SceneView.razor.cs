@@ -1,45 +1,97 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-using Aptacode.AppFramework.Extensions;
-using Aptacode.BlazorCanvas;
+﻿using Aptacode.AppFramework.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Numerics;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aptacode.AppFramework.Views;
 
 public class SceneViewBase : ComponentBase, IDisposable
 {
+    #region Properties
+
+    [Parameter, EditorRequired]
+    public int Width { get; set; } = 400;
+
+    [Parameter, EditorRequired]
+    public int Height { get; set; } = 400;
+
     [Parameter, EditorRequired]
     public Scene Scene { get; set; }
 
-    #region Lifecycle
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    protected BlazorCanvas.BlazorCanvas Canvas { get; set; }
+
+    private readonly SceneInteractionController SceneInteractionController = new();
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
+    public int FPS { get; private set; } = 0;
+
+    private long _lastRender = -1;
+
+    #endregion
     protected override async Task OnInitializedAsync()
     {
-        while (Canvas is not { Ready: true })
-        {
-            await Task.Delay(10);
-        }
-
-        SceneInteractionController.Scene = Scene;
-        SceneRenderController.Setup(Scene, Canvas);
-
         try
         {
+            Width = Height = (int)Math.Floor(Width / 100.0) * 100;
+
+            Scene.Width = Width;
+            Scene.Height = Height;
+
+            await InvokeAsync(StateHasChanged);
+
+            // Wait for the canvas to be ready
+            while (Canvas is not { Ready: true } && !_cancellationTokenSource.IsCancellationRequested)
+            {
+                await Task.Delay(10, _cancellationTokenSource.Token);
+            }
+
+            // Setup the scene
+            SceneInteractionController.Scene = Scene;
+            await Scene.Setup();
+
             using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(10));
             var watch = new Stopwatch();
-            float timeStamp = 0.0f;
+            var watch2 = new Stopwatch();
+            watch2.Start();
+            long last = 0;
             while (await timer.WaitForNextTickAsync(_cancellationTokenSource.Token))
             {
                 watch.Restart();
-                timeStamp += 0.1f;
-                SceneRenderController.Tick(timeStamp);
+
+                var d = watch2.ElapsedMilliseconds - last;
+                last = watch2.ElapsedMilliseconds;
+                await Scene.Loop(d);
+
+                //Clear canvas
+                Canvas.ClearRect(0, 0, Width, Height);
+                Canvas.Transform(1, 0, 0, -1, 0, Height);
+
+                //Render each component
+                for (var i = 0; i < Scene.Components.Count; i++)
+                {
+                    Scene.Components[i].Draw(Canvas);
+                }
+
+                //Flip canvas
+                Canvas.Transform(1, 0, 0, -1, 0, Height);
 
                 watch.Stop();
+                if (watch.Elapsed.Milliseconds == 0)
+                {
+                    FPS = 0;
+                }
+                else
+                {
+                    FPS = 1000 / watch.Elapsed.Milliseconds;
+                }
 
                 await InvokeAsync(StateHasChanged);
             }
@@ -50,12 +102,14 @@ public class SceneViewBase : ComponentBase, IDisposable
         }
         finally
         {
-
+            await Scene.Teardown();
         }
     }
 
-
-    #endregion
+    public void Dispose()
+    {
+        _cancellationTokenSource?.Cancel();
+    }
 
     #region Events
 
@@ -87,27 +141,6 @@ public class SceneViewBase : ComponentBase, IDisposable
     {
         SceneInteractionController.KeyUp(e.Key);
     }
-
-    public void Dispose()
-    {
-        _cancellationTokenSource?.Cancel();
-    }
-
-    #endregion
-
-    #region Dependencies
-
-    [Inject] public SceneInteractionController SceneInteractionController { get; set; }
-
-    #endregion
-
-    #region Properties
-
-    protected ElementReference Container;
-    protected BlazorCanvas.BlazorCanvas Canvas { get; set; }
-    protected SceneRenderController SceneRenderController { get; set; } = new SceneRenderController();
-
-    public string Style { get; set; } = "position: absolute; ";
 
     #endregion
 }

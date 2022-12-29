@@ -1,11 +1,12 @@
 ﻿using System.Numerics;
 using Aptacode.AppFramework.Components;
+using Aptacode.AppFramework.Components.Primitives;
 using Aptacode.AppFramework.Plugins.Behaviours;
 using Aptacode.Geometry;
 
 namespace Aptacode.AppFramework.Demo.Pages.Physics.States;
 
-public class PhysicsState : ComponentPlugin
+public class PhysicsState : PrimitiveComponentPlugin
 {
     #region Constants
 
@@ -15,7 +16,7 @@ public class PhysicsState : ComponentPlugin
 
     public static string StateName = "PhysicsState";
 
-    public PhysicsState(Scene scene, Component component) : base(scene, component)
+    public PhysicsState(Scene scene, PrimitiveComponent component) : base(scene, component)
     {
     }
 

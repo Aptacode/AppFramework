@@ -1,30 +1,39 @@
 ﻿using System.Numerics;
-using Aptacode.BlazorCanvas;
 using Aptacode.Geometry.Primitives;
 
 namespace Aptacode.AppFramework.Components.Primitives;
 
-public class PolylineComponent : Component
+public class PolylineComponent : PrimitiveComponent
 {
-    #region Ctor
-
-    public PolylineComponent(PolyLine polyLine) : base(polyLine)
+    public PolylineComponent(PolyLine polyLine)
     {
+        PolyLine = polyLine;
+        transformedPrimitive = PolyLine.Copy();
     }
 
-    #endregion
+    public PolyLine PolyLine { get; init; }
+    private readonly PolyLine transformedPrimitive;
 
-    public PolyLine PolyLine => (PolyLine)Primitive;
-
-    #region Canvas
-
-    public override void CustomDraw(BlazorCanvas.BlazorCanvas ctx)
+    public override PolyLine TransformedPrimitive
     {
-        var vertices = new double[PolyLine.Vertices.Length * 2];
-        var vIndex = 0;
-        for (var i = 0; i < PolyLine.Vertices.Length; i++)
+        get
         {
-            var v = PolyLine.Vertices[i];
+            if (transformedMatrixChanged)
+            {
+                transformedMatrixChanged = false;
+                PolyLine.CopyAndTransformTo(PolyLine, TransformedMatrix);
+            }
+            return transformedPrimitive;
+        }
+    }
+    public override void Render(BlazorCanvas.BlazorCanvas ctx)
+    {
+        var primitive = TransformedPrimitive;
+        var vertices = new double[primitive.Vertices.Length * 2];
+        var vIndex = 0;
+        for (var i = 0; i < primitive.Vertices.Length; i++)
+        {
+            var v = primitive.Vertices[i];
             vertices[vIndex++] = v.X;
             vertices[vIndex++] = v.Y;
         }
@@ -32,15 +41,4 @@ public class PolylineComponent : Component
         ctx.PolyLine(vertices);
         ctx.Stroke();
     }
-
-    #endregion
-
-    #region Methods
-
-    public void Update(PolyLine primitive)
-    {
-        Primitive = primitive;
-    }
-
-    #endregion
 }

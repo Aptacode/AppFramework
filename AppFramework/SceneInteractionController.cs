@@ -23,7 +23,7 @@ public class SceneInteractionController
 
     private Vector2 Transform(Vector2 p)
     {
-        return new Vector2(p.X, Scene.Size.Y - p.Y);
+        return new Vector2(p.X, Scene.Height - p.Y);
     }
 
     public void MouseClickDown()

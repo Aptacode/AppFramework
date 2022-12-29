@@ -1,41 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Net;
+using System.Threading.Tasks;
 using Aptacode.AppFramework.Components;
 using Aptacode.AppFramework.Events;
 using Aptacode.AppFramework.Plugins;
 
 namespace Aptacode.AppFramework;
 
-public class Scene 
+public abstract class Scene
 {
-    #region Plugins
+    public virtual Task Setup()
+    {
+        return Task.CompletedTask;
+    }
 
-    public PluginCollection Plugins { get; set; } = new();
-
-    public void Handle(float deltaT)
+    public virtual Task Loop(float deltaT)
     {
         //Execute scene behaviours
-        foreach (var sceneBehavior in Plugins.All)
-        {
-            sceneBehavior.Handle(deltaT);
-        }
+        Plugins.Handle(deltaT);
 
         //Execute tick behaviours
         foreach (var component in Components)
         {
-            component.Handle(deltaT);
+            component.Plugins?.Handle(deltaT);
         }
+
+        return Task.CompletedTask;
     }
 
-    #endregion
+    public virtual Task Reset()
+    {
+        Plugins.Clear();
+        _components.Clear();
+        return Task.CompletedTask;
+    }
+
+    public virtual Task Teardown()
+    {
+        return Task.CompletedTask;
+    }
 
     #region Properties
+    public PluginCollection Plugins { get; set; } = new();
 
-    private readonly List<Component> _components = new();
+    protected readonly List<Component> _components = new();
 
-    public Vector2 Size { get; set; }
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public int Width { get; set; } = 200;
+    public int Height { get; set; } = 200;
 
     #endregion
 
@@ -53,10 +65,7 @@ public class Scene
     public void Handle(UiEvent e)
     {
         //Execute scene behaviours
-        foreach (var sceneBehavior in Plugins.All)
-        {
-            sceneBehavior.Handle(e);
-        }
+        Plugins.Handle(e);
 
         //Execute tick behaviours
         foreach (var component in Components)
